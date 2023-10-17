@@ -1,34 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-
+import itemsLogo from '../public/items-icon.png'
+import placesLogo from '../public/places-icon.png'
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="mockup-window bg-primary-focus">
+        <div className="flex justify-center px-4 py-16 bg-primary gap-20">
+          <div className="card w-96 image-full hover:cursor-pointer ">
+            <figure className='shadow-xl '><img src={placesLogo} alt="Places Icon" /></figure>
+            <div className="card-body m-auto">
+              <h2 className="card-title text-5xl">Find Authorized Points</h2>
+            </div>
+          </div>
+          <div className="card w-96 image-full hover:cursor-pointer">
+          <figure className='shadow-xl'><img src={itemsLogo} alt="Places Icon" /></figure>
+            <div className="card-body m-auto">
+              <h2 className="card-title text-5xl">Find Lost Items</h2>
+            </div>
+          </div>
+        </div>
       </div>
-      <h1 className='text-3xl font-bold underline'>Vite + React</h1>
-      <h1 className="text-9xl font-bold underline text-center">Hello world!</h1> 
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
