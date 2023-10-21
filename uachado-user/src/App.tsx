@@ -1,8 +1,9 @@
 import "./App.css";
 
 import generalLogo from "../public/general-icon.png";
-import Home from "./components/Home/home";
 import { Link, Route, Routes } from "react-router-dom";
+import NewItem from "./components/NewItem/newItem";
+import Home from "./components/Home/home";
 
 function App() {
   return (

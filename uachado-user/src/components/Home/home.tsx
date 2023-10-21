@@ -8,7 +8,7 @@ const Home = () => {
     <>
       <div className="sm:flex flex-column justify-center px-20 py-16 bg-primary gap-40">
         <Link to="/dropPoints">
-          <div className="card w-96 image-full hover:cursor-pointer mb-10 py-10">
+          <div className="card custom-card w-96 image-full hover:cursor-pointer mb-10 py-10">
             <figure className="shadow-xl">
               <img src={placesLogo} alt="Places Icon" />
             </figure>
@@ -18,7 +18,7 @@ const Home = () => {
           </div>
         </Link>
         <Link to="/findItems">
-          <div className="card w-96 image-full hover:cursor-pointer mb-10 py-10">
+          <div className="card custom-card w-96 image-full hover:cursor-pointer mb-10 py-10">
             <figure className="shadow-xl">
               <img src={itemsLogo} alt="Places Icon" />
             </figure>
