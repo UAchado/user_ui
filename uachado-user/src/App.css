@@ -5,12 +5,15 @@
   text-align: center;
 }
 
-.card:hover .card-body,
-.card:hover figure::before {
-    opacity: 0;
+/* Target the custom card */
+.custom-card:hover .card-body,
+.custom-card figure::before {
+  opacity: 0;
 }
 
-.card .card-body,
-.card figure::before {
-    transition: opacity 0.3s;
+/* Add transition for the custom card */
+.custom-card .card-body,
+.custom-card figure::before {
+  transition: opacity 0.3s;
 }
+
