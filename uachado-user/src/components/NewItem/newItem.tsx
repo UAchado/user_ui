@@ -41,12 +41,12 @@ const NewItem = () => {
     // Access form fields directly from formData
     const description = formData.get("description");
     const image = formData.get("image") as File;
-    const objectType = formData.get("toggle-group");
+    const tag = formData.get("tag");
 
     // Now, formData contains the form data, and you can decide how to process it.
     console.log("Description:", description);
     console.log("Image:", image);
-    console.log("Object Type:", objectType);
+    console.log("Tag:", tag);
 
     // You can perform further processing with formData as needed.
   };
@@ -84,11 +84,9 @@ const NewItem = () => {
             </div>
           </div>
         </div>
-        <br />
         <Dropdown />
 
-        <br />
-        <button type="submit" className="button">
+        <button type="submit" className="btn btn-primary bordered border-secondary mt-5">
           Submit
         </button>
       </form>

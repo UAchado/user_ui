@@ -25,7 +25,7 @@ function App() {
         </div>
       </div>
       <div className=" flex justify-center items-center h-screen ">
-        <div className="mockup-window bg-primary-focus">
+        <div tabIndex={0} className="mockup-window bg-primary-focus relative">
           <Contents />
         </div>
       </div>

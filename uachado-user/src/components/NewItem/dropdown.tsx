@@ -24,24 +24,26 @@ function Dropdown() {
   };
 
   return (
-    <div className="dropdown w-full">
-      <input
-        className="input input-bordered w-full bg-primary placeholder-black"
-        placeholder="Tipo de Objeto"
-        onClick={() => setIsOpen(true)}
-        value={searchText}
-        onChange={handleInputChange}
-      />
-      {isOpen && filteredItems.length > 0 && (
-        <ul className="dropdown-content z-10 menu p-2 shadow bg-primary border-secondary rounded-box w-52 max-h-80 flex-nowrap overflow-auto">
-          {filteredItems.map((item, index) => (
-            <li key={index} onClick={() => handleItemClick(item)}>
-              <a>{item}</a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <div className="dropdown w-full mt-5">
+    <input
+      className="input input-bordered border-secondary w-full bg-primary placeholder-black"
+      placeholder="Tipo de Objeto"
+      onClick={() => setIsOpen(true)}
+      value={searchText}
+      name="tag"
+      onChange={handleInputChange}
+      tabIndex={10}
+    />
+    {isOpen && filteredItems.length > 0 && (
+      <ul tabIndex={10} className="dropdown-content z-20 menu p-2 shadow bg-primary bordered border-secondary rounded-box w-52 max-h-80 flex-nowrap overflow-auto">
+        {filteredItems.map((item, index) => (
+          <li key={index} onClick={() => handleItemClick(item)}>
+            <a>{item}</a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
   );
 }
 
