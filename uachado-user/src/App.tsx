@@ -26,7 +26,7 @@ function Contents() {
       <Route path="/dropPoints" element={<DropPoints/> } />
       <Route path="/findItems" element={<div>Find Items</div>} />
       <Route path="/signIn" element={<div>Staff Sign-In</div>} />
-      <Route path="/newItem" element={<NewItem/>} />
+      <Route path="/newItem" element={<NewItem />} />
     </Routes>
   );
 }
