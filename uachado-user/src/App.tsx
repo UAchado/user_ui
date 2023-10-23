@@ -7,7 +7,7 @@ import Home from "./components/Home/home";
 
 function App() {
   return (
-    <div className="">
+    <div>
       <div className="navbar w- bg-primary rounded-lg">
         <div className="flex-1">
           <img className="w-32 -mr-8" src={generalLogo}></img>
@@ -24,11 +24,7 @@ function App() {
           </Link>
         </div>
       </div>
-      <div className=" flex justify-center items-center h-screen ">
-        <div tabIndex={0} className="mockup-window bg-primary-focus relative">
-          <Contents />
-        </div>
-      </div>
+      <Contents />
     </div>
   );
 }
@@ -40,7 +36,7 @@ function Contents() {
       <Route path="/dropPoints" element={<div>Drop Points</div>} />
       <Route path="/findItems" element={<div>Find Items</div>} />
       <Route path="/signIn" element={<div>Staff Sign-In</div>} />
-      <Route path="/newItem" element={<NewItem/>} />
+      <Route path="/newItem" element={<NewItem />} />
     </Routes>
   );
 }
