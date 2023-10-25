@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+
 const ItemList = () => {
 
     const data = [
@@ -8,6 +10,15 @@ const ItemList = () => {
             dropoffPoint_id: "1234"
         },
     ];
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    useEffect(() => {
+        if (selectedItem !== null) {
+            const modal = document.getElementById("my_modal_1");
+            modal.showModal();
+        }
+    }, [selectedItem]);
+
     return (
         <div>
             <div className="overflow-x-auto">
@@ -42,13 +53,38 @@ const ItemList = () => {
                                 </td>
                                 <td>{item.dropoffPoint_id}</td>
                                 <th>
-                                    <button className="btn btn-ghost btn-xs">details</button>
+                                    <button
+                                        className="p-1 btn btn-ghost border-primary-content btn-xs"
+                                        onClick={() => setSelectedItem(item)}
+                                    >
+                                        Details
+                                    </button>
                                 </th>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            {selectedItem && (
+                <dialog id="my_modal_1" className="modal">
+                    <div className="modal-box">
+                        <img src={selectedItem.image} alt={selectedItem.description} />
+                        <h3 className="text-lg font-bold">{selectedItem.description}</h3>
+                        <span className="badge badge-ghost badge-md">{selectedItem.tag}</span>
+                        <h1 className="text-xl font-bold">Guardado em: <b>{selectedItem.dropoffPoint_id}</b></h1>
+                        <div className="modal-action">
+                            <form method="dialog">
+                                <button
+                                    className="btn"
+                                    onClick={() => setSelectedItem(null)}
+                                >
+                                    Close
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </dialog>
+            )}
         </div>
     );
 };
