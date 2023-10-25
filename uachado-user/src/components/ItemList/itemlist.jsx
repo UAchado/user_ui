@@ -27,7 +27,7 @@ const ItemList = () => {
                     <thead>
                         <tr>
                             <th>Description</th>
-                            <th>Tags</th>
+                            <th>Tag</th>
                             <th>Pickup Point</th>
                             <th></th>
                         </tr>
