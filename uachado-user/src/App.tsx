@@ -11,7 +11,7 @@ function App() {
     <div className="">
       <Navbar />
       <div className="flex items-center justify-center h-screen">
-        <div tabIndex={0} className="mockup-window bg-primary-focus">
+        <div className="mockup-window bg-primary-focus">
           <Contents />
         </div>
       </div>
