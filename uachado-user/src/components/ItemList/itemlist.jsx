@@ -55,7 +55,7 @@ const ItemList = () => {
 
     return (
         <div>
-            <div className="sm:w-[55vw] overflow-x-auto">
+            <div className="sm:w-[55vw] overflow-x-auto p-10">
                 <table className="table">
                     {/* head */}
                     <thead>
