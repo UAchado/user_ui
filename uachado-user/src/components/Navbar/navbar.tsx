@@ -9,7 +9,7 @@ const Navbar = () => {
                     <a className="pl-0 text-xl normal-case btn btn-ghost">UAchado</a>
                 </Link>
                 <Link to="/newItem">
-                    <a className="pl-0 text-xl normal-case btn btn-ghost">Add Item</a>
+                    <a className="pl-0 text-xl normal-case btn btn-ghost">Adicionar Item</a>
                 </Link>
             </div>
             <div className="flex-none">

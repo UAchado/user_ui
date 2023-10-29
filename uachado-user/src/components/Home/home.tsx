@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <>
-      <div className="justify-center gap-40 px-20 py-16 sm:flex flex-column bg-primary">
+      <div className="justify-center w-full gap-40 px-40 py-16 sm:flex flex-column bg-primary">
         <Link to="/dropPoints">
           <div className="w-full py-10 mb-10 card custom-card image-full hover:cursor-pointer">
             <figure className="shadow-xl">

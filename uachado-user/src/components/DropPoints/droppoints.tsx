@@ -21,9 +21,9 @@ const DropPoints = () => {
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 m-10 sm:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 m-10 sm:grid-cols-4 ">
                 {locations.map((loc, index) => (
-                    <div key={index} className="w-64 card glass">
+                    <div key={index} className="w-64 border-2 card border-secondary-focus">
                         <figure>
                             <img src={loc.image} alt={loc.name} />
                         </figure>
@@ -31,7 +31,7 @@ const DropPoints = () => {
                             <h2 className="card-title">{loc.name}</h2>
                             <p>{loc.location}</p>
                             <div className="justify-end card-actions">
-                                <button className="btn btn-primary" onClick={() => handleModalOpen(index)}>View Details</button>
+                                <button className="btn btn-primary" onClick={() => handleModalOpen(index)}>Ver Detalhes</button>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@ const DropPoints = () => {
                         <p className="py-4">Coordinates: {locations[selectedIndex].coordinates}</p>
                         <div className="modal-action">
                             <form method="dialog">
-                                <button className="btn" onClick={handleModalClose}>Close</button>
+                                <button className="btn" onClick={handleModalClose}>Fechar</button>
                             </form>
                         </div>
                     </div>
