@@ -15,13 +15,16 @@
     transform: rotate(0deg); /* Straighten up on hover */
   }
   
-  /* Style the image to fit well within the card */
-  .custom-card img {
+  .custom-card figure {
+    margin: 0; /* Remove default margins if any */
+    position: relative;
+    z-index: 1; /* Ensure the image is above the yellow background */
+  }
+  
+  .custom-card figure img {
     display: block;
-    max-width: 100%; /* Make sure it's responsive */
+    width: 100%; /* Ensure it covers the entire card */
     height: auto;
-    border-top-left-radius: 8px; /* Match the card's border-radius */
-    border-top-right-radius: 8px;
   }
   .custom-card::before {
     content: "";

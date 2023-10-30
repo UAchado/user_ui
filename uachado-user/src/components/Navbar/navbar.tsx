@@ -1,8 +1,10 @@
 import generalLogo from "../../../public/general-icon.png";
 import { Link } from "react-router-dom";
+import "./navbar.css";
 const Navbar = () => {
+
     return (
-        <div className="rounded-lg navbar bg-opacity-90 bg-primary">
+        <div className="shadow-xl rounded-s navbar wood-texture">
             <div className="flex-1">
                 <img className="w-32 -mr-8" src={generalLogo}></img>
                 <Link to="/">

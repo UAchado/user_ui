@@ -5,15 +5,16 @@
   text-align: center;
 }
 
-/* Target the custom card */
-.custom-card:hover .card-body,
-.custom-card figure::before {
-  opacity: 0;
-}
 
-/* Add transition for the custom card */
-.custom-card .card-body,
-.custom-card figure::before {
-  transition: opacity 0.3s;
-}
 
+.cork-texture {
+  background-image: url('../public/cork-texture.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: solid 10px transparent; /* Adjust the width as needed */
+  border-radius: 12px; /* Adjust for rounded corners */
+  box-shadow:
+    inset 0 0 0 10px rgba(139, 69, 19, 0.5), /* Inner shadow for depth */
+    0 0 15px 5px rgba(0, 0, 0, 0.3); /* Outer shadow for 3D effect */
+  border-image: url('../public/wood-texture.jpeg') 30 round; 
+}
