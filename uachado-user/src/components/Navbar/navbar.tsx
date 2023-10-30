@@ -2,7 +2,7 @@ import generalLogo from "../../../public/general-icon.png";
 import { Link } from "react-router-dom";
 const Navbar = () => {
     return (
-        <div className="rounded-lg navbar w- bg-primary">
+        <div className="rounded-lg navbar bg-opacity-90 bg-primary">
             <div className="flex-1">
                 <img className="w-32 -mr-8" src={generalLogo}></img>
                 <Link to="/">
