@@ -1,0 +1,59 @@
+/* Define the base styles for the card */
+.custom-card {
+    position: relative;
+    background-color: #fcf83e; /* Post-it note yellow */
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    transform: rotate(-5deg); /* Slight rotation */
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+    border-radius: 8px; /* Optional: rounded corners */
+    /* Add a paper-like texture to the background */
+    background-image: url('../../../public/paper-texture.jpeg');
+  }
+  
+  /* Add a hover effect */
+  .custom-card:hover {
+    transform: rotate(0deg); /* Straighten up on hover */
+  }
+  
+  /* Style the image to fit well within the card */
+  .custom-card img {
+    display: block;
+    max-width: 100%; /* Make sure it's responsive */
+    height: auto;
+    border-top-left-radius: 8px; /* Match the card's border-radius */
+    border-top-right-radius: 8px;
+  }
+  .custom-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #FFF73F; /* Semi-transparent yellow */
+    mix-blend-mode: multiply; /* Blend the color with the image */
+    pointer-events: none; /* Allow clicks to pass through */
+  }
+  
+  /* Style the card body */
+  .card-body {
+    padding: 15px;
+    text-align: center; /* Center the text */
+  }
+  
+  /* Style the title */
+  .card-title {
+    font-size: 1.5rem; /* Adjust the font size */
+    font-weight: bold;
+    margin: 0;
+    color: #333; /* Dark text color for contrast */
+  }
+  
+  /* Make sure the card and its contents scale nicely */
+  @media screen and (max-width: 768px) {
+    .custom-card {
+      transform: none;
+      margin: 0 auto;
+    }
+  }
+  

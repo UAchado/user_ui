@@ -5,14 +5,14 @@ import NewItem from "./components/NewItem/newItem";
 import Home from "./components/Home/home";
 import DropPoints from "./components/DropPoints/droppoints";
 import Navbar from "./components/Navbar/navbar";
-import ItemList from "./components/ItemList/itemList";
-
+import ItemList from "./components/ItemList/itemlist";
+import corkTexture from "../public/cork-texture.png"
 function App() {
   return (
     <div className="">
       <Navbar />
       <div className="flex items-center justify-center h-screen">
-        <div tabIndex={0} className="mockup-window bg-primary-focus">
+        <div tabIndex={0} className="" style={{backgroundImage: corkTexture}}>
           <Contents />
         </div>
       </div>

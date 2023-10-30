@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const ItemList = () => {
 
@@ -44,11 +44,11 @@ const ItemList = () => {
 
 
     ];
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedItem, setSelectedItem] : any = useState(null);
 
     useEffect(() => {
         if (selectedItem !== null) {
-            const modal = document.getElementById("my_modal_1");
+            const modal : any = document.getElementById("my_modal_1");
             modal.showModal();
         }
     }, [selectedItem]);
