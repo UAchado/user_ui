@@ -78,12 +78,12 @@ const NewItem = () => {
   };
 
   return (
-    <div className="toast toast-middle toast-center items-center">
+    <div className="items-center toast toast-middle toast-center">
       {warning && (
         <div className="alert alert-error">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-4 w-4"
+            className="w-4 h-4 stroke-current shrink-0"
             fill="none"
             viewBox="0 0 24 24"
             onClick={() => setWarning(null)}
@@ -101,10 +101,10 @@ const NewItem = () => {
         </div>
       )}
       {sucess && (
-        <div className="alert alert-success w-1/2">
+        <div className="w-1/2 alert alert-success">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-4 w-4"
+            className="w-4 h-4 stroke-current shrink-0"
             fill="none"
             viewBox="0 0 24 24"
             onClick={() => setSucess(null)}
@@ -120,14 +120,14 @@ const NewItem = () => {
         </div>
       )}
       <div className="flex justify-center">
-        <div className="card bg-primary">
+        <div className="card bg-neutral-content">
           <div className="card-body">
             <h2 className="card-title">Formulário de novo Objeto Perdido</h2>
             <form onSubmit={handleSubmit}>
               {/* Textarea for item description */}
-              <div className="form-control w-full max-w-xs">
+              <div className="w-full max-w-xs form-control">
                 <textarea
-                  className="textarea bg-secondary border-primary placeholder-black text-black w-full max-w-xs mt-5"
+                  className="w-full max-w-xs mt-5 text-black placeholder-black textarea bg-neutral-content"
                   placeholder="Breve descrição sobre o item e como foi encontrado."
                   name="description"
                   required
@@ -138,7 +138,7 @@ const NewItem = () => {
 
                 <Image />
                 {/* Submit button */}
-                <div className="card-actions justify-end">
+                <div className="justify-end card-actions">
                   <button
                     type="submit"
                     className="btn btn-secondary bordered border-primary"
