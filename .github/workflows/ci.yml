@@ -6,8 +6,7 @@ on:
 
 jobs:
 
-  test-and-build:
-
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,10 +18,10 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKERHUB_PASSWORD}}
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       
-
     - name: Change directory
       run: cd uachado-user
+
     - name: Build the Docker image
-      run: docker build -t uachado/user-ui -f Dockerfile.prod .
+      run: docker build . -t uachado/user-ui -f Dockerfile.prod
     - name: Push image to DockerHub
       run: docker push uachado/user-ui:latest
