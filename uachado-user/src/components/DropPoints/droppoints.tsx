@@ -128,7 +128,7 @@ const DropPoints = () => {
     <>
       <div className="grid grid-cols-1 gap-4 m-10 sm:grid-cols-4">
         {locations.map((loc, index) => (
-          <div key={index} className="w-64 card glass">
+          <div key={index} className="w-64 card bg-secondary-focus">
             <figure>
               <img src={loc.image} alt={loc.name} />
             </figure>
@@ -137,10 +137,10 @@ const DropPoints = () => {
               <p>{loc.location}</p>
               <div className="justify-end card-actions">
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-secondary"
                   onClick={() => handleModalOpen(index)}
                 >
-                  View Details
+                  View Location
                 </button>
               </div>
             </div>
