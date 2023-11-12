@@ -5,6 +5,7 @@ import Home from "./components/Home/home";
 import DropPoints from "./components/DropPoints/droppoints";
 import Navbar from "./components/Navbar/navbar";
 import ItemList from "./components/ItemList/itemlist";
+import Dashboard from "./components/Dashboard/dashboard";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function Contents() {
       <Route path="/" element={<Home />} />
       <Route path="/dropPoints" element={<DropPoints/> } />
       <Route path="/findItems" element={<ItemList/>} />
-      <Route path="/signIn" element={<div>Staff Sign-In</div>} />
+      <Route path="/dashboard" element={<Dashboard/>} />
       <Route path="/newItem" element={<NewItem />} />
     </Routes>
   );
