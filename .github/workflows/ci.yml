@@ -18,9 +18,6 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKERHUB_PASSWORD}}
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       
-    - name: Change directory
-      run: cd uachado-user
-
     - name: Build the Docker image
       run: docker build . -t uachado/user-ui -f Dockerfile.prod
     - name: Push image to DockerHub
