@@ -44,11 +44,11 @@ const ItemList = () => {
 
 
     ];
-    const [selectedItem, setSelectedItem] : any = useState(null);
+    const [selectedItem, setSelectedItem]: any = useState(null);
 
     useEffect(() => {
         if (selectedItem !== null) {
-            const modal : any = document.getElementById("my_modal_1");
+            const modal: any = document.getElementById("my_modal_1");
             modal.showModal();
         }
     }, [selectedItem]);
@@ -66,7 +66,7 @@ const ItemList = () => {
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className='text-xl'>
                         {data.map((item, index) => (
                             <tr key={index}>
                                 <td>
@@ -77,7 +77,8 @@ const ItemList = () => {
                                             </div>
                                         </div>
                                         <div>
-                                            <div className="font-bold">{item.description}</div>                                        </div>
+                                            <div className="font-bold">{item.description}</div>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
