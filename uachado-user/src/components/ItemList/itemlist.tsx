@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Dropdown from '../NewItem/form/dropdown';
 
 const ItemList = () => {
 
@@ -41,8 +42,39 @@ const ItemList = () => {
             "dropoffPoint_id": "CP"
         }
 
+    ];
 
-
+    const tags = [
+        "Todos",
+        "Portáteis",
+        "Telemóveis",
+        "Tablets",
+        "Auscultadores/Fones",
+        "Carregadores",
+        "Pen drives",
+        "Câmaras",
+        "Livros",
+        "Cadernos",
+        "Material de escritório",
+        "Carteiras",
+        "Chaves",
+        "Cartão",
+        "Óculos",
+        "Joalharia",
+        "Casacos",
+        "Chapéus/Bonés",
+        "Cachecóis",
+        "Luvas",
+        "Mochilas",
+        "Equipamento desportivo",
+        "Garrafas de água",
+        "Guarda-chuvas",
+        "Instrumentos musicais",
+        "Material de arte",
+        "Bagagem",
+        "Produtos de maquilhagem",
+        "Artigos de higiene",
+        "Medicamentos",
     ];
     const [selectedItem, setSelectedItem]: any = useState(null);
 
@@ -52,6 +84,16 @@ const ItemList = () => {
             modal.showModal();
         }
     }, [selectedItem]);
+
+    const [selectedTag, setSelectedTag] = useState<string>("Todos");
+
+    const handleSelectTag = (tag: string) => {
+        setSelectedTag(tag);
+    };
+
+    // Filter the data based on the selected tag
+    const filteredData = selectedTag === "Todos" ? data : data.filter(item => item.tag === selectedTag);
+
 
     return (
         <div>
@@ -63,11 +105,13 @@ const ItemList = () => {
                             <th>Descrição</th>
                             <th>Tag</th>
                             <th>Ponto de Recolha</th>
-                            <th></th>
+                            <th>
+                                <Dropdown items={tags} onSelect={handleSelectTag} /> 
+                            </th>
                         </tr>
                     </thead>
                     <tbody className='text-xl'>
-                        {data.map((item, index) => (
+                        {filteredData.map((item, index) => (
                             <tr key={index}>
                                 <td>
                                     <div className="flex items-center space-x-3">

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 
-function Dropdown({ items }: { items: string[] }) {
+function Dropdown({ items, onSelect }: { items: string[], onSelect?: (item: string) => void }) {
   const [searchText, setSearchText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [filteredItems, setFilteredItems] = useState<string[]>(items);
@@ -20,12 +20,15 @@ function Dropdown({ items }: { items: string[] }) {
   const handleItemClick = (item: string) => {
     setSearchText(item);
     setIsOpen(false);
+    if (onSelect) {
+      onSelect(item); // Only call onSelect if it's provided
+    }
   };
 
   return (
-    <div className="dropdown w-full mt-7">
+    <div className="w-full dropdown mt-7">
       <input
-        className="input input-bordered border-primary w-full bg-secondary placeholder-black"
+        className="w-full placeholder-black input input-bordered bg-neutral-content"
         placeholder="Tipo de Objeto"
         onClick={() => setIsOpen(true)}
         value={searchText}
@@ -36,7 +39,7 @@ function Dropdown({ items }: { items: string[] }) {
       />
       {isOpen && filteredItems.length > 0 && (
         <ul
-          className="dropdown-content z-10 menu p-2 shadow bg-primary bordered border-secondary rounded-box w-52 max-h-80 flex-nowrap overflow-auto"
+          className="z-10 p-2 overflow-auto shadow dropdown-content menu bg-primary bordered border-secondary rounded-box w-52 max-h-80 flex-nowrap"
         >
           {filteredItems.map((item, index) => (
             <li key={index} onClick={() => handleItemClick(item)}>

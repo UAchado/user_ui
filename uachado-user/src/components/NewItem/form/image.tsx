@@ -35,16 +35,16 @@ function Image() {
   }
   return (
     <>
-      <div className="collapse collapse-arrow bg-secondary border border-primary mt-7">
+      <div className="collapse collapse-arrow bg-neutral-content mt-7">
         <input type="checkbox" />
-        <div className="collapse-title text-xl font-medium">Foto do Objeto</div>
+        <div className="text-xl font-medium collapse-title">Foto do Objeto</div>
         <div className="collapse-content">
           {/* File input for item image */}
           <input
             name="image"
             type="file"
             accept="image/png, image/jpeg, image/svg, image/jpg"
-            className="file-input file-input-primary w-full max-w-xs"
+            className="w-full max-w-xs file-input file-input-primary"
             onChange={handleImageChange}
           />
 
