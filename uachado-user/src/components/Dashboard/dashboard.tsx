@@ -10,6 +10,7 @@ const Dashboard = () => {
             "description": "Carteira preta",
             "tag": "Carteiras",
             "dropoffPoint_id": "Cantina de Santiago",
+            "admittedAt": "2021-04-01T00:00:00.000Z",
             "isVisible": true,
         },
         {
@@ -17,6 +18,7 @@ const Dashboard = () => {
             "description": "Notebook ultrafino",
             "tag": "Portáteis",
             "dropoffPoint_id": "Reitoria",
+            "admittedAt": "2021-05-01T00:00:00.000Z",
             "isVisible": true,
         },
         {
@@ -24,6 +26,7 @@ const Dashboard = () => {
             "description": "Smartphone Samsung",
             "tag": "Telemóveis",
             "dropoffPoint_id": "Cantina de Santiago",
+            "admittedAt": "2021-06-01T00:00:00.000Z",
             "isVisible": true,
         },
         {
@@ -31,6 +34,7 @@ const Dashboard = () => {
             "description": "Tablet Lenovo",
             "tag": "Tablets",
             "dropoffPoint_id": "Cantina do Crasto",
+            "admittedAt": "2021-07-01T00:00:00.000Z",
             "isVisible": true,
         },
         {
@@ -38,6 +42,7 @@ const Dashboard = () => {
             "description": "Auscultadores JBL",
             "tag": "Auscultadores/Fones",
             "dropoffPoint_id": "Cantina do Crasto",
+            "admittedAt": "2021-08-01T00:00:00.000Z",
             "isVisible": true,
         },
         {
@@ -45,6 +50,7 @@ const Dashboard = () => {
             "description": "Carregador portátil universal",
             "tag": "Carregadores",
             "dropoffPoint_id": "CP",
+            "admittedAt": "2021-08-01T00:00:00.000Z",
             "isVisible": true,
         }
 
@@ -168,7 +174,7 @@ const Dashboard = () => {
                         <tr>
                             <th>Descrição</th>
                             <th>Tag</th>
-                            <th>Ponto de Recolha</th>
+                            <th>Admitido em</th>
                             <th>
                                 <Dropdown items={tags} onSelect={handleSelectTag} />
                             </th>
@@ -195,7 +201,7 @@ const Dashboard = () => {
                                         <span className="badge badge-ghost badge-md">{item.tag}</span>
                                     </div>
                                 </td>
-                                <td>{item.dropoffPoint_id}</td>
+                                <td>{new Date(item.admittedAt).toLocaleDateString()}</td>
                                 <th>
                                     <button
                                         className="btn btn-ghost border-primary-content"
