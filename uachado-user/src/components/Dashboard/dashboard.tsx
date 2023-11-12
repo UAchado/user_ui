@@ -91,7 +91,16 @@ const Dashboard = () => {
     ];
     // Rename the state variable to itemsData
     const [selectedTag, setSelectedTag] = useState("Todos");
-    const [selectedItem, setSelectedItem] = useState(null);
+    type ItemType = {
+        image: string;
+        description: string;
+        tag: string;
+        dropoffPoint_id: string;
+        admittedAt: string;
+        isVisible: boolean;
+     };
+     
+     const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
     const [filteredData, setFilteredData] = useState(data.filter(item =>
         (selectedTag === "Todos" ? true : item.tag === selectedTag) && item.isVisible
     ));
@@ -100,7 +109,7 @@ const Dashboard = () => {
     const [selectedIndices, setSelectedIndices] = useState(new Set());
 
     // Handle checkbox selection
-    const handleCheckboxChange = (index) => {
+    const handleCheckboxChange = (index : any) => {
         setSelectedIndices(prevIndices => {
             const newIndices = new Set(prevIndices);
             if (newIndices.has(index)) {
@@ -146,7 +155,7 @@ const Dashboard = () => {
                 {/* Button for marking items as found */}
                 <button
                     className={`btn ${selectedIndices.size > 0 ? 'bg-primary' : 'btn-disabled'}`}
-                    onClick={() => selectedIndices.size > 0 && document.getElementById('my_modal_5').showModal()}
+                    onClick={() => selectedIndices.size > 0 && (document.getElementById('my_modal_5') as HTMLDialogElement)!.showModal()}
                 >
                     Marcar Itens como Encontrados
                 </button>
@@ -226,10 +235,10 @@ const Dashboard = () => {
             {selectedItem && (
                 <dialog id="my_modal_1" className="modal">
                     <div className="modal-box">
-                        <img src={selectedItem.image} alt={selectedItem.description} />
-                        <h3 className="text-lg font-bold">{selectedItem.description}</h3>
-                        <span className="badge badge-ghost badge-md">{selectedItem.tag}</span>
-                        <h1 className="text-xl font-bold">Guardado em: <b>{selectedItem.dropoffPoint_id}</b></h1>
+                        <img src={selectedItem["image"]} alt={selectedItem["description"]} />
+                        <h3 className="text-lg font-bold">{selectedItem["description"]}</h3>
+                        <span className="badge badge-ghost badge-md">{selectedItem["tag"]}</span>
+                        <h1 className="text-xl font-bold">Guardado em: <b>{selectedItem["dropoffPoint_id"]}</b></h1>
                         <div className="modal-action">
                             <form method="dialog">
                                 <button
