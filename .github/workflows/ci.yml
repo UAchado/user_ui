@@ -23,6 +23,6 @@ jobs:
     - name: Change directory
       run: cd uachado-user
     - name: Build the Docker image
-      run: docker build -t uachado/user-ui .
+      run: docker build -t uachado/user-ui -f Dockerfile.prod .
     - name: Push image to DockerHub
       run: docker push uachado/user-ui:latest
