@@ -167,7 +167,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </dialog>
-                <h1 className='text-3xl'>Dashboard para: <b>DETI</b></h1>
+                <h1 className='text-3xl'>Dashboard para: <b>DETI (Sr.Fidalgo)</b></h1>
                 <table className="table">
                     {/* head */}
                     <thead>
