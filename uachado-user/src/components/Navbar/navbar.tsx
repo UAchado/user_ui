@@ -13,7 +13,7 @@ const Navbar = () => {
                 </Link>
             </div>
             <div className="flex-none">
-                <Link to="/signIn">
+                <Link to="/dashboard">
                     <button className="btn btn-ghost">Staff Sign-In</button>
                 </Link>
             </div>

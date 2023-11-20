@@ -11,23 +11,26 @@ module.exports = {
     themes: [{
       mytheme: {
 
-        "primary": "#AE7951",
+        "primary": "#92D40D",
 
-        "secondary": "#CAA17D",
+        "secondary": "#7AB10A",
 
-        "accent": "#7951AE",
+        "accent": "#DBA071",
 
-        "neutral": "#251726",
+        "neutral": "#3b2640",
 
-        "base-100": "#d0dee9",
+        "base-100": "#f6f2f8",
 
-        "info": "#a5c7e9",
+        "info": "#94e5f9",
 
-        "success": "#176456",
+        "success": "#1c8276",
 
-        "warning": "#f6d52c",
+        "warning": "#f7a650",
 
-        "error": "#ef3e76",
+        "error": "#df4343",
+        "--rounded-box": "0.5rem", // border radius rounded-box utility class, used in card and other large boxes
+        "--rounded-btn": "0.5rem", // border radius rounded-btn utility class, used in buttons and similar element
+        "--rounded-badge":"0.5rem", // border radius rounded-badge utility class, used in badges and similar
       },
     }, ],
   },
