@@ -120,14 +120,14 @@ const NewItem = () => {
         </div>
       )}
       <div className="flex justify-center">
-        <div className="card bg-neutral-content">
+        <div className="card bg-primary">
           <div className="card-body">
             <h2 className="card-title">Formulário de novo Objeto Perdido</h2>
             <form onSubmit={handleSubmit}>
               {/* Textarea for item description */}
               <div className="w-full max-w-xs form-control">
                 <textarea
-                  className="w-full max-w-xs mt-5 text-black placeholder-black textarea bg-neutral-content"
+                  className="w-full max-w-xs mt-5 text-black placeholder-black textarea bg-secondary"
                   placeholder="Breve descrição sobre o item e como foi encontrado."
                   name="description"
                   required
@@ -143,7 +143,7 @@ const NewItem = () => {
                     type="submit"
                     className="btn btn-secondary bordered border-primary"
                   >
-                    Submit
+                    Submeter
                   </button>
                 </div>
               </div>

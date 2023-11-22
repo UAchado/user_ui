@@ -126,25 +126,25 @@ const DropPoints = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 m-10 sm:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 m-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {locations.map((loc, index) => (
-          <div key={index} className="w-64 card bg-secondary-focus">
-            <figure>
-              <img src={loc.image} alt={loc.name} />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title">{loc.name}</h2>
-              <p>{loc.location}</p>
-              <div className="justify-end card-actions">
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => handleModalOpen(index)}
-                >
-                  View Location
-                </button>
+            <div key={index} className="card bg-secondary-focus ">
+              <figure>
+                <img src={loc.image} alt={loc.name} />
+              </figure>
+              <div className="card-body">
+                <h2 className="card-title text-xs md:text-lg">{loc.name}</h2>
+                <p className="text-xs md:text-lg">{loc.location}</p>
+                <div className="card-actions">
+                  <button
+                    className="btn btn-warning btn-block text-xs sm:text-md"
+                    onClick={() => handleModalOpen(index)}
+                  >
+                    View Location
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
         ))}
       </div>
       {isModalOpen && isLoaded && !loadError && (

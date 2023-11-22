@@ -28,13 +28,14 @@ function Dropdown({ items, onSelect }: { items: string[], onSelect?: (item: stri
   return (
     <div className="w-full dropdown mt-7">
       <input
-        className="w-full placeholder-black input input-bordered bg-neutral-content"
+        className="w-full placeholder-black input input-bordered bg-secondary shadow-lg"
         placeholder="Tipo de Objeto"
         onClick={() => setIsOpen(true)}
         value={searchText}
         name="tag"
         onChange={handleInputChange}
         tabIndex={10}
+        autoComplete="off"
         required
       />
       {isOpen && filteredItems.length > 0 && (
