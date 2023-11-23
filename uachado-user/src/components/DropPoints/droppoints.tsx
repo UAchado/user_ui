@@ -1,47 +1,15 @@
-import { useEffect, useState } from "react";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import React, { useEffect, useState } from "react";
+import { useJsApiLoader } from "@react-google-maps/api";
+import LocationCard from "./Location/locationCard";
+import LocationModal from "./Location/locationModal";
 
-const containerStyle = {
-  width: "100%",
-  height: "400px",
-};
-
-type Location = {
-  lat: number;
-  lng: number;
-} | null;
-
-
-
-const calculateMidpoint = (lat1: number , lng1: number, lat2: number, lng2: number) => {
-if (lat1 == 0 && lng1 != 0 && lat2 != 0 && lng2 != 0) {
-    return false;
-}
-
-
-    let dLng = ((lng2 - lng1) * Math.PI) / 180; // Convert degrees to radians
-
-    // Convert latitude and longitude values to radians
-    lat1 = (lat1 * Math.PI) / 180;
-    lat2 = (lat2 * Math.PI) / 180;
-    lng1 = (lng1 * Math.PI) / 180;
-
-    let bX = Math.cos(lat2) * Math.cos(dLng);
-    let bY = Math.cos(lat2) * Math.sin(dLng);
-    let lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + bX) * (Math.cos(lat1) + bX) + bY * bY));
-    let lng3 = lng1 + Math.atan2(bY, Math.cos(lat1) + bX);
-
-    // Convert the midpoint's latitude and longitude from radians to degrees
-    lat3 = (lat3 * 180) / Math.PI;
-    lng3 = (lng3 * 180) / Math.PI;
-
-    return { lat: lat3, lng: lng3 };
-};
-
-const DropPoints = () => {
+const DropPoints: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userLocation, setUserLocation] = useState<Location>(null);
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_API_KEY, // Make sure you use your API key here
@@ -74,6 +42,39 @@ const DropPoints = () => {
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
+
+  const calculateMidpoint = (
+    lat1: number,
+    lng1: number,
+    lat2: number,
+    lng2: number
+  ): { lat: number; lng: number } | null => {
+    if (lat1 === 0 && lng1 !== 0 && lat2 !== 0 && lng2 !== 0) {
+      return null;
+    }
+
+    let dLng = ((lng2 - lng1) * Math.PI) / 180; // Convert degrees to radians
+
+    // Convert latitude and longitude values to radians
+    lat1 = (lat1 * Math.PI) / 180;
+    lat2 = (lat2 * Math.PI) / 180;
+    lng1 = (lng1 * Math.PI) / 180;
+
+    let bX = Math.cos(lat2) * Math.cos(dLng);
+    let bY = Math.cos(lat2) * Math.sin(dLng);
+    let lat3 = Math.atan2(
+      Math.sin(lat1) + Math.sin(lat2),
+      Math.sqrt((Math.cos(lat1) + bX) * (Math.cos(lat1) + bX) + bY * bY)
+    );
+    let lng3 = lng1 + Math.atan2(bY, Math.cos(lat1) + bX);
+
+    // Convert the midpoint's latitude and longitude from radians to degrees
+    lat3 = (lat3 * 180) / Math.PI;
+    lng3 = (lng3 * 180) / Math.PI;
+
+    return { lat: lat3, lng: lng3 };
+  };
+
   const locations = [
     {
       name: "Reitoria",
@@ -128,79 +129,20 @@ const DropPoints = () => {
     <>
       <div className="grid grid-cols-1 gap-4 m-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {locations.map((loc, index) => (
-            <div key={index} className="card bg-secondary-focus ">
-              <figure>
-                <img src={loc.image} alt={loc.name} />
-              </figure>
-              <div className="card-body">
-                <h2 className="card-title text-xs md:text-lg">{loc.name}</h2>
-                <p className="text-xs md:text-lg">{loc.location}</p>
-                <div className="card-actions">
-                  <button
-                    className="btn btn-warning btn-block text-xs sm:text-md"
-                    onClick={() => handleModalOpen(index)}
-                  >
-                    View Location
-                  </button>
-                </div>
-              </div>
-            </div>
+          <LocationCard
+            key={index}
+            location={loc}
+            onOpenModal={() => handleModalOpen(index)}
+          />
         ))}
       </div>
       {isModalOpen && isLoaded && !loadError && (
-        <dialog open className="modal modal-bottom sm:modal-middle">
-          <div className="modal-box">
-            <h3 className="text-lg font-bold">
-              {locations[selectedIndex].name}
-            </h3>
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={
-                calculateMidpoint(
-                    userLocation?.lat || 0,
-                    userLocation?.lng || 0,
-                    locations[selectedIndex]?.latitude || 0,
-                    locations[selectedIndex]?.longitude || 0
-                ) || {
-                  lat: locations[selectedIndex]?.latitude,
-                  lng: locations[selectedIndex]?.longitude,
-                }
-              }
-              zoom={15}
-            >
-              {/* Marker Component for selected location */}
-              {locations[selectedIndex] && (
-                <Marker
-                  position={{
-                    lat: locations[selectedIndex]?.latitude,
-                    lng: locations[selectedIndex]?.longitude,
-                  }}
-                />
-              )}
-              {/* Marker Component for user location */}
-              {userLocation && (
-                <Marker
-                  position={userLocation}
-                  icon={{
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 7,
-                    fillColor: "#4285F4",
-                    fillOpacity: 1,
-                    strokeWeight: 2,
-                    strokeColor: "white",
-                  }}
-                />
-              )}
-            </GoogleMap>
-            <div className="modal-action">
-              <form method="dialog">
-                <button className="btn" onClick={handleModalClose}>
-                  Close
-                </button>
-              </form>
-            </div>
-          </div>
-        </dialog>
+        <LocationModal
+          location={locations[selectedIndex]}
+          userLocation={userLocation}
+          onCloseModal={handleModalClose}
+          calculateMidpoint={calculateMidpoint}
+        />
       )}
     </>
   );

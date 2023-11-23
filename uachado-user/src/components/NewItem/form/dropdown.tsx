@@ -40,7 +40,7 @@ function Dropdown({ items, onSelect }: { items: string[], onSelect?: (item: stri
       />
       {isOpen && filteredItems.length > 0 && (
         <ul
-          className="z-10 p-2 overflow-auto shadow dropdown-content menu bg-primary bordered border-secondary rounded-box w-52 max-h-80 flex-nowrap"
+          className="z-10 p-2 overflow-auto shadow dropdown-content menu bg-secondary-focus bordered border-secondary rounded-box w-52 max-h-80 flex-nowrap"
         >
           {filteredItems.map((item, index) => (
             <li key={index} onClick={() => handleItemClick(item)}>
