@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Dropdown from '../NewItem/form/dropdown';
+import Modal from './Details/ItemDetails';
 
 const ItemList = () => {
 
@@ -76,7 +77,13 @@ const ItemList = () => {
         "Artigos de higiene",
         "Medicamentos",
     ];
-    const [selectedItem, setSelectedItem]: any = useState(null);
+    const [selectedItem, setSelectedItem] = useState<{
+      image: string;
+      description: string;
+      tag: string;
+      dropoffPoint_id: string;
+    } | null>(null);
+
 
     useEffect(() => {
         if (selectedItem !== null) {
@@ -102,7 +109,7 @@ const ItemList = () => {
                     {/* head */}
                     <thead>
                         <tr>
-                            <th>Descrição</th>
+                            <th>Imagem</th>
                             <th>Tag</th>
                             <th>Ponto de Recolha</th>
                             <th>
@@ -120,9 +127,6 @@ const ItemList = () => {
                                                 <img src={item.image} alt="Avatar Tailwind CSS Component" />
                                             </div>
                                         </div>
-                                        <div>
-                                            <div className="font-bold">{item.description}</div>
-                                        </div>
                                     </div>
                                 </td>
                                 <td>
@@ -131,38 +135,21 @@ const ItemList = () => {
                                     </div>
                                 </td>
                                 <td>{item.dropoffPoint_id}</td>
-                                <th>
+                                <td className='flex justify-center   items-center'>
                                     <button
                                         className="btn btn-ghost border-primary-content"
                                         onClick={() => setSelectedItem(item)}
                                     >
                                         Detalhes
                                     </button>
-                                </th>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
             {selectedItem && (
-                <dialog id="my_modal_1" className="modal">
-                    <div className="modal-box">
-                        <img src={selectedItem.image} alt={selectedItem.description} />
-                        <h3 className="text-lg font-bold">{selectedItem.description}</h3>
-                        <span className="badge badge-ghost badge-md">{selectedItem.tag}</span>
-                        <h1 className="text-xl font-bold">Guardado em: <b>{selectedItem.dropoffPoint_id}</b></h1>
-                        <div className="modal-action">
-                            <form method="dialog">
-                                <button
-                                    className="btn"
-                                    onClick={() => setSelectedItem(null)}
-                                >
-                                    Fechar
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </dialog>
+                <Modal selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
             )}
         </div>
     );

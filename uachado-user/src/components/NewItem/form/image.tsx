@@ -35,7 +35,7 @@ function Image() {
   }
   return (
     <>
-      <div className="collapse collapse-arrow bg-neutral-content mt-7">
+      <div className="collapse collapse-arrow bg-secondary mt-7">
         <input type="checkbox" />
         <div className="text-xl font-medium collapse-title">Foto do Objeto</div>
         <div className="collapse-content">
