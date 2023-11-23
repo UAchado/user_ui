@@ -17,20 +17,20 @@ const Navbar = () => {
           </label>
           <ul
             tabIndex={20}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 bg-secondary space-y-2 "
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 space-y-2 "
           >
             <li>
               <Link
                 to="/newItem"
-                className="text-xl normal-case btn btn-ghost rounded-box w-52 justify-start items-center w-full"
+                className="text-xl normal-case btn btn-ghost rounded-box w-full justify-start items-center"
               >
-                Add Item
+                Adicionar Item
               </Link>
             </li>
             <li>
               <Link
                 to="/newItem"
-                className="text-xl normal-case btn btn-ghost rounded-box w-52 justify-start items-center w-full mt-1"
+                className="text-xl normal-case btn btn-ghost rounded-box w-full justify-start items-center mt-1"
               >
                 Add Item
               </Link>
