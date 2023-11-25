@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Dropdown from '../NewItem/form/dropdown';
+import Dropdown from '../../components/NewItem/Dropdown/dropdown';
 
 const Dashboard = () => {
 

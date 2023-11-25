@@ -1,27 +1,34 @@
 import React from "react";
 
+// Define a type for the item
+type ItemType = {
+  image: string;
+  description: string;
+  tag: string;
+  dropoffPoint_id: string;
+};
+
+// Define the props for the Modal component
 interface ModalProps {
-  selectedItem: {
-    image: string;
-    description: string;
-    tag: string;
-    dropoffPoint_id: string;
-  } | null;
-  setSelectedItem: (
-    item: {
-      image: string;
-      description: string;
-      tag: string;
-      dropoffPoint_id: string;
-    } | null
-  ) => void;
+  selectedItem: ItemType | null;
+  setSelectedItem: (item: ItemType | null) => void;
+  onOpenOtherComponent: () => void; // Define the type for this prop
 }
 
-const Modal: React.FC<ModalProps> = ({ selectedItem, setSelectedItem }) => {
+const Modal: React.FC<ModalProps> = ({
+  selectedItem,
+  setSelectedItem,
+  onOpenOtherComponent,
+}) => {
   return (
     <dialog id="my_modal_1" className="modal">
       <div className="modal-box">
-        {/* Apply max-width to limit the image size */}
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
         <div className="grid grid-cols-2 items-center text-center gap-3">
           <div className="avatar">
             <img
@@ -41,14 +48,17 @@ const Modal: React.FC<ModalProps> = ({ selectedItem, setSelectedItem }) => {
         </h1>
         <div className="modal-action grid justify-center">
           <form method="dialog">
-            <button className="btn btn-primary mr-3" onClick={() => setSelectedItem(null)}>
-              Confirmar
-            </button>
-            <button className="btn ml-3" onClick={() => setSelectedItem(null)}>
-              Fechar
+            <button
+              className="btn btn-warning"
+              onClick={() => {
+                setSelectedItem(null);
+                onOpenOtherComponent();
+              }}
+            >
+              Ver no mapa
             </button>
           </form>
-        </div>
+        </div>{" "}
       </div>
     </dialog>
   );

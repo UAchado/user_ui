@@ -29,10 +29,10 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                to="/newItem"
+                to="/dashboard"
                 className="text-xl normal-case btn btn-ghost rounded-box w-full justify-start items-center mt-1"
               >
-                Add Item
+                DashBoard
               </Link>
             </li>
           </ul>
@@ -44,11 +44,10 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="navbar-end">
-        <Link to="/dashboard">
+        <Link to="/login">
           <button className="btn btn-ghost btn-circle">
             <div className="indicator">
-              <i className="fas fa-bell"></i>{" "}
-              {/* Example: Using Font Awesome icons */}
+              <i className="fas fa-user"></i>
               <span className="badge badge-xs badge-primary indicator-item"></span>
             </div>
           </button>

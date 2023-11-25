@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Dropdown from "./form/dropdown";
+import Dropdown from "../../components/NewItem/Dropdown/dropdown";
 import axios from "axios";
-import Image from "./form/image";
+import Image from "../../components/NewItem/Image/image";
 /**
  * Component for creating a new item.
  */
