@@ -43,8 +43,8 @@ function Dropdown({ items, onSelect }: { items: string[], onSelect?: (item: stri
           className="z-10 p-2 overflow-auto shadow dropdown-content menu bg-secondary-focus bordered border-secondary rounded-box w-52 max-h-80 flex-nowrap"
         >
           {filteredItems.map((item, index) => (
-            <li key={index} onClick={() => handleItemClick(item)}>
-              <button>{item}</button>
+            <li key={index}>
+              <button onClick={() => handleItemClick(item)}>{item}</button>
             </li>
           ))}
         </ul>

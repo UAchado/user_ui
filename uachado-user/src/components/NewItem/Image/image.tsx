@@ -29,10 +29,6 @@ function Image() {
       setSelectedImage(null);
     }
   };
-
-  {
-    /* Collapse section for item image */
-  }
   return (
     <>
       <div className="collapse collapse-arrow bg-secondary mt-7">
