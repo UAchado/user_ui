@@ -4,6 +4,7 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 interface LocationModalProps {
   location: {
     name: string;
+    coordinates: string;
     latitude: number;
     longitude: number;
   };
@@ -30,6 +31,12 @@ const LocationModal: React.FC<LocationModalProps> = ({
     width: "100%",
     height: "400px",
   };
+  const [latitudeStr, longitudeStr] = location.coordinates.split(", ");
+
+  // Convert string values to numbers
+  location.latitude = parseFloat(latitudeStr);
+  location.longitude = parseFloat(longitudeStr);
+
 
   return (
     <dialog open className="modal modal-bottom sm:modal-middle">
@@ -39,8 +46,8 @@ const LocationModal: React.FC<LocationModalProps> = ({
           mapContainerStyle={containerStyle}
           center={
             calculateMidpoint(
-              userLocation?.lat || 0,
-              userLocation?.lng || 0,
+              userLocation?.lat || 40.631417730224,
+              userLocation?.lng || -8.657526476133642,
               location.latitude || 0,
               location.longitude || 0
             ) || {

@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import Dropdown from "../../components/NewItem/Dropdown/dropdown";
 import Modal from "../../components/ItemDetails/ItemDetails";
 import LocationModal from "../../components/Map/locationModal";
+import axios from "axios";
 
 const ItemList = () => {
+  const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
+  const [tags, setTags] = useState<string[]>([]);
   const data = [
     {
       image:
@@ -49,38 +52,6 @@ const ItemList = () => {
     },
   ];
 
-  const tags = [
-    "Todos",
-    "Portáteis",
-    "Telemóveis",
-    "Tablets",
-    "Auscultadores/Fones",
-    "Carregadores",
-    "Pen drives",
-    "Câmaras",
-    "Livros",
-    "Cadernos",
-    "Material de escritório",
-    "Carteiras",
-    "Chaves",
-    "Cartão",
-    "Óculos",
-    "Joalharia",
-    "Casacos",
-    "Chapéus/Bonés",
-    "Cachecóis",
-    "Luvas",
-    "Mochilas",
-    "Equipamento desportivo",
-    "Garrafas de água",
-    "Guarda-chuvas",
-    "Instrumentos musicais",
-    "Material de arte",
-    "Bagagem",
-    "Produtos de maquilhagem",
-    "Artigos de higiene",
-    "Medicamentos",
-  ];
   const [selectedItem, setSelectedItem] = useState<{
     image: string;
     description: string;
@@ -94,6 +65,27 @@ const ItemList = () => {
       modal.showModal();
     }
   }, [selectedItem]);
+
+  useEffect(() => {
+    // Fetch tags from the API
+    const fetchTags = async () => {
+      try {
+        // Adjust the endpoint as needed
+        axios
+          .get(itemsBaseUrl + "items/tags/")
+          .then(function (response) {
+            setTags(response.data);
+            console.log("Data fetched successfully:", response.data);
+          })
+          .catch(function (error) {
+            console.error("Error sending data:", error);
+          });
+      } catch (error) {
+        console.error("Error fetching tags:", error);
+      }
+    };
+    fetchTags();
+  }, []);
 
   const [selectedTag, setSelectedTag] = useState<string>("Todos");
   const [showMap, setShowMap] = useState(false);
@@ -114,55 +106,57 @@ const ItemList = () => {
 
   return (
     <div>
-      <div className="sm:w-[55vw] overflow-x-auto p-10">
-        <table className="table">
-          {/* head */}
-          <thead>
-            <tr>
-              <th>Imagem</th>
-              <th>Tag</th>
-              <th>Ponto de Recolha</th>
-              <th>
-                <Dropdown items={tags} onSelect={handleSelectTag} />
-              </th>
-            </tr>
-          </thead>
-          <tbody className="text-xl">
-            {filteredData.map((item, index) => (
-              <tr key={index}>
-                <td>    
-                  <div className="flex items-center space-x-3">
-                    <div className="avatar">
-                      <div className="w-12 h-12 mask mask-squircle">
-                        <img
-                          src={item.image}
-                          alt="Avatar Tailwind CSS Component"
-                        />
+      {tags.length !== 0 && (
+        <div className="sm:w-[55vw] overflow-x-auto p-10">
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>Imagem</th>
+                <th>Tag</th>
+                <th>Ponto de Recolha</th>
+                <th>
+                  <Dropdown items={tags} onSelect={handleSelectTag} />
+                </th>
+              </tr>
+            </thead>
+            <tbody className="text-xl">
+              {filteredData.map((item, index) => (
+                <tr key={index}>
+                  <td>
+                    <div className="flex items-center space-x-3">
+                      <div className="avatar">
+                        <div className="w-12 h-12 mask mask-squircle">
+                          <img
+                            src={item.image}
+                            alt="Avatar Tailwind CSS Component"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td>
-                  <div className="flex items-center space-x-2">
-                    <span className="badge badge-ghost badge-md">
-                      {item.tag}
-                    </span>
-                  </div>
-                </td>
-                <td>{item.dropoffPoint_id}</td>
-                <td className="flex justify-center   items-center">
-                  <button
-                    className="btn btn-ghost border-primary-content"
-                    onClick={() => setSelectedItem(item)}
-                  >
-                    Detalhes
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  </td>
+                  <td>
+                    <div className="flex items-center space-x-2">
+                      <span className="badge badge-ghost badge-md">
+                        {item.tag}
+                      </span>
+                    </div>
+                  </td>
+                  <td>{item.dropoffPoint_id}</td>
+                  <td className="flex justify-center   items-center">
+                    <button
+                      className="btn btn-ghost border-primary-content"
+                      onClick={() => setSelectedItem(item)}
+                    >
+                      Detalhes
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       {selectedItem && (
         <Modal
           selectedItem={selectedItem}
@@ -172,13 +166,13 @@ const ItemList = () => {
       )}
       {showMap && (
         <LocationModal
-        // chamar a api para obter a localização do ponto de recolha
+          // chamar a api para obter a localização do ponto de recolha
           location={{
             name: "",
             latitude: 0,
             longitude: 0,
           }}
-          // 
+          //
           userLocation={null}
           onCloseModal={() => setShowMap(false)}
           calculateMidpoint={function (

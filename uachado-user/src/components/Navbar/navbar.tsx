@@ -1,9 +1,25 @@
 import generalLogo from "../../../public/general-icon.png";
 import { Link } from "react-router-dom";
-import '@fortawesome/fontawesome-free/css/all.css';
-
+import "@fortawesome/fontawesome-free/css/all.css";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/LoginContext/AuthContext";
 
 const Navbar = () => {
+  const { isLoggedIn, logout } = useContext(AuthContext);
+
+  const { username } = useContext(AuthContext);
+
+  const [showGreeting, setShowGreeting] = useState(false);
+  
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  const toggleGreeting = () => {
+    setShowGreeting(!showGreeting);
+  };
+
   return (
     <div
       className="rounded-lg navbar bg-primary"
@@ -44,14 +60,45 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="navbar-end">
-        <Link to="/login">
-          <button className="btn btn-ghost btn-circle">
-            <div className="indicator">
-              <i className="fas fa-user"></i>
-              <span className="badge badge-xs badge-primary indicator-item"></span>
-            </div>
-          </button>
-        </Link>
+        {isLoggedIn && (
+          <div className="relative">
+            <button
+              onClick={toggleGreeting}
+              className="btn btn-ghost btn-circle"
+            >
+              <div className="indicator">
+                <i className="fas fa-user"></i> {/* User icon */}
+              </div>
+            </button>
+            {showGreeting && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <div className="p-2">
+                  <p className="text-gray-800 text-sm">
+                    Hello, {username}{/* Replace with actual username */}
+                  </p>
+                  <hr className="my-2" />
+                  <button
+                    onClick={handleLogout}
+                    className="button w-full text-cent text-gray-800 hover:bg-gray-200 p-2"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        {!isLoggedIn && (
+          <div className="relative">
+            <Link to="/login">
+              <button onClick={() => {}} className="btn btn-ghost btn-circle">
+                <div className="indicator">
+                  <i className="fas fa-user"></i> {/* User icon */}
+                </div>
+              </button>
+            </Link>
+          </div>
+        )}
       </div>
 
       <div className="flex-none"></div>

@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import NewItem from "./pages/NewItemPage/newItem";
 import Home from "./pages/HomePage/home";
 import DropPoints from "./pages/DropOffPointsPage/droppoints";
@@ -7,7 +7,8 @@ import Navbar from "./components/Navbar/navbar";
 import ItemList from "./pages/ItemListPage/itemlist";
 import Dashboard from "./pages/DashboardPage/dashboard";
 import Login from "./pages/LoginPage/login";
-
+import { useContext } from "react";
+import { AuthContext } from "./context/LoginContext/AuthContext";
 
 function App() {
   return (
@@ -23,14 +24,26 @@ function App() {
 }
 
 function Contents() {
+  // Check if the user is logged in (you can use localStorage or another state management solution)
+  const { isLoggedIn } = useContext(AuthContext);
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/dropPoints" element={<DropPoints/> } />
+      <Route path="/dropPoints" element={<DropPoints />} />
       <Route path="/findItems" element={<ItemList />} />
-      <Route path="/dashboard" element={<Dashboard/>} />
-      <Route path="/newItem" element={<NewItem />} />
-      <Route path="/login" element={<Login />} />
+      <Route
+        path="/dashboard"
+        element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/newItem"
+        element={isLoggedIn ? <NewItem /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/login"
+        element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />}
+      />
       <Route path="*" element={<h1>Not Found!</h1>} />
     </Routes>
   );
