@@ -226,7 +226,11 @@ const ItemList = () => {
                       </span>
                     </div>
                   </td>
-                  <td>{item.dropoffPoint_id}</td>
+                  <td>
+                    {dropPoints
+                      .filter((point) => point.id === item.dropoffPoint_id)
+                      .map((filteredPoint) => filteredPoint.name)}
+                  </td>
                   <td className="flex justify-center items-center">
                     <button
                       className="btn btn-ghost border-primary-content"
@@ -285,17 +289,19 @@ const ItemList = () => {
         //   calculateMidpoint={calculateMidpoint}
         // />
         <LocationModal
-        // chamar a api para obter a localização do ponto de recolha
-        location={dropPoints.filter((point) => point.id === selectedItem?.dropoffPoint_id)[0]}
-        userLocation={null}
-        onCloseModal={() => setShowMap(false)}
-        calculateMidpoint={calculateMidpoint}
-      />
+          // chamar a api para obter a localização do ponto de recolha
+          location={
+            dropPoints.filter(
+              (point) => point.id === selectedItem?.dropoffPoint_id
+            )[0]
+          }
+          userLocation={null}
+          onCloseModal={() => setShowMap(false)}
+          calculateMidpoint={calculateMidpoint}
+        />
       )}
     </div>
   );
 };
 
 export default ItemList;
-
-
