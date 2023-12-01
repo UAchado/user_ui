@@ -156,7 +156,7 @@ const ItemList = () => {
             </tbody>
           </table>
           <h2 className="cursor-pointer hover:underline">
-            <a
+            <button className="btn btn-ghost hover:underline hover:bg-transparent"
               onClick={() =>
                 (
                   document.getElementById("contacto") as HTMLDialogElement
@@ -164,7 +164,7 @@ const ItemList = () => {
               }
             >
               Não encontraste o que perdeste?
-            </a>
+            </button>
           </h2>
           <dialog id="contacto" className="modal">
             <div className="modal-box">
