@@ -3,6 +3,7 @@ import Dropdown from "../../components/NewItem/Dropdown/dropdown";
 import Modal from "../../components/ItemDetails/ItemDetails";
 import LocationModal from "../../components/Map/locationModal";
 import axios from "axios";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 const ItemList = () => {
   const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
@@ -12,6 +13,10 @@ const ItemList = () => {
   const [locationData, setLocationData] = useState(null); // State to hold the location data
   const [selectedTag, setSelectedTag] = useState<string>("Todos");
   const [showMap, setShowMap] = useState(false);
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
 
   const data = [
     {
@@ -71,6 +76,33 @@ const ItemList = () => {
       modal.showModal();
     }
   }, [selectedItem]);
+
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_API_KEY, // Make sure you use your API key here
+  });
+
+  useEffect(() => {
+    // Get user's current location
+    const interval = setInterval(() => {
+    }, 5000);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log("User's location:", position.coords.latitude, position.coords.longitude);
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        () => {
+          console.error("Error: The Geolocation service failed.");
+        }
+      );
+    } else {
+      console.error("Error: Your browser doesn't support geolocation.");
+    }
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     // Fetch tags from the API
@@ -273,14 +305,15 @@ const ItemList = () => {
           </dialog>
         </div>
       )}
-      {selectedItem && (
+      {selectedItem &&(
         <Modal
           selectedItem={selectedItem}
+          droppoints={dropPoints}
           onOpenOtherComponent={openMapComponent}
         />
       )}
 
-      {showMap && (
+      {showMap && isLoaded && !loadError && (
         // <LocationModal
         //   // chamar a api para obter a localização do ponto de recolha
         //   location={locationData}
@@ -295,7 +328,7 @@ const ItemList = () => {
               (point) => point.id === selectedItem?.dropoffPoint_id
             )[0]
           }
-          userLocation={null}
+          userLocation={userLocation}
           onCloseModal={() => setShowMap(false)}
           calculateMidpoint={calculateMidpoint}
         />
