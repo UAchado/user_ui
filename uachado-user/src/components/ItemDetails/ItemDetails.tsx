@@ -5,19 +5,17 @@ type ItemType = {
   image: string;
   description: string;
   tag: string;
-  dropoffPoint_id: string;
-};
+  dropoffPoint_id: number;
+} | null;
 
 // Define the props for the Modal component
 interface ModalProps {
   selectedItem: ItemType | null;
-  setSelectedItem: (item: ItemType | null) => void;
   onOpenOtherComponent: () => void; // Define the type for this prop
 }
 
 const Modal: React.FC<ModalProps> = ({
   selectedItem,
-  setSelectedItem,
   onOpenOtherComponent,
 }) => {
   return (
@@ -51,7 +49,6 @@ const Modal: React.FC<ModalProps> = ({
             <button
               className="btn btn-warning"
               onClick={() => {
-                setSelectedItem(null);
                 onOpenOtherComponent();
               }}
             >

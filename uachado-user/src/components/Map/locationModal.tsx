@@ -7,7 +7,7 @@ interface LocationModalProps {
     coordinates: string;
     latitude: number;
     longitude: number;
-  };
+  } | null;
   userLocation: {
     lat: number;
     lng: number;
@@ -31,6 +31,8 @@ const LocationModal: React.FC<LocationModalProps> = ({
     width: "100%",
     height: "400px",
   };
+  if (!location) return null;
+  
   const [latitudeStr, longitudeStr] = location.coordinates.split(", ");
 
   // Convert string values to numbers

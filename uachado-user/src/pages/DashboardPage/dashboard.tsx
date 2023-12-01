@@ -181,7 +181,7 @@ const Dashboard = () => {
                     {/* head */}
                     <thead>
                         <tr>
-                            <th>Descrição</th>
+                            <th>Imagem</th>
                             <th>Tag</th>
                             <th>Admitido em</th>
                             <th>
@@ -200,9 +200,6 @@ const Dashboard = () => {
                                                 <img src={item.image} alt="Avatar Tailwind CSS Component" />
                                             </div>
                                         </div>
-                                        <div>
-                                            <div className="font-bold">{item.description}</div>
-                                        </div>
                                     </div>
                                 </td>
                                 <td>
@@ -211,22 +208,22 @@ const Dashboard = () => {
                                     </div>
                                 </td>
                                 <td>{new Date(item.admittedAt).toLocaleDateString()}</td>
-                                <th>
+                                <td className='items-center'>
                                     <button
                                         className="btn btn-ghost border-primary-content"
                                         onClick={() => setSelectedItem(item)}
                                     >
                                         Detalhes
                                     </button>
-                                </th>
-                                <th>
+                                </td>
+                                <td>
                                     <input
                                         type="checkbox"
                                         className="checkbox"
                                         checked={selectedIndices.has(index)}
                                         onChange={() => handleCheckboxChange(index)}
                                     />
-                                </th>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

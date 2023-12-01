@@ -59,6 +59,7 @@ const DropPoints: React.FC = () => {
   }, []);
 
   const handleModalOpen = (index: number) => {
+    console.log(locations[index]);
     setSelectedIndex(index);
     setIsModalOpen(true);
   };
