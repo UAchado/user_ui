@@ -38,6 +38,11 @@ const LocationModal: React.FC<LocationModalProps> = ({
   location.longitude = parseFloat(longitudeStr);
 
 
+  const goToDirections = () => {
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}&travelmode=walking`, '_blank');
+  }
+
+
   return (
     <dialog open className="modal modal-bottom sm:modal-middle">
       <div className="modal-box bg-secondary-focus">
@@ -55,7 +60,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
               lng: location.longitude,
             }
           }
-          zoom={15}
+          zoom={13}
         >
           {/* Marker Component for selected location */}
           {location && (
@@ -83,6 +88,7 @@ const LocationModal: React.FC<LocationModalProps> = ({
         </GoogleMap>
         <div className="modal-action">
           <form method="dialog">
+            <button className="btn bg-primary" onClick={goToDirections}>Directions</button>
             <button className="btn bg-secondary" onClick={onCloseModal}>
               Close
             </button>

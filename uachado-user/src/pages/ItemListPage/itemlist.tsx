@@ -155,6 +155,33 @@ const ItemList = () => {
               ))}
             </tbody>
           </table>
+          <h2 className="cursor-pointer hover:underline">
+            <button className="btn btn-ghost hover:underline hover:bg-transparent"
+              onClick={() =>
+                (
+                  document.getElementById("contacto") as HTMLDialogElement
+                )?.showModal()
+              }
+            >
+              Não encontraste o que perdeste?
+            </button>
+          </h2>
+          <dialog id="contacto" className="modal">
+            <div className="modal-box">
+              <h3 className="text-lg font-bold">Tu aí!</h3>
+              <p className="py-4">
+                Se não encontraste aqui o que perdeste, não desesperes! Manda um
+                e-mail para <b>uachadomachado@gmail.com</b> com uma breve
+                descrição do teu item e faremos o nosso melhor para fazê-lo
+                chegar até ti!{" "}
+              </p>
+              <div className="modal-action">
+                <form method="dialog">
+                  <button className="btn">Entendido!</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
         </div>
       )}
       {selectedItem && (

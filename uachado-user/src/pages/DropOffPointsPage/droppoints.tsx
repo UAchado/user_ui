@@ -16,17 +16,6 @@ const DropPoints: React.FC = () => {
 
   //console.log("Points URL:", pointsBaseUrl + "points/");
   // Make a GET request to the points API
-  axios
-    .get(pointsBaseUrl + "points/")
-    .then((response) => {
-      // Handle the successful response here
-      //console.log("Points API response:", response.data);
-      setLocations(response.data);
-    })
-    .catch((error) => {
-      // Handle any errors that occurred during the request
-      console.error("Error:", error);
-    });
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_API_KEY, // Make sure you use your API key here
@@ -34,9 +23,12 @@ const DropPoints: React.FC = () => {
 
   useEffect(() => {
     // Get user's current location
+    const interval = setInterval(() => {
+    }, 5000);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.log("User's location:", position.coords.latitude, position.coords.longitude);
           setUserLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
@@ -49,6 +41,21 @@ const DropPoints: React.FC = () => {
     } else {
       console.error("Error: Your browser doesn't support geolocation.");
     }
+
+    axios
+    .get(pointsBaseUrl + "points/")
+    .then((response) => {
+      // Handle the successful response here
+      //console.log("Points API response:", response.data);
+      console.log("Points API response:", response.data);
+      setLocations(response.data);
+    })
+    .catch((error) => {
+      // Handle any errors that occurred during the request
+      console.error("Error:", error);
+    });
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleModalOpen = (index: number) => {
@@ -66,9 +73,6 @@ const DropPoints: React.FC = () => {
     lat2: number,
     lng2: number
   ): { lat: number; lng: number } | null => {
-    if (lat1 === 0 && lng1 !== 0 && lat2 !== 0 && lng2 !== 0) {
-      return null;
-    }
 
     let dLng = ((lng2 - lng1) * Math.PI) / 180; // Convert degrees to radians
 
