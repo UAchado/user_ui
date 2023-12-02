@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AOS from "aos";
 import "aos/dist/aos.css";
 import genIcon from '../../../public/general-icon.png';
-import saCouto from '../../../public/sacouto.jpeg';
+import machado from '../../../public/machado.png';
 
 const LandingPage: React.FC = () => {
 
@@ -72,7 +72,7 @@ const LandingPage: React.FC = () => {
                 </div>
                 <div className='absolute flex-col bottom-20'>
                     <div>
-                        <button className="text-xl font-extrabold btn btn-primary btn-active" onClick={enterSite}>UA<h5 className='-ml-2 lowercase'>char</h5></button>
+                        <button className="px-4 py-2 text-xl font-extrabold btn btn-primary btn-active" onClick={enterSite}>UA<h5 className='-ml-2 lowercase'>char</h5></button>
                     </div>
                     <div>
                         <button onClick={handleClick}>O que é isto?</button>
@@ -83,11 +83,11 @@ const LandingPage: React.FC = () => {
                 <div className="chat chat-start" ref={ref}>
                     <div className="chat-image avatar" data-aos="fade-left" data-aos-delay="50">
                         <div className="w-10 rounded-full">
-                            <img alt="Tailwind CSS chat bubble component" src={saCouto} />
+                            <img alt="Tailwind CSS chat bubble component" src={machado} />
                         </div>
                     </div>
                     <div className="chat-header" data-aos="fade-left" data-aos-delay="50">
-                        Zé Maria
+                        Rui Machado
                         <time className="ml-2 text-xs opacity-50 " >12:40</time>
                     </div>
                     <div className="chat-bubble chat-bubble-primary" data-aos="fade-left" data-aos-delay="50">isto vem a ser o quê?</div>
@@ -110,11 +110,11 @@ const LandingPage: React.FC = () => {
                 <div className="chat chat-start">
                     <div className="chat-image avatar" data-aos="fade-left" data-aos-delay="1800">
                         <div className="w-10 rounded-full" data-aos="fade-left" data-aos-delay="1800">
-                            <img alt="Tailwind CSS chat bubble component" src={saCouto} />
+                            <img alt="Tailwind CSS chat bubble component" src={machado} />
                         </div>
                     </div>
                     <div className="chat-header" data-aos="fade-left" data-aos-delay="1800">
-                        Zé Maria
+                        Rui Machado
                         <time className="ml-2 text-xs opacity-50" data-aos="fade-left" data-aos-delay="1800">12:45</time>
                     </div>
                     <div className="text-left chat-bubble chat-bubble-primary" data-aos="fade-left" data-aos-delay="1800">okay... digamos que eu perdi o meu guarda-chuva, o que é que eu faço? </div>
@@ -137,11 +137,11 @@ const LandingPage: React.FC = () => {
                 <div className="chat chat-start">
                     <div className="chat-image avatar" data-aos="fade-left" data-aos-delay="3000">
                         <div className="w-10 rounded-full" data-aos="fade-left" data-aos-delay="3000">
-                            <img alt="Tailwind CSS chat bubble component" src={saCouto} />
+                            <img alt="Tailwind CSS chat bubble component" src={machado} />
                         </div>
                     </div>
                     <div className="chat-header" data-aos="fade-left" data-aos-delay="3000">
-                        Zé Maria
+                        Rui Machado
                         <time className="ml-2 text-xs opacity-50 " data-aos="fade-left" data-aos-delay="3000">12:50</time>
                     </div>
                     <div className="text-left chat-bubble chat-bubble-primary" data-aos="fade-left" data-aos-delay="3000">realmente, como é que ninguém pensou nisto antes? </div>
