@@ -6,7 +6,7 @@ import Image from "../../components/NewItem/Image/image";
  * Component for creating a new item.
  */
 
-const NewItem = () => {
+const ReportItem = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [warning, setWarning] = useState<string | null>(null);
   const [sucess, setSucess] = useState<string | null>(null);
@@ -43,15 +43,15 @@ const NewItem = () => {
 
     if (tag != null) {
       if (tags.includes(tag.toString())) {
-        axios
-          .post(itemsBaseUrl + "items/", formData) // change to post request to the server
-          .then(function (response) {
-            console.log("Data sent successfully:", response.data);
-            setSucess("Tag is valid");
-          })
-          .catch(function (error) {
-            console.error("Error sending data:", error);
-          });
+        // axios
+        //   .post(itemsBaseUrl + "items/", formData) // change to post request to the server
+        //   .then(function (response) {
+        //     console.log("Data sent successfully:", response.data);
+        //     setSucess("Tag is valid");
+        //   })
+        //   .catch(function (error) {
+        //     console.error("Error sending data:", error);
+        //   });
       } else {
         setWarning("Tag is invalid");
       }
@@ -76,9 +76,7 @@ const NewItem = () => {
               d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span style={{ fontSize: "11px" }}>
-            Selecione uma tag da lista.
-          </span>
+          <span style={{ fontSize: "11px" }}>Selecione uma tag da lista.</span>
         </div>
       )}
       {sucess && (
@@ -97,20 +95,20 @@ const NewItem = () => {
               d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span style={{ fontSize: "11px" }}>Item adicionado com sucesso.</span>
+          <span style={{ fontSize: "11px" }}>Item adicionado com sucesso</span>
         </div>
       )}
       {tags.length !== 0 && (
         <div className="flex justify-center">
           <div className="card bg-primary">
             <div className="card-body">
-              <h2 className="card-title">Formulário de Objeto Encontrado</h2>
+              <h2 className="card-title">Formulário de Objeto Perdido</h2>
               <form onSubmit={handleSubmit}>
                 {/* Textarea for item description */}
                 <div className="w-full max-w-xs form-control">
                   <textarea
                     className="w-full max-w-xs mt-5 text-black placeholder-black textarea bg-secondary"
-                    placeholder="Breve descrição sobre o item e como foi encontrado."
+                    placeholder="Breve descrição sobre o item para facilitar a identificação."
                     name="description"
                     required
                   ></textarea>
@@ -138,4 +136,4 @@ const NewItem = () => {
   );
 };
 
-export default NewItem;
+export default ReportItem;
