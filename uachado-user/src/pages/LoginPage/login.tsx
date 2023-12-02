@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import axios from "axios";
+//import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/LoginContext/AuthContext";
 
@@ -10,24 +10,34 @@ const LoginComponent: React.FC = () => {
   const navigate = useNavigate();
   const { logout, login } = useContext(AuthContext); // Use useContext within the component
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const hardcodedUsername = "user1";
     const hardcodedPassword = "pass1";
 
+    const hardcodedUsername2 = "user2";
+    const hardcodedPassword2 = "pass2";
+
     if (username === hardcodedUsername && password === hardcodedPassword) {
       // Successful login
-      console.log("Login successful");
-      login(username);
-      localStorage.setItem("username", username);
+      console.log("User successful");
+      login(username, "user");
+      setShowError(false);
+      navigate("/");
+    } else if (
+      username === hardcodedUsername2 &&
+      password === hardcodedPassword2
+    ) {
+      // Successful login
+      console.log("Admin successful");
+      login(username, "admin");
       setShowError(false);
       navigate("/");
     } else {
       // Failed login
       console.error("Login failed");
-      logout()
+      logout();
       localStorage.removeItem("username");
       setShowError(true);
     }
@@ -64,9 +74,7 @@ const LoginComponent: React.FC = () => {
       {showError && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-center mb-4">
           <strong className="font-bold">Error:</strong>
-          <span className="block sm:inline">
-            Invalid username or password.
-          </span>
+          <span className="block sm:inline">Invalid username or password.</span>
           <button
             className="px-4 py-3 justify-center items-center"
             onClick={() => setShowError(false)}
