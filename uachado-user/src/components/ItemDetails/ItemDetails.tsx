@@ -5,19 +5,24 @@ type ItemType = {
   image: string;
   description: string;
   tag: string;
-  dropoffPoint_id: string;
-};
+  dropoffPoint_id: number;
+} | null;
 
+type DropPointType = {
+  id: number;
+  name: string;
+  coordinates: string;
+} | null;
 // Define the props for the Modal component
 interface ModalProps {
   selectedItem: ItemType | null;
-  setSelectedItem: (item: ItemType | null) => void;
+  droppoints: DropPointType[] | null;
   onOpenOtherComponent: () => void; // Define the type for this prop
 }
 
 const Modal: React.FC<ModalProps> = ({
   selectedItem,
-  setSelectedItem,
+  droppoints = null,
   onOpenOtherComponent,
 }) => {
   return (
@@ -44,14 +49,18 @@ const Modal: React.FC<ModalProps> = ({
           <h3 className="text-md">{selectedItem?.description}</h3>
         </div>
         <h1 className="text-xl font-bold mt-3">
-          Guardado em: <b>{selectedItem?.dropoffPoint_id}</b>
+          Guardado em:
+          <b>
+            {droppoints!
+              .filter((point) => point!.id === selectedItem?.dropoffPoint_id)
+              .map((filteredPoint) => filteredPoint!.name)}
+          </b>
         </h1>
         <div className="modal-action grid justify-center">
           <form method="dialog">
             <button
               className="btn btn-warning"
               onClick={() => {
-                setSelectedItem(null);
                 onOpenOtherComponent();
               }}
             >
