@@ -3,13 +3,15 @@ import React, { createContext, useState, ReactNode } from "react";
 interface AuthContextType {
   isLoggedIn: boolean;
   username: string;
-  login: (username: string) => void;
+  role: string;
+  login: (username: string, role: string) => void;
   logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   username: "",
+  role: "",
   login: () => {},
   logout: () => {},
 });
@@ -26,13 +28,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [username, setUsername] = useState<string>(
     localStorage.getItem("username") || ""
   );
+
+  const [role, setRole] = useState<string>(
+    localStorage.getItem("role") || ""
+  );
   
 
-  const login = (newUsername: string) => {
+  const login = (newUsername: string, role: string) => {
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("username", newUsername);
+    localStorage.setItem("role", role);
     setIsLoggedIn(true);
     setUsername(newUsername);
+    setRole(role);
   };
 
   const logout = () => {
@@ -40,12 +48,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem("username");
     setIsLoggedIn(false);
     setUsername("");
+    setRole("");
   };
 
 
 
   const contextValue: AuthContextType = {
     username,
+    role,
     isLoggedIn,
     login,
     logout,

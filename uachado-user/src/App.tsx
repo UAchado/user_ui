@@ -27,6 +27,7 @@ function App() {
 function Contents() {
   // Check if the user is logged in (you can use localStorage or another state management solution)
   const { isLoggedIn } = useContext(AuthContext);
+  //const role = localStorage.getItem("role");
 
   return (
     <Routes>

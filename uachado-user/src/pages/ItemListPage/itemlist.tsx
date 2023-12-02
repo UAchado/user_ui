@@ -10,7 +10,7 @@ const ItemList = () => {
   const pointsBaseUrl = import.meta.env.VITE_POINTS_URL;
   const [tags, setTags] = useState<string[]>([]);
   const [dropPoints, setDropoints] = useState<any[]>([]);
-  const [locationData, setLocationData] = useState(null); // State to hold the location data
+  //const [locationData, setLocationData] = useState(null); // State to hold the location data
   const [selectedTag, setSelectedTag] = useState<string>("Todos");
   const [showMap, setShowMap] = useState(false);
   const [userLocation, setUserLocation] = useState<{
