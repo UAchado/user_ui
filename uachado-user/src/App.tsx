@@ -9,6 +9,7 @@ import Dashboard from "./pages/DashboardPage/dashboard";
 import Login from "./pages/LoginPage/login";
 import { useContext } from "react";
 import { AuthContext } from "./context/LoginContext/AuthContext";
+import Feedback from "./components/Feedback/feedback";
 
 
 function App() {
@@ -16,10 +17,11 @@ function App() {
     <div className="">
       <Navbar />
       <div className="flex items-center justify-center">
-        <div tabIndex={0} className="card shadow-xl bg-primary mt-5 sm:m-10">
+        <div tabIndex={0} className="mt-5 shadow-xl card bg-primary sm:m-10">
           <Contents />
         </div>
       </div>
+      <Feedback/>
     </div>
   );
 }
