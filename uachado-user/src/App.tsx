@@ -30,7 +30,7 @@ function App() {
         }
         {!isnotLanding && <LandingPage/>}
       </div>
-      <Feedback/>
+      {isnotLanding && <Feedback/>}
     </div>
   );
 }
