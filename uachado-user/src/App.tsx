@@ -1,5 +1,6 @@
 // @ts-nocheck
 import "./App.css";
+import { useLocation } from "react-router-dom";
 import { Navigate, Route, Routes } from "react-router-dom";
 import NewItem from "./pages/NewItemPage/newItem";
 import Home from "./pages/HomePage/home";
@@ -8,6 +9,7 @@ import Navbar from "./components/Navbar/navbar";
 import ItemList from "./pages/ItemListPage/itemlist";
 import Dashboard from "./pages/DashboardPage/dashboard";
 import Login from "./pages/LoginPage/login";
+import LandingPage from "./pages/LandingPage/landing";
 import ReportItem from "./pages/ReportItemPage/reportItem";
 import { useContext } from "react";
 import { AuthContext } from "./context/LoginContext/AuthContext";
@@ -15,15 +17,22 @@ import Feedback from "./components/Feedback/feedback";
 
 
 function App() {
+
+  const location = useLocation();
+  const isnotLanding = location.pathname !== "/";
   return (
     <div className="">
-      <Navbar />
+      {isnotLanding && <Navbar />
+      }
       <div className="flex items-center justify-center">
+        {isnotLanding && 
         <div tabIndex={0} className="mt-5 shadow-xl card bg-primary sm:m-10">
           <Contents />
         </div>
+        }
+        {!isnotLanding && <LandingPage/>}
       </div>
-      <Feedback/>
+      {isnotLanding && <Feedback/>}
     </div>
   );
 }
@@ -36,7 +45,7 @@ function Contents() {
   if (isLoggedIn && role === "admin") {
     return (
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/dropPoints" element={<DropPoints />} />
         <Route path="/findItems" element={<ItemList />} />
         <Route
@@ -54,7 +63,7 @@ function Contents() {
   else if (isLoggedIn && role === "user") {
     return (
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/dropPoints" element={<DropPoints />} />
         <Route path="/findItems" element={<ItemList />} />
         <Route
@@ -83,7 +92,6 @@ function Contents() {
       </Routes>
     );
   }
-
 }
 
 export default App;
