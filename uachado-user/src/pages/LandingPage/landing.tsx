@@ -1,10 +1,17 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AOS from "aos";
 import "aos/dist/aos.css";
 import genIcon from '../../../public/general-icon.png';
+import saCouto from '../../../public/sacouto.jpeg';
 
 const LandingPage: React.FC = () => {
+
+    const navigate = useNavigate();
     
+    const enterSite = () => {
+        navigate("/home");
+    };
     useEffect(() => {
           AOS.init();
           AOS.refresh();
@@ -34,7 +41,7 @@ const LandingPage: React.FC = () => {
         textAlign: 'left',
         color: '#C0704D', // Replace with the actual color code
         lineHeight: 0.9,
-        fontSize: windowWidth > 768 ? '2em' : '0.6em',
+        fontSize: windowWidth > 768 ? '2em' : '0.5em',
     };
 
     const largeStyle = {
@@ -49,10 +56,13 @@ const LandingPage: React.FC = () => {
         color: '#332B27',
     };
 
+    const hideXOverflow = {
+        overflowX: windowWidth > 768 ? 'hidden' : 'scroll',
+    };
 
     return (
         <div className="flex-col items-center justify-center bg-base-200">
-            <div className="relative w-screen h-screen hero bg-base-200">
+            <div className="relative h-screen sm:w-screen hero bg-base-200">
                 <div className="sm:text-left hero-content">
                     <div style={textStyle}>
                         <div style={largeStyle}>na UA, nada se </div>
@@ -62,7 +72,7 @@ const LandingPage: React.FC = () => {
                 </div>
                 <div className='absolute flex-col bottom-20'>
                     <div>
-                        <button className="text-xl font-extrabold btn btn-primary btn-active">UA<h5 className='-ml-2 lowercase'>char</h5></button>
+                        <button className="text-xl font-extrabold btn btn-primary btn-active" onClick={enterSite}>UA<h5 className='-ml-2 lowercase'>char</h5></button>
                     </div>
                     <div>
                         <button onClick={handleClick}>O que é isto?</button>
@@ -73,7 +83,7 @@ const LandingPage: React.FC = () => {
                 <div className="chat chat-start" ref={ref}>
                     <div className="chat-image avatar" data-aos="fade-left" data-aos-delay="50">
                         <div className="w-10 rounded-full">
-                            <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                            <img alt="Tailwind CSS chat bubble component" src={saCouto} />
                         </div>
                     </div>
                     <div className="chat-header" data-aos="fade-left" data-aos-delay="50">
@@ -100,7 +110,7 @@ const LandingPage: React.FC = () => {
                 <div className="chat chat-start">
                     <div className="chat-image avatar" data-aos="fade-left" data-aos-delay="1800">
                         <div className="w-10 rounded-full" data-aos="fade-left" data-aos-delay="1800">
-                            <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                            <img alt="Tailwind CSS chat bubble component" src={saCouto} />
                         </div>
                     </div>
                     <div className="chat-header" data-aos="fade-left" data-aos-delay="1800">
@@ -119,7 +129,7 @@ const LandingPage: React.FC = () => {
                         Estagiário
                         <time className="ml-2 text-xs opacity-50">12:46</time>
                     </div>
-                    <div className="text-left chat-bubble " data-aos="fade-right" data-aos-delay="2500">simples: vais a <b>Objetos Perdidos</b>, usas os filtros para ver só os guarda-chuvas, encontras o teu e vais ter ao sítio onde ficou guardado. se não sabes bem onde fica, podes ir a <b>Pontos Autorizados</b> e nós levamos-te lá ;)</div>
+                    <div className="text-left chat-bubble " data-aos="fade-right" data-aos-delay="2500">simples: vais a <b>Objetos Perdidos</b>, usas os filtros para ver só os guarda-chuvas, encontras o teu e vais ter ao sítio onde ficou guardado. se não sabes bem onde fica nós levamos-te lá ;)</div>
                     <div className="opacity-50 chat-footer" data-aos="fade-right" data-aos-delay="2500">
                         Visto às 12:49
                     </div>
@@ -127,7 +137,7 @@ const LandingPage: React.FC = () => {
                 <div className="chat chat-start">
                     <div className="chat-image avatar" data-aos="fade-left" data-aos-delay="3000">
                         <div className="w-10 rounded-full" data-aos="fade-left" data-aos-delay="3000">
-                            <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                            <img alt="Tailwind CSS chat bubble component" src={saCouto} />
                         </div>
                     </div>
                     <div className="chat-header" data-aos="fade-left" data-aos-delay="3000">
