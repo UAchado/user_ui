@@ -59,7 +59,7 @@ const Modal: React.FC<ModalProps> = ({
         <div className="modal-action grid justify-center">
           <form method="dialog">
             <button
-              className="btn btn-warning"
+              className="btn btn-accent"
               onClick={() => {
                 onOpenOtherComponent();
               }}
