@@ -20,7 +20,7 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, onOpenModal }) =>
           <p className="text-xs">{location.location}</p>
           <div className="card-actions">
             <button
-                className="btn btn-warning btn-block text-xs sm:text-md"
+                className="btn btn-accent btn-block text-xs sm:text-md"
                 onClick={onOpenModal}
             >
               Ver Localização
