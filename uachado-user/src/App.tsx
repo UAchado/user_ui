@@ -81,7 +81,7 @@ function Contents() {
   else {
     return (
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/dropPoints" element={<DropPoints />} />
         <Route path="/findItems" element={<ItemList />} />
         <Route
