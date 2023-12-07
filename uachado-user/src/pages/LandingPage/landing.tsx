@@ -5,6 +5,7 @@ import "aos/dist/aos.css";
 import genIcon from '../../../public/general-icon.png';
 import machado from '../../../public/machado.png';
 
+
 const LandingPage: React.FC = () => {
 
     const navigate = useNavigate();
@@ -56,10 +57,6 @@ const LandingPage: React.FC = () => {
         color: '#332B27',
     };
 
-    const hideXOverflow = {
-        overflowX: windowWidth > 768 ? 'hidden' : 'scroll',
-    };
-
     return (
         <div className="flex-col items-center justify-center bg-base-200">
             <div className="relative h-screen sm:w-screen hero bg-base-200">
@@ -72,10 +69,10 @@ const LandingPage: React.FC = () => {
                 </div>
                 <div className='absolute flex-col bottom-20'>
                     <div>
-                        <button className="px-4 py-2 text-xl font-extrabold btn btn-primary btn-active" onClick={enterSite}>UA<h5 className='-ml-2 lowercase'>char</h5></button>
+                        <button className="px-4 py-2 text-2xl italic animate-pulse font-extrabold btn btn-base-200" onClick={enterSite}>UA<h5 className='-ml-2 lowercase'>char</h5></button>
                     </div>
                     <div>
-                        <button onClick={handleClick}>O que é isto?</button>
+                        <button  onClick={handleClick}>O que é isto?</button>
                     </div>
                 </div>
             </div>
