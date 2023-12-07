@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, } from 'react';
+import { useEffect, useState, useRef, CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -38,21 +38,21 @@ const LandingPage: React.FC = () => {
       ref.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const textStyle = {
+    const textStyle : CSSProperties = {
         textAlign: 'left',
         color: '#C0704D', // Replace with the actual color code
         lineHeight: 0.9,
         fontSize: windowWidth > 768 ? '2em' : '0.5em',
     };
 
-    const largeStyle = {
+    const largeStyle: CSSProperties = {
         ...textStyle,
         fontSize: '5em',
         fontWeight: 'bold',
     };
 
 
-    const transformedStyle = {
+    const transformedStyle: CSSProperties = {
         ...largeStyle,
         color: '#332B27',
     };
