@@ -16,7 +16,7 @@ const Home = () => {
                 className="max-w-full h-auto shadow-xl"
               />
             </div>
-            <h2 className="text-3xl sm:text-5xl mt-4">Pontos Autorizados</h2>
+            <h2 className="text-3xl md:text-6xl mt-4 font-extrabold  ">Pontos Autorizados</h2>
           </div>
         </Link>
         <Link to="/findItems">
@@ -28,7 +28,7 @@ const Home = () => {
                 className="max-w-full h-auto shadow-xl"
               />
             </div>
-            <h2 className="text-3xl sm:text-5xl mt-4">Objetos Perdidos</h2>
+            <h2 className="text-3xl md:text-6xl mt-4 font-extrabold">Objetos Perdidos</h2>
           </div>
         </Link>
       </div>

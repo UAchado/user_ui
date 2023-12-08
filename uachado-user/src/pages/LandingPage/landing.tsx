@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, CSSProperties } from 'react';
+import React, { useEffect, useState, useRef, CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AOS from "aos";
 import "aos/dist/aos.css";
