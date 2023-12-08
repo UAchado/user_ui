@@ -18,7 +18,7 @@ const DropPoints: React.FC = () => {
   // Make a GET request to the points API
 
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_API_KEY, // Make sure you use your API key here
+    googleMapsApiKey: import.meta.env.VITE_API_KEY,
   });
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const DropPoints: React.FC = () => {
     });
 
     return () => clearInterval(interval);
-  }, []);
+  }, [pointsBaseUrl]);
 
   const handleModalOpen = (index: number) => {
     console.log(locations[index]);

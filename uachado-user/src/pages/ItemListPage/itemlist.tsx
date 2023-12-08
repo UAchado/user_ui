@@ -264,7 +264,7 @@ const ItemList = () => {
                 )
                 : (
                     <div className="grid grid-cols-1 gap-4 m-10 md:grid-cols-2">
-                    <Dropdown items={tags} onSelect={handleSelectTag} />
+                    <Dropdown items={tags} onSelect={handleSelectTag} className="md:col-span-2"/>
                         {filteredData.map((item, index) => (
                             <div
                                 key={index}
