@@ -75,21 +75,19 @@ const DropPoints: React.FC = () => {
     lng2: number
   ): { lat: number; lng: number } | null => {
 
-    let dLng = ((lng2 - lng1) * Math.PI) / 180; // Convert degrees to radians
+    const dLng: number = ((lng2 - lng1) * Math.PI) / 180; // Convert degrees to radians
 
     // Convert latitude and longitude values to radians
     lat1 = (lat1 * Math.PI) / 180;
     lat2 = (lat2 * Math.PI) / 180;
     lng1 = (lng1 * Math.PI) / 180;
 
-    let bX = Math.cos(lat2) * Math.cos(dLng);
-    let bY = Math.cos(lat2) * Math.sin(dLng);
+    const bX = Math.cos(lat2) * Math.cos(dLng);
+    const bY = Math.cos(lat2) * Math.sin(dLng);
     let lat3 = Math.atan2(
-      Math.sin(lat1) + Math.sin(lat2),
-      Math.sqrt((Math.cos(lat1) + bX) * (Math.cos(lat1) + bX) + bY * bY)
-    );
-    let lng3 = lng1 + Math.atan2(bY, Math.cos(lat1) + bX);
-
+        Math.sin(lat1) + Math.sin(lat2),
+        Math.sqrt((Math.cos(lat1) + bX) * (Math.cos(lat1) + bX) + bY * bY)
+    ), lng3 = lng1 + Math.atan2(bY, Math.cos(lat1) + bX);
     // Convert the midpoint's latitude and longitude from radians to degrees
     lat3 = (lat3 * 180) / Math.PI;
     lng3 = (lng3 * 180) / Math.PI;

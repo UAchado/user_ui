@@ -1,7 +1,6 @@
-// @ts-nocheck
 import "./App.css";
 import { useLocation } from "react-router-dom";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import NewItem from "./pages/NewItemPage/newItem";
 import Home from "./pages/HomePage/home";
 import DropPoints from "./pages/DropOffPointsPage/droppoints";

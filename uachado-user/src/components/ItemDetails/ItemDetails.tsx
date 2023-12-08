@@ -34,32 +34,35 @@ const Modal: React.FC<ModalProps> = ({
             ✕
           </button>
         </form>
-        <div className="grid grid-cols-2 items-center text-center gap-3">
+        <div className="flex-col items-center text-center gap-3">
           <div className="avatar">
             <img
-              src={selectedItem?.image}
-              alt={"Image of " + selectedItem?.tag}
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-                borderRadius: "40px",
-              }} // Adjust the percentage and radius as needed
+                src={selectedItem?.image}
+                alt={"Image of " + selectedItem?.tag}
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                  borderRadius: "40px",
+                }} // Adjust the percentage and radius as needed
             />
           </div>
+          <span className="badge badge-neutral badge-md">
+            {selectedItem?.tag}
+          </span>
           <h3 className="text-md">{selectedItem?.description}</h3>
         </div>
         <h1 className="text-xl font-bold mt-3">
           Guardado em:
           <b>
             {droppoints!
-              .filter((point) => point!.id === selectedItem?.dropoffPoint_id)
+                .filter((point) => point!.id === selectedItem?.dropoffPoint_id)
               .map((filteredPoint) => filteredPoint!.name)}
           </b>
         </h1>
         <div className="modal-action grid justify-center">
           <form method="dialog">
             <button
-              className="btn btn-warning"
+              className="btn btn-accent"
               onClick={() => {
                 onOpenOtherComponent();
               }}

@@ -56,15 +56,15 @@ const MapsProvider: React.FC<MapsProviderProps> = ({ children }) => {
         return null;
       }
   
-      let dLng = ((lng2 - lng1) * Math.PI) / 180; // Convert degrees to radians
+      const dLng = ((lng2 - lng1) * Math.PI) / 180; // Convert degrees to radians
   
       // Convert latitude and longitude values to radians
       lat1 = (lat1 * Math.PI) / 180;
       lat2 = (lat2 * Math.PI) / 180;
       lng1 = (lng1 * Math.PI) / 180;
   
-      let bX = Math.cos(lat2) * Math.cos(dLng);
-      let bY = Math.cos(lat2) * Math.sin(dLng);
+      const bX = Math.cos(lat2) * Math.cos(dLng);
+      const bY = Math.cos(lat2) * Math.sin(dLng);
       let lat3 = Math.atan2(
         Math.sin(lat1) + Math.sin(lat2),
         Math.sqrt((Math.cos(lat1) + bX) * (Math.cos(lat1) + bX) + bY * bY)

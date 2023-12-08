@@ -1,9 +1,10 @@
-import { useEffect, useState, useRef, } from 'react';
+import React, { useEffect, useState, useRef, CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AOS from "aos";
 import "aos/dist/aos.css";
 import genIcon from '../../../public/general-icon.png';
 import machado from '../../../public/machado.png';
+
 
 const LandingPage: React.FC = () => {
 
@@ -31,33 +32,29 @@ const LandingPage: React.FC = () => {
         };
     }, []);
 
-    const ref = useRef(null);
+    const ref = useRef<HTMLDivElement>(null);
 
     const handleClick = () => {
       ref.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const textStyle = {
+    const textStyle : CSSProperties = {
         textAlign: 'left',
         color: '#C0704D', // Replace with the actual color code
         lineHeight: 0.9,
         fontSize: windowWidth > 768 ? '2em' : '0.5em',
     };
 
-    const largeStyle = {
+    const largeStyle: CSSProperties = {
         ...textStyle,
         fontSize: '5em',
         fontWeight: 'bold',
     };
 
 
-    const transformedStyle = {
+    const transformedStyle: CSSProperties = {
         ...largeStyle,
         color: '#332B27',
-    };
-
-    const hideXOverflow = {
-        overflowX: windowWidth > 768 ? 'hidden' : 'scroll',
     };
 
     return (
@@ -72,10 +69,10 @@ const LandingPage: React.FC = () => {
                 </div>
                 <div className='absolute flex-col bottom-20'>
                     <div>
-                        <button className="px-4 py-2 text-xl font-extrabold btn btn-primary btn-active" onClick={enterSite}>UA<h5 className='-ml-2 lowercase'>char</h5></button>
+                        <button className="px-4 py-2 text-2xl italic animate-[bounce_20s_linear_infinite] font-extrabold btn btn-base-200" onClick={enterSite}>UA<h5 className='-ml-2 lowercase'>char</h5></button>
                     </div>
                     <div>
-                        <button onClick={handleClick}>O que é isto?</button>
+                        <button  onClick={handleClick}>O que é isto?</button>
                     </div>
                 </div>
             </div>

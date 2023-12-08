@@ -90,9 +90,9 @@ const LocationModal: React.FC<LocationModalProps> = ({
         </GoogleMap>
         <div className="modal-action">
           <form method="dialog">
-            <button className="btn bg-primary" onClick={goToDirections}>Directions</button>
-            <button className="btn bg-secondary" onClick={onCloseModal}>
-              Close
+            <button className="btn bg-primary mx-2" onClick={goToDirections}>Direções</button>
+            <button className="btn bg-warning mx-2" onClick={onCloseModal}>
+              Fechar
             </button>
           </form>
         </div>
