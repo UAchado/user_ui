@@ -52,7 +52,7 @@ const Modal: React.FC<ModalProps> = ({
           <h3 className="text-md">{selectedItem?.description}</h3>
         </div>
         <h1 className="text-xl font-bold mt-3">
-          Guardado em:
+          Guardado em: 
           <b>
             {droppoints!
                 .filter((point) => point!.id === selectedItem?.dropoffPoint_id)
