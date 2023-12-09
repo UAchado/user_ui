@@ -99,40 +99,25 @@ const Dashboard = () => {
         admittedAt: string;
         isVisible: boolean;
     };
-
     const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
-    const [filteredData, setFilteredData] = useState(data.filter(item =>
-        (selectedTag === "Todos" ? true : item.tag === selectedTag) && item.isVisible
-    ));
-
-    // Track selected items using their index or a unique identifier
-    const [selectedIndices, setSelectedIndices] = useState(new Set());
-
-    // Handle checkbox selection
-    const handleCheckboxChange = (index: number) => {
-        setSelectedIndices(prevIndices => {
-            const newIndices = new Set(prevIndices);
-            if (newIndices.has(index)) {
-                newIndices.delete(index);
-            } else {
-                newIndices.add(index);
+    const [filteredData, setFilteredData] = useState<ItemType[]>(data);
+    const handleSelect = (item: ItemType) => {
+        // Update the visibility of item directly
+        setData(prevData => prevData.map(currItem => {
+            if (currItem === item) {
+                return {...currItem, isVisible: false};
             }
-            return newIndices;
-        });
+            return currItem;
+        }));
     };
     const handleSelectTag = (tag: string) => {
         setSelectedTag(tag);
     };
-
-    const removeSelectedItems = () => {
-        // Update data directly
-        setData(prevData => prevData.map((item, index) => ({
-            ...item,
-            isVisible: selectedIndices.has(index) ? false : item.isVisible
-        })));
-
-        setSelectedIndices(new Set()); // Reset selected indices
-    };
+    useEffect(() => {
+        setFilteredData(data.filter(item =>
+            (selectedTag === "Todos" ? true : item.tag === selectedTag) && item.isVisible
+        ));
+    }, [data, selectedTag]);
 
     useEffect(() => {
         if (selectedItem !== null) {
@@ -140,12 +125,6 @@ const Dashboard = () => {
             modal.showModal();
         }
     }, [selectedItem]);
-    // This useEffect will automatically update filteredData when data or selectedTag changes
-    useEffect(() => {
-        setFilteredData(data.filter(item =>
-            (selectedTag === "Todos" ? true : item.tag === selectedTag) && item.isVisible
-        ));
-    }, [data, selectedTag]);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     useEffect(() => {
         const handleResize = () => {
@@ -166,35 +145,11 @@ const Dashboard = () => {
     }
 
     // Filter the itemsData based on the selected tag
-
+    console.log("Selected item:", selectedItem);
     return (
         <div>
             {renderTable ? (
                     <div className="sm:w-[55vw] overflow-x-auto p-10">
-                        {/* Button for marking items as found */}
-                        <button
-                            className={`btn ${selectedIndices.size > 0 ? 'bg-primary' : 'btn-disabled'}`}
-                            onClick={() => selectedIndices.size > 0 && (document.getElementById('my_modal_5') as HTMLDialogElement)!.showModal()}
-                        >
-                            Marcar Itens como Encontrados
-                        </button>
-
-                        {/* New modal for confirming item removal */}
-                        <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
-                            <div className="modal-box">
-                                <h3 className="text-lg font-bold">Marcar itens como encontrados?</h3>
-                                <div className="modal-action">
-                                    <form method="dialog">
-                                        <button
-                                            className="btn"
-                                            onClick={removeSelectedItems}
-                                        >
-                                            Marcar
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </dialog>
                         <h1 className='text-3xl'>Dashboard para: <b>DETI (Sr.Fidalgo)</b></h1>
                         <table className="table">
                             {/* head */}
@@ -210,52 +165,51 @@ const Dashboard = () => {
                             </thead>
                             <tbody className='text-xl'>
                             {filteredData.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <div className="flex items-center space-x-3">
-                                                <div className="avatar">
-                                                    <div className="w-12 h-12 mask mask-squircle">
-                                                        <img src={item.image} alt="Avatar Tailwind CSS Component"/>
-                                                    </div>
+                                <tr key={index}>
+                                    <td>
+                                        <div className="flex items-center space-x-3">
+                                            <div className="avatar">
+                                                <div className="w-12 h-12 mask mask-squircle">
+                                                    <img src={item.image} alt="Avatar Tailwind CSS Component"/>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="badge badge-ghost badge-md">{item.tag}</span>
-                                            </div>
-                                        </td>
-                                        <td>{new Date(item.admittedAt).toLocaleDateString()}</td>
-                                        <td className='items-center'>
-                                            <button
-                                                className="btn btn-ghost border-primary-content"
-                                                onClick={() => setSelectedItem(item)}
-                                            >
-                                                Detalhes
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="checkbox"
-                                                className="checkbox"
-                                                checked={selectedIndices.has(index)}
-                                                onChange={() => handleCheckboxChange(index)}
-                                            />
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="flex items-center space-x-2">
+                                            <span className="badge badge-ghost badge-md">{item.tag}</span>
+                                        </div>
+                                    </td>
+                                    <td>{new Date(item.admittedAt).toLocaleDateString()}</td>
+                                    <td className='items-center'>
+                                        <button
+                                            className="btn btn-ghost border-primary-content"
+                                            onClick={() => openItemDetails(item)}
+                                        >
+                                            Detalhes
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button
+                                            className="btn btn-ghost border-primary-content"
+                                            onClick={() => handleSelect(item)}
+                                        >
+                                            Marcar como encontrado
+                                        </button>
+                                    </td>
+                                </tr>
                             ))}
                             </tbody>
                         </table>
                     </div>
                 ) :
                 (
-                    <div className="grid grid-cols-1 gap-4 m-auto md:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-4 m-10 md:grid-cols-2">
                         <Dropdown items={tags} onSelect={handleSelectTag} className="md:col-span-2"/>
                         {filteredData.map((item, index) => (
                             <div
                                 key={index}
                                 className="card bg-secondary-focus"
-                                onClick={() => openItemDetails(item)}
                             >
                                 <figure className="h-40 overflow-hidden">
                                     <img
@@ -272,8 +226,16 @@ const Dashboard = () => {
                                         {item.dropoffPoint_id}
                                     </p>
                                     <div className="card-actions">
-                                        <button className="btn btn-accent btn-block text-xs sm:text-md">
+                                        <button className="btn btn-accent btn-block text-xs sm:text-md"
+                                                onClick={() => openItemDetails(item)}
+                                        >
                                             Ver Detalhes
+                                        </button>
+                                        <button
+                                            className="btn btn-ghost  btn-block border-primary-content"
+                                            onClick={() => handleSelect(item)}
+                                        >
+                                            Marcar como encontrado
                                         </button>
                                     </div>
                                 </div>
@@ -302,22 +264,6 @@ const Dashboard = () => {
                 </dialog>
             )}
 
-            {/* New modal for confirming item removal */}
-            <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
-                <div className="modal-box">
-                    <h3 className="text-lg font-bold">Marcar itens como encontrados?</h3>
-                    <div className="modal-action">
-                        <form method="dialog">
-                            <button
-                                className="btn"
-                                onClick={removeSelectedItems}
-                            >
-                                Marcar
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </dialog>
         </div>
     );
 };
