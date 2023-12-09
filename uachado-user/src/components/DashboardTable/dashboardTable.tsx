@@ -8,7 +8,6 @@ interface DashboardTableProps {
     handleSelect: (item: ItemType) => void;
     tags: string[];
     handleSelectTag: (tag: string) => void;
-    isAdmin: boolean;
 }
 export const DashboardTable: React.FC<DashboardTableProps> = (
     {
@@ -17,7 +16,6 @@ export const DashboardTable: React.FC<DashboardTableProps> = (
         handleSelect,
         tags,
         handleSelectTag,
-        isAdmin
     }
 ) => {
 
@@ -31,8 +29,8 @@ export const DashboardTable: React.FC<DashboardTableProps> = (
                 <tr>
                     <th>Imagem</th>
                     <th>Tag</th>
-                    {isAdmin ? <th>Admitido em</th> : <th> Ponto de Recolha</th>}
-                    {isAdmin && <th></th>}
+                     <th>Admitido em</th> : <th> Ponto de Recolha</th>
+                     <th></th>
                     <th>
                         <Dropdown items={tags} onSelect={handleSelectTag}/>
                     </th>

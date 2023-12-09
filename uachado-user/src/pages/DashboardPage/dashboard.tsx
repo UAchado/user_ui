@@ -68,7 +68,7 @@ const Dashboard = () => {
                         handleSelect={handleSelect}
                         tags={tags}
                         handleSelectTag={handleSelectTag}
-                        isAdmin={true}
+
                     />
                 ) :
                 (
@@ -78,7 +78,7 @@ const Dashboard = () => {
                         handleSelect={handleSelect}
                         tags={tags}
                         handleSelectTag={handleSelectTag}
-                        isAdmin={true}
+
                     />
                 )
             }

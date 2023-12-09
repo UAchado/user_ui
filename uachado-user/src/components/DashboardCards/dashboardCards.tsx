@@ -8,8 +8,8 @@ interface DashboardCardsProps {
     handleSelect: (item: ItemType) => void;
     tags: string[];
     handleSelectTag: (tag: string) => void;
-    isAdmin: boolean;
 }
+
 export const DashboardCards: React.FC<DashboardCardsProps> = (
     {
         filteredData,
@@ -17,7 +17,6 @@ export const DashboardCards: React.FC<DashboardCardsProps> = (
         handleSelect,
         tags,
         handleSelectTag,
-        isAdmin,
     }
 ) => {
 
@@ -50,14 +49,14 @@ export const DashboardCards: React.FC<DashboardCardsProps> = (
                             >
                                 Ver Detalhes
                             </button>
-                            {isAdmin &&
+
                             <button
                                 className="btn btn-neutral btn-block"
                                 onClick={() => handleSelect(item)}
                             >
                                 Marcar como encontrado
                             </button>
-                            }
+
                         </div>
                     </div>
                 </div>
