@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 
-
-function Dropdown({ items, onSelect }: { items: string[], onSelect?: (item: string) => void }) {
+interface DropdownProps {
+  items: string[];
+  onSelect?: ((item: string) => void);
+  className?: string;
+}
+const Dropdown: React.FC<DropdownProps> = ({ items, onSelect, className }) => {
   const [searchText, setSearchText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [filteredItems, setFilteredItems] = useState<string[]>(items);
@@ -26,7 +30,7 @@ function Dropdown({ items, onSelect }: { items: string[], onSelect?: (item: stri
   };
 
   return (
-    <div className="w-full dropdown mt-7">
+      <div className={`w-full dropdown mt-7 ${className}`}>
       <input
         className="w-full placeholder-black input input-bordered bg-secondary shadow-lg"
         placeholder="Tipo de Objeto"
