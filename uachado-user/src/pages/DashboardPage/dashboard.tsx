@@ -23,7 +23,7 @@ const Dashboard = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
     useEffect(() => {
-        setFilteredData(data.filter(item =>
+        setFilteredData(data.filter((item: { tag: never; isVisible: never; }) =>
             (selectedTag === "Todos" ? true : item.tag === selectedTag) && item.isVisible
         ));
     }, [data, selectedTag, setFilteredData]);
@@ -44,7 +44,7 @@ const Dashboard = () => {
     }
 
     const handleSelect = (item: ItemType) => {
-        setData(prevData => prevData.map(currItem => {
+        setData((prevData: ItemType[]) => prevData.map(currItem => {
             if (currItem === item) {
                 return {...currItem, isVisible: false};
             }
