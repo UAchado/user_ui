@@ -3,41 +3,46 @@ import Dropdown from "../NewItem/Dropdown/dropdown.tsx";
 import {ItemType} from "../../types/ItemType.ts";
 
 interface DashboardTableProps {
-    filteredData: ItemType[];
     openItemDetails: (item: ItemType) => void;
     handleSelect: (item: ItemType) => void;
     tags: string[];
     handleSelectTag: (tag: string) => void;
+    toggleSelectedState: () => void;
+    filteredItems: ItemType[];
 }
 export const DashboardTable: React.FC<DashboardTableProps> = (
     {
-        filteredData,
         openItemDetails,
         handleSelect,
         tags,
         handleSelectTag,
+        toggleSelectedState,
+        filteredItems
     }
 ) => {
 
-
     return (
         <div className="sm:w-[55vw] overflow-x-auto p-10">
-            <h1 className='text-3xl'>Dashboard para: <b>DETI (Sr.Fidalgo)</b></h1>
             <table className="table">
                 {/* head */}
                 <thead>
                 <tr>
                     <th>Imagem</th>
                     <th>Tag</th>
-                     <th>Admitido em</th> : <th> Ponto de Recolha</th>
-                     <th></th>
+                    <th>Admitido em</th>
+                    <th> Ponto de Recolha</th>
                     <th>
                         <Dropdown items={tags} onSelect={handleSelectTag}/>
+                    </th>
+                    <th>
+                        <button onClick={toggleSelectedState} className="btn btn-accent btn-block mt-7">
+                            Alternar Ativos/Arquivados
+                        </button>
                     </th>
                 </tr>
                 </thead>
                 <tbody className='text-xl'>
-                {filteredData.map((item, index) => (
+                {filteredItems.map((item, index) => (
                     <tr key={index}>
                         <td>
                             <div className="flex items-center space-x-3">
@@ -54,6 +59,7 @@ export const DashboardTable: React.FC<DashboardTableProps> = (
                             </div>
                         </td>
                         <td>{new Date(item.admittedAt).toLocaleDateString()}</td>
+                        <td></td>
                         <td>
                             <button
                                 className="btn btn-ghost border-primary-content"

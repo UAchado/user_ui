@@ -15,7 +15,12 @@ const Dashboard = () => {
     } = useContext(DashboardContext);
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const [selectedState, setSelectedState] = useState<string>("stored"); // Initial state is set to 'stored'
 
+    const toggleSelectedState = () => {
+        setSelectedState(prevState => prevState === "stored" ? "archived" : "stored");
+    }
+    const filteredItems = filteredData.filter(item => item.state === selectedState);
     useEffect(() => {
         const handleResize = () => {
             setWindowWidth(window.innerWidth);
@@ -63,21 +68,23 @@ const Dashboard = () => {
         <div>
             {renderTable ? (
                     <DashboardTable
-                        filteredData={filteredData}
+
                         openItemDetails={openItemDetails}
                         handleSelect={handleSelect}
                         tags={tags}
                         handleSelectTag={handleSelectTag}
-
+                        toggleSelectedState={toggleSelectedState}
+                        filteredItems={filteredItems}
                     />
                 ) :
                 (
                     <DashboardCards
-                        filteredData={filteredData}
                         openItemDetails={openItemDetails}
                         handleSelect={handleSelect}
                         tags={tags}
                         handleSelectTag={handleSelectTag}
+                        toggleSelectedState={toggleSelectedState}
+                        filteredItems={filteredItems}
 
                     />
                 )

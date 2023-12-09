@@ -10,4 +10,6 @@ export interface DashboardContextType {
     setData: React.Dispatch<React.SetStateAction<ItemType[]>>,
     filteredData: ItemType[],
     setFilteredData: React.Dispatch<React.SetStateAction<ItemType[]>>,
+    toggleSelectedState: (item: ItemType) => void,
+    filteredItems: ItemType[],
 }

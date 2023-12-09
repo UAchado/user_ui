@@ -3,28 +3,32 @@ import Dropdown from "../NewItem/Dropdown/dropdown.tsx";
 import {ItemType} from "../../types/ItemType.ts";
 
 interface DashboardCardsProps {
-    filteredData: ItemType[];
     openItemDetails: (item: ItemType) => void;
     handleSelect: (item: ItemType) => void;
     tags: string[];
     handleSelectTag: (tag: string) => void;
+    toggleSelectedState: () => void;
+    filteredItems: ItemType[];
 }
 
 export const DashboardCards: React.FC<DashboardCardsProps> = (
     {
-        filteredData,
         openItemDetails,
         handleSelect,
         tags,
         handleSelectTag,
+        toggleSelectedState,
+        filteredItems
     }
 ) => {
-
 
     return (
         <div className="grid grid-cols-1 gap-4 m-10 md:grid-cols-2">
             <Dropdown items={tags} onSelect={handleSelectTag} className="md:col-span-2"/>
-            {filteredData.map((item: ItemType, index: number) => (
+            <button onClick={toggleSelectedState} className="btn btn-accent btn-block">
+                Alternar Ativos/Arquivados
+            </button>
+            {filteredItems.map((item: ItemType, index: number) => (
                 <div
                     key={index}
                     className="card bg-secondary-focus"
