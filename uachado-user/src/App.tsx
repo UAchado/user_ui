@@ -21,7 +21,7 @@ function App() {
     const location = useLocation();
     const isnotLanding = location.pathname !== "/";
     return (
-        <DashboardContextProvider>
+        <DashboardContextProvider >
             <div>
                 {isnotLanding && <Navbar/>
                 }

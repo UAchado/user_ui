@@ -1,3 +1,4 @@
+
 import {useState, useEffect, useContext} from 'react';
 import {DashboardTable} from '../../components/DashboardTable/dashboardTable';
 import {DashboardContext} from "../../context/DashboardContext/DashboardContext";
@@ -67,6 +68,7 @@ const Dashboard = () => {
                         handleSelect={handleSelect}
                         tags={tags}
                         handleSelectTag={handleSelectTag}
+                        isAdmin={true}
                     />
                 ) :
                 (
@@ -76,6 +78,7 @@ const Dashboard = () => {
                         handleSelect={handleSelect}
                         tags={tags}
                         handleSelectTag={handleSelectTag}
+                        isAdmin={true}
                     />
                 )
             }
