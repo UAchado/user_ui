@@ -8,6 +8,7 @@ interface DashboardTableProps {
     tags: string[];
     handleSelectTag: (tag: string) => void;
     toggleSelectedState: () => void;
+    selectedState: string;
     filteredItems: ItemType[];
 }
 export const DashboardTable: React.FC<DashboardTableProps> = (
@@ -17,9 +18,14 @@ export const DashboardTable: React.FC<DashboardTableProps> = (
         tags,
         handleSelectTag,
         toggleSelectedState,
-        filteredItems
+        filteredItems,
+        selectedState,
     }
 ) => {
+
+    const canArchive = () => {
+        return selectedState === "archived";
+    }
 
     return (
         <div className="sm:w-[55vw] overflow-x-auto p-10">
@@ -30,7 +36,7 @@ export const DashboardTable: React.FC<DashboardTableProps> = (
                     <th>Imagem</th>
                     <th>Tag</th>
                     <th>Admitido em</th>
-                    <th> Ponto de Recolha</th>
+                    <th></th>
                     <th>
                         <Dropdown items={tags} onSelect={handleSelectTag}/>
                     </th>
@@ -69,12 +75,14 @@ export const DashboardTable: React.FC<DashboardTableProps> = (
                             </button>
                         </td>
                         <td>
+                            {canArchive() &&
                             <button
                                 className="btn btn-neutral"
                                 onClick={() => handleSelect(item)}
                             >
                                 Marcar como encontrado
                             </button>
+                            }
                         </td>
                     </tr>
                 ))}

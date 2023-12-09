@@ -8,6 +8,7 @@ interface DashboardCardsProps {
     tags: string[];
     handleSelectTag: (tag: string) => void;
     toggleSelectedState: () => void;
+    selectedState: string;
     filteredItems: ItemType[];
 }
 
@@ -18,9 +19,14 @@ export const DashboardCards: React.FC<DashboardCardsProps> = (
         tags,
         handleSelectTag,
         toggleSelectedState,
+        selectedState,
         filteredItems
     }
 ) => {
+    const canArchive = () => {
+        return selectedState === "archived";
+    }
+
 
     return (
         <div className="grid grid-cols-1 gap-4 m-10 md:grid-cols-2">
@@ -44,8 +50,8 @@ export const DashboardCards: React.FC<DashboardCardsProps> = (
                         <h2 className="card-title text-3xl sm:text-2xl mx-auto">
                             {item.description}
                         </h2>
-                        <p className="text-xs">
-                            {item.dropoffPoint_id}
+                        <p className="text-sm">
+                            {new Date(item.admittedAt).toLocaleDateString()}
                         </p>
                         <div className="card-actions">
                             <button className="btn btn-accent btn-block text-xs sm:text-md"
@@ -53,13 +59,14 @@ export const DashboardCards: React.FC<DashboardCardsProps> = (
                             >
                                 Ver Detalhes
                             </button>
-
-                            <button
-                                className="btn btn-neutral btn-block"
-                                onClick={() => handleSelect(item)}
-                            >
-                                Marcar como encontrado
-                            </button>
+                            {canArchive() &&
+                                <button
+                                    className={`btn btn-neutral btn-block`}
+                                    onClick={() => handleSelect(item)}
+                                >
+                                    Marcar como encontrado
+                                </button>
+                            }
 
                         </div>
                     </div>

@@ -5,4 +5,5 @@ export interface ItemType {
     dropoffPoint_id: string;
     admittedAt: string;
     isVisible: boolean;
+    state: string;
 }

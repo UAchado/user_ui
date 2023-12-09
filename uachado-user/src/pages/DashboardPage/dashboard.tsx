@@ -74,6 +74,7 @@ const Dashboard = () => {
                         tags={tags}
                         handleSelectTag={handleSelectTag}
                         toggleSelectedState={toggleSelectedState}
+                        selectedState={selectedState}
                         filteredItems={filteredItems}
                     />
                 ) :
@@ -84,6 +85,7 @@ const Dashboard = () => {
                         tags={tags}
                         handleSelectTag={handleSelectTag}
                         toggleSelectedState={toggleSelectedState}
+                        selectedState={selectedState}
                         filteredItems={filteredItems}
 
                     />
