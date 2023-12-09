@@ -12,7 +12,6 @@ const Dashboard = () => {
         data, setData,
         filteredData, setFilteredData
     } = useContext(DashboardContext);
-    console.log(data);
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -62,7 +61,13 @@ const Dashboard = () => {
 
             <div>
                 {renderTable ? (
-                        <DashboardTable data={data} setData={setData} setSelectedItem={setSelectedItem}/>
+                        <DashboardTable
+                            filteredData={filteredData}
+                            openItemDetails={openItemDetails}
+                            handleSelect={handleSelect}
+                            tags={tags}
+                            handleSelectTag={handleSelectTag}
+                        />
 
                     ) :
                     (

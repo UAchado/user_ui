@@ -1,54 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Dropdown from "../NewItem/Dropdown/dropdown.tsx";
+import {ItemType} from "../../types/ItemType.ts";
 
-
-export const DashboardTable: React.FC = (props) => {
-
-    const tags = props.tags;
-    const data = props.data;
-    interface ItemType {
-        image: string;
-        description: string;
-        tag: string;
-        dropoffPoint_id: string;
-        admittedAt: string;
-        isVisible: boolean;
+interface DashboardTableProps {
+    filteredData: ItemType[];
+    openItemDetails: (item: ItemType) => void;
+    handleSelect: (item: ItemType) => void;
+    tags: string[];
+    handleSelectTag: (tag: string) => void;
+}
+export const DashboardTable: React.FC<DashboardTableProps> = (
+    {
+        filteredData,
+        openItemDetails,
+        handleSelect,
+        tags,
+        handleSelectTag
     }
+) => {
 
-    const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
-    const [selectedTag, setSelectedTag] = useState("Todos");
-
-
-    const [filteredData, setFilteredData] = useState<ItemType[]>(data);
-    const handleSelect = (item: ItemType) => {
-        // Update the visibility of item directly
-        setData(prevData => prevData.map(currItem => {
-            if (currItem === item) {
-                return {...currItem, isVisible: false};
-            }
-            return currItem;
-        }));
-    };
-    const handleSelectTag = (tag: string) => {
-        setSelectedTag(tag);
-    };
-    const openItemDetails = (item: ItemType) => {
-        setSelectedItem(item);
-        const modal = document.getElementById('my_modal_1') as HTMLDialogElement;
-        modal.showModal();
-    }
-    useEffect(() => {
-        setFilteredData(data.filter(item =>
-            (selectedTag === "Todos" ? true : item.tag === selectedTag) && item.isVisible
-        ));
-    }, [data, selectedTag]);
-
-    useEffect(() => {
-        if (selectedItem !== null) {
-            const modal = document.getElementById("my_modal_1") as HTMLDialogElement;
-            modal.showModal();
-        }
-    }, [selectedItem]);
 
     return (
         <div className="sm:w-[55vw] overflow-x-auto p-10">
@@ -104,26 +74,6 @@ export const DashboardTable: React.FC = (props) => {
                 ))}
                 </tbody>
             </table>
-            {selectedItem && (
-                <dialog id="my_modal_1" className="modal">
-                    <div className="modal-box">
-                        <img src={selectedItem["image"]} alt={selectedItem["description"]}/>
-                        <h3 className="text-lg font-bold">{selectedItem["description"]}</h3>
-                        <span className="badge badge-ghost badge-md">{selectedItem["tag"]}</span>
-                        <h1 className="text-xl font-bold">Guardado em: <b>{selectedItem["dropoffPoint_id"]}</b></h1>
-                        <div className="modal-action">
-                            <form method="dialog">
-                                <button
-                                    className="btn"
-                                    onClick={() => setSelectedItem(null)}
-                                >
-                                    Fechar
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </dialog>
-            )}
         </div>
 
 
