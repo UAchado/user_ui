@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Image() {
+function Image({ onImageChange }: { onImageChange: (file: File | null) => void }) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   /**
@@ -11,6 +11,7 @@ function Image() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+      onImageChange(file); // Pass the file object to the parent component
 
       if (file) {
         const reader = new FileReader();
@@ -27,6 +28,7 @@ function Image() {
       }
     } else {
       setSelectedImage(null);
+      onImageChange(null); // Clear the file in the parent component
     }
   };
   return (

@@ -17,7 +17,10 @@ const defaultContextValue: DashboardContextType = {
   filteredData: [], // Assuming filteredData is an empty array by default
   setFilteredData: () => {}, // This should actually be a state updater function
   toggleSelectedState: () => {}, // Replace with the actual implementation
-  filteredItems: [], // Assuming filteredItems is an empty array by default
+  page: 1,
+  setPage: () => {}, // This should actually be a state updater function
+  totalPages: 1,
+  setTotalPages: () => {}, // This should actually be a state updater function
 };
 
 // Create the context
@@ -33,73 +36,18 @@ export const DashboardContextProvider: React.FC<
   const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
   const [selectedItem, setSelectedItem] = useState<ItemType | null>(null);
   const [selectedTag, setSelectedTag] = useState("Todos");
-  const [data, setData] = useState([
-    {
-      image:
-        "https://media.discordapp.net/attachments/852109272262770710/1166749106669113364/image.png",
-      description: "Carteira preta",
-      tag: "Carteiras",
-      dropoffPoint_id: 4,
-      admittedAt: "2021-04-01T00:00:00.000Z",
-      isVisible: true,
-      state: "archived",
-    },
-    {
-      image:
-        "https://www.lenovo.com/medias/lenovo-laptop-yoga-slim-series-feature-2-1.png?context=bWFzdGVyfC9lbWVhL2ltYWdlcy98NjkxMzczfGltYWdlL3BuZ3wvZW1lYS9pbWFnZXMvaDgyL2gzZC8xNTg4MTY4MTk5Mzc1OC5wbmd8OWUxZWI4ZTBjZjRhYTNiN2E2YmZlODEyOTAzYjdmOTc4NTE0ZTdiM2IwMGQ0YzI3MzI0NjVkM2I0NTBmY2U5MA",
-      description: "Notebook ultrafino",
-      tag: "Portáteis",
-      dropoffPoint_id: 1,
-      admittedAt: "2021-05-01T00:00:00.000Z",
-      isVisible: true,
-      state: "stored",
-    },
-    {
-      image:
-        "https://www.tek4life.pt/media/catalog/product/cache/2/image/800x800/85e4522595efc69f496374d01ef2bf13/s/2/s23__lavender_composta_1.png",
-      description: "Smartphone Samsung",
-      tag: "Telemóveis",
-      dropoffPoint_id: 4,
-      admittedAt: "2021-06-01T00:00:00.000Z",
-      isVisible: true,
-      state: "archived",
-    },
-    {
-      image:
-        "https://img.pccomponentes.com/articles/1066/10663343/1111-lenovo-tab-m10-hd-2nd-gen-101-3-32gb-gris.jpg",
-      description: "Tablet Lenovo",
-      tag: "Tablets",
-      dropoffPoint_id: 5,
-      admittedAt: "2021-07-01T00:00:00.000Z",
-      isVisible: true,
-      state: "stored",
-    },
-    {
-      image:
-        "https://nanochip.pt/wp-content/uploads/Produtos/JBLT520BTAZUL/headphone-jbl-tune-t520-5-3-le-bluetooth-azul-0.jpg",
-      description: "Auscultadores JBL",
-      tag: "Auscultadores/Fones",
-      dropoffPoint_id: 5,
-      admittedAt: "2021-08-01T00:00:00.000Z",
-      isVisible: true,
-      state: "archived",
-    },
-    {
-      image:
-        "https://www.worten.pt/i/370d3f3ddc5f01b5fb58963e70730d74e5d61626.jpg",
-      description: "Carregador portátil universal",
-      tag: "Carregadores",
-      dropoffPoint_id: 2,
-      admittedAt: "2021-08-01T00:00:00.000Z",
-      isVisible: true,
-      state: "stored",
-    },
-  ]);
+  const [filteredData, setFilteredData] = useState<ItemType[]>([]);
+  const [data, setData] = useState<ItemType[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [tags, setTags] = useState<string[]>([]);
+  const [selectedState, setSelectedState] = useState<string>("stored"); // Initial state is set to 'stored'
 
   useEffect(() => {
+    fetchItems(page);
     fetchTags();
   }, []);
+
   const fetchTags = async () => {
     try {
       // Adjust the endpoint as needed
@@ -117,17 +65,63 @@ export const DashboardContextProvider: React.FC<
     }
   };
 
-  const [filteredData, setFilteredData] = useState<ItemType[]>([]);
-  const [selectedState, setSelectedState] = useState<string>("stored"); // Initial state is set to 'stored'
+  const fetchItems = async (page: number) => {
+    try {
+      // Adjust the endpoint as needed
+      axios
+        .post(itemsBaseUrl + "items/stored?page=" + page + "&size=10", {
+          filter: {},
+        })
+        .then(function (response) {
+          setData(response.data.items);
+          setTotalPages(response.data.pages);
+          console.log("Data fetched successfully:", response.data);
+        })
+        .catch(function (error) {
+          console.error("Error sending data:", error);
+        });
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
+
+  const fetchItemImage = async (item: ItemType) => {
+    const filePath = item.image;
+    try {
+      const response = await axios.get(itemsBaseUrl + "image/" + filePath, { responseType: 'blob' });
+      return URL.createObjectURL(response.data); // Create an Object URL from the Blob
+    } catch (error) {
+      console.error("Error fetching image:", error);
+      return undefined;
+    }
+  };
+
+  useEffect(() => {
+    const updateDataWithImages = async () => {
+      if (data.length === 0) return;
+  
+      const dataWithImages = await Promise.all(data.map(async (item) => {
+        const imageData = await fetchItemImage(item);
+        return { ...item, image: imageData };
+      }));
+  
+      setFilteredData(
+        dataWithImages.filter((item) =>
+          selectedTag === "Todos" ? true : item.tag === selectedTag
+        )
+      );
+    };
+  
+    updateDataWithImages();
+  }, [data, selectedTag]);
+
 
   const toggleSelectedState = () => {
     setSelectedState((prevState) =>
       prevState === "stored" ? "archived" : "stored"
     );
   };
-  const filteredItems = filteredData.filter(
-    (item) => item.state === selectedState
-  );
+
 
   return (
     <DashboardContext.Provider
@@ -143,7 +137,10 @@ export const DashboardContextProvider: React.FC<
         filteredData,
         setFilteredData,
         toggleSelectedState,
-        filteredItems,
+        page,
+        setPage,
+        totalPages,
+        setTotalPages,
       }}
     >
       {children}

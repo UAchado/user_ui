@@ -1,9 +1,7 @@
 export interface ItemType {
-    image: string;
+    image: string | undefined;
     description: string;
     tag: string;
-    dropoffPoint_id: number;
-    admittedAt: string;
-    isVisible: boolean;
+    dropoff_point_id: number;
     state: string;
 }
