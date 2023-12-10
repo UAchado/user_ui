@@ -36,24 +36,25 @@ const NewItem = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-
+    const tag = e.currentTarget.tag.value;
     // Access form fields directly from formData
-    const tag = formData.get("tag");
 
     if (tag != null) {
       if (tags.includes(tag.toString())) {
+        // Send data to the API
+        const data = {"tag": tag, "description": e.currentTarget.description.value, "image": e.currentTarget.image.value, "dropoff_point_id": 1}
+        console.log(data)
         axios
-          .post(itemsBaseUrl + "items/", formData) // change to post request to the server
+          .post(itemsBaseUrl + "items/create", data) // change to post request to the server
           .then(function (response) {
             console.log("Data sent successfully:", response.data);
-            setSucess("Tag is valid");
+            setSucess("Item adicionado com sucesso");
           })
           .catch(function (error) {
             console.error("Error sending data:", error);
           });
       } else {
-        setWarning("Tag is invalid");
+        setWarning("A tag é inválida");
       }
     }
   };

@@ -1,11 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Dropdown from "../../components/NewItem/Dropdown/dropdown";
 import Modal from "../../components/ItemDetails/ItemDetails";
 import LocationModal from "../../components/Map/locationModal";
 import axios from "axios";
 import { useJsApiLoader } from "@react-google-maps/api";
+import { ItemListContext } from "../../context/ItemListContext/ItemListContext";
 
 const ItemList = () => {
+  const {
+    selectedItem,
+    setSelectedItem,
+    tags,
+    setSelectedTag,
+    data,
+    filteredData,
+  } = useContext(ItemListContext);
+
   interface DropPoint {
     id: number;
     name: string;
@@ -16,58 +26,15 @@ const ItemList = () => {
 
   const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
   const pointsBaseUrl = import.meta.env.VITE_POINTS_URL;
-  const [tags, setTags] = useState<string[]>([]);
   const [dropPoints, setDropoints] = useState<DropPoint[]>([]);
-  const [selectedTag, setSelectedTag] = useState<string>("Todos");
   const [showMap, setShowMap] = useState(false);
+  let isDataLoaded = tags.length > 0 && data.length > 0;
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
-  const data = [
-    {
-      image:
-        "https://media.discordapp.net/attachments/852109272262770710/1166749106669113364/image.png",
-      description: "Carteira preta",
-      tag: "Carteiras",
-      dropoffPoint_id: 5,
-    },
-    {
-      image:
-        "https://www.lenovo.com/medias/lenovo-laptop-yoga-slim-series-feature-2-1.png?context=bWFzdGVyfC9lbWVhL2ltYWdlcy98NjkxMzczfGltYWdlL3BuZ3wvZW1lYS9pbWFnZXMvaDgyL2gzZC8xNTg4MTY4MTk5Mzc1OC5wbmd8OWUxZWI4ZTBjZjRhYTNiN2E2YmZlODEyOTAzYjdmOTc4NTE0ZTdiM2IwMGQ0YzI3MzI0NjVkM2I0NTBmY2U5MA",
-      description: "Notebook ultrafino",
-      tag: "Portáteis",
-      dropoffPoint_id: 1,
-    },
-    {
-      image:
-        "https://www.tek4life.pt/media/catalog/product/cache/2/image/800x800/85e4522595efc69f496374d01ef2bf13/s/2/s23__lavender_composta_1.png",
-      description: "Smartphone Samsung",
-      tag: "Telemóveis",
-      dropoffPoint_id: 4,
-    },
-    {
-      image:
-        "https://img.pccomponentes.com/articles/1066/10663343/1111-lenovo-tab-m10-hd-2nd-gen-101-3-32gb-gris.jpg",
-      description: "Tablet Lenovo",
-      tag: "Tablets",
-      dropoffPoint_id: 5,
-    },
-    {
-      image:
-        "https://nanochip.pt/wp-content/uploads/Produtos/JBLT520BTAZUL/headphone-jbl-tune-t520-5-3-le-bluetooth-azul-0.jpg",
-      description: "Auscultadores JBL",
-      tag: "Auscultadores/Fones",
-      dropoffPoint_id: 4,
-    },
-    {
-      image:
-        "https://www.worten.pt/i/370d3f3ddc5f01b5fb58963e70730d74e5d61626.jpg",
-      description: "Carregador portátil universal",
-      tag: "Carregadores",
-      dropoffPoint_id: 2,
-    },
-  ];
+
+  
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
     const handleResize = () => {
@@ -81,12 +48,6 @@ const ItemList = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const [selectedItem, setSelectedItem] = useState<{
-    image: string;
-    description: string;
-    tag: string;
-    dropoffPoint_id: number;
-  } | null>(null);
 
   useEffect(() => {
     if (selectedItem !== null) {
@@ -126,24 +87,6 @@ const ItemList = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch tags from the API
-    const fetchTags = async () => {
-      try {
-        // Adjust the endpoint as needed
-        axios
-          .get(itemsBaseUrl + "items/tags/")
-          .then(function (response) {
-            setTags(response.data);
-            console.log("Data fetched successfully:", response.data);
-          })
-          .catch(function (error) {
-            console.error("Error sending data:", error);
-          });
-      } catch (error) {
-        console.error("Error fetching tags:", error);
-      }
-    };
-
     const fetchDropPoints = async () => {
       try {
         // Adjust the endpoint as needed
@@ -160,7 +103,6 @@ const ItemList = () => {
         console.error("Error fetching dropPoints:", error);
       }
     };
-    fetchTags().then(() => console.log("Tags fetched successfully"));
     fetchDropPoints().then(() =>
       console.log("DropPoints fetched successfully")
     );
@@ -202,16 +144,12 @@ const ItemList = () => {
     setShowMap(true);
   };
 
-  // Filter the data based on the selected tag
-  const filteredData =
-    selectedTag === "Todos"
-      ? data
-      : data.filter((item) => item.tag === selectedTag);
-
   const renderTable: boolean = windowWidth > 1250;
 
   return (
     <div>
+      {isDataLoaded ? (
+        <>
       {renderTable ? (
         <div className="sm:w-[55vw] overflow-x-auto p-10">
           <table className="table">
@@ -250,7 +188,9 @@ const ItemList = () => {
                   </td>
                   <td>
                     {dropPoints
-                      .filter((point) => point.id === item.dropoffPoint_id)
+                      .filter(
+                        (point) => point.id === item.dropoffPoint_id
+                      )
                       .map((filteredPoint) => filteredPoint.name)}
                   </td>
                   <td className="flex justify-center items-center">
@@ -288,7 +228,9 @@ const ItemList = () => {
                 </h2>
                 <p className="text-xs">
                   {dropPoints
-                    .filter((point) => point.id === item.dropoffPoint_id)
+                    .filter(
+                      (point) => point.id === item.dropoffPoint_id
+                    )
                     .map((filteredPoint) => filteredPoint.name)}
                 </p>
                 <div className="card-actions">
@@ -316,7 +258,7 @@ const ItemList = () => {
               <h3 className="text-lg font-bold">Tu aí!</h3>
               <p className="py-4">
                 Se não encontraste aqui o que perdeste, não desesperes! Manda um
-                e-mail para <b>uachadomachado@gmail.com</b> com uma breve
+                e-mail para <b>uachadomachado@gmail.com</b> com uma bre§e
                 descrição do teu item e faremos o nosso melhor para fazê-lo
                 chegar até ti!
               </p>
@@ -349,6 +291,12 @@ const ItemList = () => {
           onCloseModal={() => setShowMap(false)}
           calculateMidpoint={calculateMidpoint}
         />
+      )}
+      </>
+      ) : (
+        <div className="flex justify-center items-center h-screen">
+          <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-64 w-64"></div>
+        </div>
       )}
     </div>
   );
