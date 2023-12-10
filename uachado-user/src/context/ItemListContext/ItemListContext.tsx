@@ -42,9 +42,10 @@ export const ItemListContextProvider: React.FC<
   const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
+    setFilteredData([]);
     fetchItems(page);
     fetchTags();
-  }, []);
+  }, [page, selectedTag]);
 
   const fetchTags = async () => {
     try {
@@ -53,7 +54,6 @@ export const ItemListContextProvider: React.FC<
         .get(itemsBaseUrl + "items/tags/")
         .then(function (response) {
           setTags(response.data);
-          console.log("Data fetched successfully:", response.data);
         })
         .catch(function (error) {
           console.error("Error sending data:", error);
@@ -64,16 +64,21 @@ export const ItemListContextProvider: React.FC<
   };
 
   const fetchItems = async (page: number) => {
+    let my_filter = {};
+
+    if (selectedTag !== "Todos") {
+      my_filter = {"tag": selectedTag};;
+    }
+
     try {
       // Adjust the endpoint as needed
       axios
-        .post(itemsBaseUrl + "items/stored?page=" + page + "&size=10", {
-          filter: {},
+        .post(itemsBaseUrl + "items/stored?page=" + page + "&size=5", {
+          filter: my_filter,
         })
         .then(function (response) {
           setData(response.data.items);
           setTotalPages(response.data.pages);
-          console.log("Data fetched successfully:", response.data);
         })
         .catch(function (error) {
           console.error("Error sending data:", error);
@@ -102,7 +107,7 @@ export const ItemListContextProvider: React.FC<
         const imageData = await fetchItemImage(item);
         return { ...item, image: imageData };
       }));
-  
+      
       setFilteredData(
         dataWithImages.filter((item) =>
           selectedTag === "Todos" ? true : item.tag === selectedTag

@@ -11,9 +11,12 @@ export interface DashboardContextType {
   setData: React.Dispatch<React.SetStateAction<ItemType[]>>;
   filteredData: ItemType[];
   setFilteredData: React.Dispatch<React.SetStateAction<ItemType[]>>;
-  toggleSelectedState: (item: ItemType) => void;
+  toggleSelectedState: () => void;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   totalPages: number;
   setTotalPages: React.Dispatch<React.SetStateAction<number>>;
+  selectedState: string;
+  setSelectedState: React.Dispatch<React.SetStateAction<string>>;
+  archiveItem: (item: ItemType, email: string) => void;
 }

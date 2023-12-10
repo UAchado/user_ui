@@ -1,4 +1,5 @@
 export interface ItemType {
+    id: number;
     image: string | undefined;
     description: string;
     tag: string;

@@ -6,10 +6,19 @@ import axios from "axios";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { ItemListContext } from "../../context/ItemListContext/ItemListContext";
 import { ItemType } from "../../types/ItemType";
+import Pagination from "../../components/Pagination/pagination";
 
 const ItemList = () => {
-  const { selectedItem, setSelectedItem, tags, setSelectedTag, filteredData } =
-    useContext(ItemListContext);
+  const {
+    selectedItem,
+    setSelectedItem,
+    tags,
+    setSelectedTag,
+    filteredData,
+    page,
+    setPage,
+    totalPages,
+  } = useContext(ItemListContext);
 
   interface DropPoint {
     id: number;
@@ -19,12 +28,9 @@ const ItemList = () => {
     longitude: number;
   }
 
-  const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
   const pointsBaseUrl = import.meta.env.VITE_POINTS_URL;
   const [dropPoints, setDropoints] = useState<DropPoint[]>([]);
   const [showMap, setShowMap] = useState(false);
-  let isDataLoaded =
-    tags.length > 0 && filteredData.length > 0 && dropPoints.length > 0;
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
@@ -100,7 +106,7 @@ const ItemList = () => {
     fetchDropPoints().then(() =>
       console.log("DropPoints fetched successfully")
     );
-  }, [itemsBaseUrl, pointsBaseUrl]);
+  }, [pointsBaseUrl]);
 
   const calculateMidpoint = (
     lat1: number,
@@ -160,150 +166,145 @@ const ItemList = () => {
   console.log("filteredData", filteredData);
   return (
     <div>
-      {isDataLoaded ? (
-        <>
-          {renderTable ? (
-            <div className="sm:w-[55vw] overflow-x-auto p-10">
-              <table className="table">
-                {/* head */}
-                <thead>
-                  <tr>
-                    <th>Imagem</th>
-                    <th>Tag</th>
-                    <th>Ponto de Recolha</th>
-                    <th>
-                      <Dropdown items={tags} onSelect={handleSelectTag} />
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-xl">
-                  {filteredData.map((item, index) => (
-                    <tr key={index}>
-                      <td>
-                        <div className="flex items-center space-x-3">
-                          <div className="avatar">
-                            <div className="w-12 h-12 mask mask-squircle">
-                              <img
-                                src={item.image}
-                                alt="Avatar Tailwind CSS Component"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="flex items-center space-x-2">
-                          <span className="badge badge-ghost badge-md">
-                            {item.tag}
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        {getDropPointName(dropPoints, item)}
-                      </td>
-                      <td className="flex justify-center items-center">
-                        <button
-                          className="btn btn-ghost border-primary-content"
-                          onClick={() => setSelectedItem(item)}
-                        >
-                          Detalhes
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 m-10 md:grid-cols-2">
-              <Dropdown items={tags} onSelect={handleSelectTag} />
+      {renderTable ? (
+        <div className="sm:w-[55vw] overflow-x-auto p-10">
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>Imagem</th>
+                <th>Tag</th>
+                <th>Ponto de Recolha</th>
+                <th>
+                  <Dropdown items={tags} onSelect={handleSelectTag} />
+                </th>
+              </tr>
+            </thead>
+            <tbody className="text-xl">
               {filteredData.map((item, index) => (
-                <div
-                  key={index}
-                  className="card bg-secondary-focus"
-                  onClick={() => setSelectedItem(item)}
-                >
-                  <figure className="h-40 overflow-hidden">
-                    <img
-                      src={item.image}
-                      alt={item.description}
-                      className="object-cover w-full h-full"
-                    />
-                  </figure>
-                  <div className="card-body">
-                    <h2 className="card-title text-3xl sm:text-2xl mx-auto">
-                      {item.description}
-                    </h2>
-                    <p className="text-xs">
-                      {dropPoints
-                        .filter((point) => point.id === item.dropoff_point_id)
-                        .map((filteredPoint) => filteredPoint.name)}
-                    </p>
-                    <div className="card-actions">
-                      <button className="btn btn-accent btn-block text-xs sm:text-md">
-                        Ver Detalhes
-                      </button>
+                <tr key={index}>
+                  <td>
+                    <div className="flex items-center space-x-3">
+                      <div className="avatar">
+                        <div className="w-12 h-12 mask mask-squircle">
+                          <img
+                            src={item.image}
+                            alt="Avatar Tailwind CSS Component"
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </td>
+                  <td>
+                    <div className="flex items-center space-x-2">
+                      <span className="badge badge-ghost badge-md">
+                        {item.tag}
+                      </span>
+                    </div>
+                  </td>
+                  <td>{getDropPointName(dropPoints, item)}</td>
+                  <td className="flex justify-center items-center">
+                    <button
+                      className="btn btn-ghost border-primary-content"
+                      onClick={() => setSelectedItem(item)}
+                    >
+                      Detalhes
+                    </button>
+                  </td>
+                </tr>
               ))}
-              <h2 className="cursor-pointer hover:underline">
-                <button
-                  className="btn btn-ghost hover:underline hover:bg-transparent"
-                  onClick={() =>
-                    (
-                      document.getElementById("contacto") as HTMLDialogElement
-                    )?.showModal()
-                  }
-                >
-                  Não encontraste o que perdeste?
-                </button>
-              </h2>
-              <dialog id="contacto" className="modal">
-                <div className="modal-box">
-                  <h3 className="text-lg font-bold">Tu aí!</h3>
-                  <p className="py-4">
-                    Se não encontraste aqui o que perdeste, não desesperes!
-                    Manda um e-mail para <b>uachadomachado@gmail.com</b> com uma
-                    bre§e descrição do teu item e faremos o nosso melhor para
-                    fazê-lo chegar até ti!
-                  </p>
-                  <div className="modal-action">
-                    <form method="dialog">
-                      <button className="btn">Entendido!</button>
-                    </form>
-                  </div>
-                </div>
-              </dialog>
-            </div>
-          )}
-          {selectedItem && (
-            <Modal
-              selectedItem={selectedItem}
-              droppoints={dropPoints}
-              onOpenOtherComponent={openMapComponent}
-            />
-          )}
-
-          {showMap && isLoaded && !loadError && (
-            <LocationModal
-              // chamar a api para obter a localização do ponto de recolha
-              location={
-                dropPoints.filter(
-                  (point) => point.id === selectedItem?.dropoff_point_id
-                )[0]
-              }
-              userLocation={userLocation}
-              onCloseModal={() => setShowMap(false)}
-              calculateMidpoint={calculateMidpoint}
-            />
-          )}
-        </>
+            </tbody>
+          </table>
+        </div>
       ) : (
-        <div className="flex justify-center items-center h-screen">
-          <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-64 w-64"></div>
+        <div className="grid grid-cols-1 gap-4 m-10 md:grid-cols-2">
+          <Dropdown items={tags} onSelect={handleSelectTag} />
+          {filteredData.map((item, index) => (
+            <div
+              key={index}
+              className="card bg-secondary-focus"
+              onClick={() => setSelectedItem(item)}
+            >
+              <figure className="h-40 overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.description}
+                  className="object-cover w-full h-full"
+                />
+              </figure>
+              <div className="card-body">
+                <h2 className="card-title text-3xl sm:text-2xl mx-auto">
+                  {item.description}
+                </h2>
+                <p className="text-xs">
+                  {dropPoints
+                    .filter((point) => point.id === item.dropoff_point_id)
+                    .map((filteredPoint) => filteredPoint.name)}
+                </p>
+                <div className="card-actions">
+                  <button className="btn btn-accent btn-block text-xs sm:text-md">
+                    Ver Detalhes
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+          <h2 className="cursor-pointer hover:underline">
+            <button
+              className="btn btn-ghost hover:underline hover:bg-transparent"
+              onClick={() =>
+                (
+                  document.getElementById("contacto") as HTMLDialogElement
+                )?.showModal()
+              }
+            >
+              Não encontraste o que perdeste?
+            </button>
+          </h2>
+          <dialog id="contacto" className="modal">
+            <div className="modal-box">
+              <h3 className="text-lg font-bold">Tu aí!</h3>
+              <p className="py-4">
+                Se não encontraste aqui o que perdeste, não desesperes! Manda um
+                e-mail para <b>uachadomachado@gmail.com</b> com uma bre§e
+                descrição do teu item e faremos o nosso melhor para fazê-lo
+                chegar até ti!
+              </p>
+              <div className="modal-action">
+                <form method="dialog">
+                  <button className="btn">Entendido!</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
         </div>
       )}
+      {selectedItem && (
+        <Modal
+          selectedItem={selectedItem}
+          droppoints={dropPoints}
+          onOpenOtherComponent={openMapComponent}
+        />
+      )}
+
+      {showMap && isLoaded && !loadError && (
+        <LocationModal
+          // chamar a api para obter a localização do ponto de recolha
+          location={
+            dropPoints.filter(
+              (point) => point.id === selectedItem?.dropoff_point_id
+            )[0]
+          }
+          userLocation={userLocation}
+          onCloseModal={() => setShowMap(false)}
+          calculateMidpoint={calculateMidpoint}
+        />
+      )}
+      <Pagination
+        totalPages={totalPages}
+        currentPage={page}
+        onPageChange={(newPage) => setPage(newPage)}
+      />
     </div>
   );
 };

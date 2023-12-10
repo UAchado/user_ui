@@ -21,6 +21,9 @@ const defaultContextValue: DashboardContextType = {
   setPage: () => {}, // This should actually be a state updater function
   totalPages: 1,
   setTotalPages: () => {}, // This should actually be a state updater function
+  selectedState: "stored",
+  setSelectedState: () => {}, // This should actually be a state updater function
+  archiveItem: (_item: ItemType | null, _email: string) => {}, // This should actually be a state updater function
 };
 
 // Create the context
@@ -44,9 +47,10 @@ export const DashboardContextProvider: React.FC<
   const [selectedState, setSelectedState] = useState<string>("stored"); // Initial state is set to 'stored'
 
   useEffect(() => {
+    console.log("selectedState", selectedState);
     fetchItems(page);
     fetchTags();
-  }, []);
+  }, [selectedState, page, selectedTag]);
 
   const fetchTags = async () => {
     try {
@@ -55,7 +59,6 @@ export const DashboardContextProvider: React.FC<
         .get(itemsBaseUrl + "items/tags/")
         .then(function (response) {
           setTags(response.data);
-          console.log("Data fetched successfully:", response.data);
         })
         .catch(function (error) {
           console.error("Error sending data:", error);
@@ -66,16 +69,29 @@ export const DashboardContextProvider: React.FC<
   };
 
   const fetchItems = async (page: number) => {
+    const drop_point_id = 1;
+    let my_filter = {};
+
+    if (selectedTag !== "Todos") {
+      my_filter = { tag: selectedTag, state: selectedState };
+    } else {
+      my_filter = { state: selectedState };
+    }
     try {
       // Adjust the endpoint as needed
       axios
-        .post(itemsBaseUrl + "items/stored?page=" + page + "&size=10", {
-          filter: {},
-        })
+        .put(
+          itemsBaseUrl +
+            "items/point/" +
+            drop_point_id +
+            "?page=" +
+            page +
+            "&size=5",
+          { filter: my_filter }
+        )
         .then(function (response) {
           setData(response.data.items);
           setTotalPages(response.data.pages);
-          console.log("Data fetched successfully:", response.data);
         })
         .catch(function (error) {
           console.error("Error sending data:", error);
@@ -88,7 +104,9 @@ export const DashboardContextProvider: React.FC<
   const fetchItemImage = async (item: ItemType) => {
     const filePath = item.image;
     try {
-      const response = await axios.get(itemsBaseUrl + "image/" + filePath, { responseType: 'blob' });
+      const response = await axios.get(itemsBaseUrl + "image/" + filePath, {
+        responseType: "blob",
+      });
       return URL.createObjectURL(response.data); // Create an Object URL from the Blob
     } catch (error) {
       console.error("Error fetching image:", error);
@@ -99,29 +117,42 @@ export const DashboardContextProvider: React.FC<
   useEffect(() => {
     const updateDataWithImages = async () => {
       if (data.length === 0) return;
-  
-      const dataWithImages = await Promise.all(data.map(async (item) => {
-        const imageData = await fetchItemImage(item);
-        return { ...item, image: imageData };
-      }));
-  
-      setFilteredData(
-        dataWithImages.filter((item) =>
-          selectedTag === "Todos" ? true : item.tag === selectedTag
-        )
+
+      const dataWithImages = await Promise.all(
+        data.map(async (item) => {
+          const imageData = await fetchItemImage(item);
+          return { ...item, image: imageData };
+        })
       );
+
+      setFilteredData(dataWithImages);
     };
-  
+
     updateDataWithImages();
   }, [data, selectedTag]);
 
-
   const toggleSelectedState = () => {
+    setFilteredData([]);
     setSelectedState((prevState) =>
-      prevState === "stored" ? "archived" : "stored"
+      prevState === "stored" ? "retrieved" : "stored"
     );
   };
 
+  const archiveItem = async (item: ItemType, email: string) => {
+    try {
+      // Adjust the endpoint as needed
+      axios
+        .put(itemsBaseUrl + "items/retrieve/" + item.id, { email: email })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.error("Error sending data:", error);
+        });
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
 
   return (
     <DashboardContext.Provider
@@ -141,6 +172,9 @@ export const DashboardContextProvider: React.FC<
         setPage,
         totalPages,
         setTotalPages,
+        selectedState,
+        setSelectedState,
+        archiveItem,
       }}
     >
       {children}
