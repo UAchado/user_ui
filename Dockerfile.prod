@@ -17,4 +17,4 @@ COPY --from=build /app /app
 EXPOSE 80
 
 WORKDIR /app
-CMD ["npm", "run", "dev", "--", "--port", "80", "--host", "0.0.0.0"]
+CMD ["npm", "run", "dev"]
