@@ -46,9 +46,9 @@ const DropPoints: React.FC = () => {
     .get(pointsBaseUrl + "points/")
     .then((response) => {
       // Handle the successful response here
-      //console.log("Points API response:", response.data);
       console.log("Points API response:", response.data);
       setLocations(response.data);
+      console.log("Locations:", locations);
     })
     .catch((error) => {
       // Handle any errors that occurred during the request
@@ -59,7 +59,6 @@ const DropPoints: React.FC = () => {
   }, [pointsBaseUrl]);
 
   const handleModalOpen = (index: number) => {
-    console.log(locations[index]);
     setSelectedIndex(index);
     setIsModalOpen(true);
   };

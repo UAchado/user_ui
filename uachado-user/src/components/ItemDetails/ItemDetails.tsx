@@ -1,12 +1,7 @@
 import React from "react";
+import {ItemType} from "../../types/ItemType.ts";
 
 // Define a type for the item
-type ItemType = {
-  image: string;
-  description: string;
-  tag: string;
-  dropoffPoint_id: number;
-} | null;
 
 type DropPointType = {
   id: number;

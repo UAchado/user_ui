@@ -1,6 +1,6 @@
-import { ItemType } from "./ItemType";
+import { ItemType } from "./ItemType.ts";
 import React from "react";
-export interface DashboardContextType {
+export interface ItemListContextType {
     selectedItem: ItemType | null,
     setSelectedItem: React.Dispatch<React.SetStateAction<ItemType | null>>,
     tags: string[],
@@ -11,6 +11,4 @@ export interface DashboardContextType {
     setData: React.Dispatch<React.SetStateAction<ItemType[]>>,
     filteredData: ItemType[],
     setFilteredData: React.Dispatch<React.SetStateAction<ItemType[]>>,
-    toggleSelectedState: (item: ItemType) => void,
-    filteredItems: ItemType[],
 }
