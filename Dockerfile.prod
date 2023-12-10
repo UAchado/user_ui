@@ -4,17 +4,14 @@ FROM node:18-slim AS build
 WORKDIR /app
 
 COPY uachado-user/package.json /app/
-RUN npm install
+RUN npm ci
 
 COPY uachado-user /app
+RUN npm run build
 
+FROM nginx:stable-alpine
 
-# Stage 2: Runtime Stage
-FROM node:18-slim
-
-COPY --from=build /app /app
-
+COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 
-WORKDIR /app
-CMD ["npm", "run", "dev"]
+CMD ["nginx", "-g", "daemon off;"]
