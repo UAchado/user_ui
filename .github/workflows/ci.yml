@@ -30,8 +30,10 @@ jobs:
     - name: Get Terraform Output
       id: terraform
       run: |
-        echo "http://$(terraform output -raw inventory_lb_dns_name)/inventory/v1/" >> $INVENTORY_URL
-        echo "http://$(terraform output -raw points_lb_dns_name)/points/v1/" >> $POINTS_URL
+        INVENTORY_DNS=$(terraform output -raw inventory_lb_dns_name)
+        POINTS_DNS=$(terraform output -raw points_lb_dns_name)
+        echo "INVENTORY_URL=http://${INVENTORY_DNS}/inventory/v1/" >> $INVENTORY_URL
+        echo "POINTS_URL=http://${POINTS_DNS}/points/v1/" >> $POINTS_URL
 
 
     - name: Login to Amazon ECR
