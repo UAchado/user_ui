@@ -19,6 +19,21 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-1
 
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Get Terraform Output
+      id: terraform
+      run: |
+        echo "http://$(terraform output -raw inventory_lb_dns_name)/inventory/v1/" >> $INVENTORY_URL
+        echo "http://$(terraform output -raw points_lb_dns_name)/points/v1/" >> $POINTS_URL
+
+
     - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
 
@@ -27,6 +42,6 @@ jobs:
         ECR_REPOSITORY: ${{ vars.AWS_ECR_URL }}
         IMAGE_TAG: latest
       run: |
-        docker build -t $ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile.prod .
+        docker build -t $ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile.prod . --build-var VITE_INVENTORY_URL=$INVENTORY_URL --build-var VITE_POINTS_URL=$POINTS_URL
         docker push $ECR_REPOSITORY:$IMAGE_TAG
         echo "$ECR_REPOSITORY:$IMAGE_TAG"

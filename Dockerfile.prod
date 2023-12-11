@@ -1,16 +1,23 @@
 # Stage 1: Build Stage
 FROM node:18-slim AS build
 
+# Define the environment variables
+ARG VITE_INVENTORY_URL
+ARG VITE_POINTS_URL
+
 WORKDIR /app
 
 COPY uachado-user/package.json /app/
-RUN npm i
 
-# EXPOSE 80
+# Use the environment variables in your build process if needed
+# For example, using them in npm install
+RUN echo "Environment Variable 1: $ENV_VAR1" \
+    && echo "Environment Variable 2: $ENV_VAR2" \
+    && npm i
 
+# Rest of your build process...
 COPY uachado-user /app
 RUN npm run build
-# CMD npm run dev
 
 FROM nginx:stable-alpine
 
@@ -18,3 +25,5 @@ COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
+
+
