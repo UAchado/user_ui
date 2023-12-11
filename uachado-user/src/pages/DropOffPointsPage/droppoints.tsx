@@ -14,7 +14,7 @@ const DropPoints: React.FC = () => {
     lng: number;
   } | null>(null);
 
-  //console.log("Points URL:", pointsBaseUrl + "points/");
+  console.log("Points Base URL:", pointsBaseUrl);
   // Make a GET request to the points API
 
   const { isLoaded, loadError } = useJsApiLoader({
