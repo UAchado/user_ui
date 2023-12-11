@@ -27,6 +27,6 @@ jobs:
         ECR_REPOSITORY: ${{ vars.AWS_ECR_URL }}
         IMAGE_TAG: latest
       run: |
-        docker build -t $ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile.prod . --build-var VITE_INVENTORY_URL=$INVENTORY_URL --build-var VITE_POINTS_URL=$POINTS_URL
+        docker build -t $ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile.prod .
         docker push $ECR_REPOSITORY:$IMAGE_TAG
         echo "$ECR_REPOSITORY:$IMAGE_TAG"
