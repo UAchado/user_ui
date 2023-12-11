@@ -11,6 +11,7 @@ const ReportItem = () => {
   const [warning, setWarning] = useState<string | null>(null);
   const [sucess, setSucess] = useState<string | null>(null);
   const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     // Fetch tags from the API
@@ -34,27 +35,35 @@ const ReportItem = () => {
     fetchTags();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+    selectedImage: File | null
+  ) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
 
-    // Access form fields directly from formData
-    const tag = formData.get("tag");
+    const tag = e.currentTarget.tag.value;
+    const description = e.currentTarget.description.value;
+    const report_email = e.currentTarget.email.value; // Or however you get this value
 
-    if (tag != null) {
-      if (tags.includes(tag.toString())) {
-        // axios
-        //   .post(itemsBaseUrl + "items/", formData) // change to post request to the server
-        //   .then(function (response) {
-        //     console.log("Data sent successfully:", response.data);
-        //     setSucess("Tag is valid");
-        //   })
-        //   .catch(function (error) {
-        //     console.error("Error sending data:", error);
-        //   });
+    if (tag && tags.includes(tag.toString())) {
+      const formData = new FormData();
+      formData.append("tag", tag);
+      formData.append("description", description);
+      if (selectedImage) {
+        formData.append("image", selectedImage);
       } else {
-        setWarning("Tag is invalid");
+        formData.append("image", new Blob(), '');
       }
+      formData.append("report_email", report_email);
+
+      try {
+        await axios.post(itemsBaseUrl + "items/report", formData);
+        setSucess("Item adicionado com sucesso");
+      } catch (error) {
+        setWarning("Erro ao enviar dados");
+      }
+    } else {
+      setWarning("A tag é inválida");
     }
   };
 
@@ -103,9 +112,14 @@ const ReportItem = () => {
           <div className="card bg-primary">
             <div className="card-body">
               <h2 className="card-title">Formulário de Objeto Perdido</h2>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={(e) => handleSubmit(e, selectedImageFile)}>
                 {/* Textarea for item description */}
                 <div className="w-full max-w-xs form-control">
+                  <input
+                    name="email"
+                    placeholder="O teu email (da UA se aplicável)"
+                    className="w-full max-w-xs mt-5 text-black placeholder-black textarea bg-secondary"
+                  />
                   <textarea
                     className="w-full max-w-xs mt-5 text-black placeholder-black textarea bg-secondary"
                     placeholder="Breve descrição sobre o item para facilitar a identificação."
@@ -116,7 +130,7 @@ const ReportItem = () => {
                   {/* Dropdown for item category */}
                   <Dropdown items={tags} />
 
-                  <Image />
+                  <Image onImageChange={setSelectedImageFile} />
                   {/* Submit button */}
                   <div className="justify-end card-actions">
                     <button

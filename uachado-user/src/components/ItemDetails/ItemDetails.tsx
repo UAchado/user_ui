@@ -1,5 +1,5 @@
 import React from "react";
-import {ItemType} from "../../types/ItemType.ts";
+import { ItemType } from "../../types/ItemType.ts";
 
 // Define a type for the item
 
@@ -31,26 +31,26 @@ const Modal: React.FC<ModalProps> = ({
         </form>
         <div className="flex-col items-center text-center gap-3">
           <div className="avatar">
-            <img
+            <figure className="h-40 overflow-hidden">
+              <img
                 src={selectedItem?.image}
                 alt={"Image of " + selectedItem?.tag}
-                style={{
-                  maxWidth: "100%",
-                  height: "auto",
-                  borderRadius: "40px",
-                }} // Adjust the percentage and radius as needed
-            />
+                className="object-cover w-full h-full"
+              />
+            </figure>
           </div>
-          <span className="badge badge-neutral badge-md">
-            {selectedItem?.tag}
-          </span>
+          <div>
+            <span className="badge badge-neutral badge-md">
+              {selectedItem?.tag}
+            </span>
+          </div>
           <h3 className="text-md">{selectedItem?.description}</h3>
         </div>
         <h1 className="text-xl font-bold mt-3">
-          Guardado em: 
+          Guardado em:
           <b>
             {droppoints!
-                .filter((point) => point!.id === selectedItem?.dropoffPoint_id)
+              .filter((point) => point!.id === selectedItem?.dropoff_point_id)
               .map((filteredPoint) => filteredPoint!.name)}
           </b>
         </h1>

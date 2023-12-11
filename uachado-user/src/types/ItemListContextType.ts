@@ -11,4 +11,8 @@ export interface ItemListContextType {
     setData: React.Dispatch<React.SetStateAction<ItemType[]>>,
     filteredData: ItemType[],
     setFilteredData: React.Dispatch<React.SetStateAction<ItemType[]>>,
+    page: number,
+    setPage: React.Dispatch<React.SetStateAction<number>>,
+    totalPages: number,
+    setTotalPages: React.Dispatch<React.SetStateAction<number>>,
 }

@@ -5,15 +5,20 @@ import LocationModal from "../../components/Map/locationModal";
 import axios from "axios";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { ItemListContext } from "../../context/ItemListContext/ItemListContext";
+import { ItemType } from "../../types/ItemType";
+import Pagination from "../../components/Pagination/pagination";
 
 const ItemList = () => {
   const {
     selectedItem,
     setSelectedItem,
     tags,
+    selectedTag,
     setSelectedTag,
-    data,
     filteredData,
+    page,
+    setPage,
+    totalPages,
   } = useContext(ItemListContext);
 
   interface DropPoint {
@@ -24,17 +29,23 @@ const ItemList = () => {
     longitude: number;
   }
 
-  const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
   const pointsBaseUrl = import.meta.env.VITE_POINTS_URL;
   const [dropPoints, setDropoints] = useState<DropPoint[]>([]);
   const [showMap, setShowMap] = useState(false);
-  let isDataLoaded = tags.length > 0 && data.length > 0;
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
 
-  
+  useEffect(() => {
+    // Call fetchItems with initial page number, e.g., 1
+    if (page !== 1 || selectedTag !== "Todos" || selectedItem !== null) {
+      setPage(1);
+      setSelectedTag("Todos")
+      setSelectedItem(null);
+    }
+  }, [setPage, setSelectedItem, setSelectedTag]);
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
     const handleResize = () => {
@@ -93,7 +104,6 @@ const ItemList = () => {
         axios
           .get(pointsBaseUrl + "points/")
           .then(function (response) {
-            console.log("Points API response:", response.data);
             setDropoints(response.data);
           })
           .catch(function (error) {
@@ -106,7 +116,7 @@ const ItemList = () => {
     fetchDropPoints().then(() =>
       console.log("DropPoints fetched successfully")
     );
-  }, [itemsBaseUrl, pointsBaseUrl]);
+  }, [pointsBaseUrl]);
 
   const calculateMidpoint = (
     lat1: number,
@@ -144,12 +154,28 @@ const ItemList = () => {
     setShowMap(true);
   };
 
-  const renderTable: boolean = windowWidth > 1250;
+  const getDropPointName = (
+    dropPoints: DropPoint[],
+    item: ItemType
+  ): string => {
+    console.log("Original dropPoints:", dropPoints);
+    console.log("Current item:", item);
 
+    const filteredPoints = dropPoints.filter((point) => {
+      console.log("Checking point with id:", point.id);
+      console.log("Against item with id:", item.dropoff_point_id);
+      return point.id === item.dropoff_point_id;
+    });
+
+    console.log("Filtered Points:", filteredPoints);
+
+    return filteredPoints.length > 0 ? filteredPoints[0].name : "Not Found";
+  };
+
+  const renderTable: boolean = windowWidth > 1250;
+  console.log("filteredData", filteredData);
   return (
     <div>
-      {isDataLoaded ? (
-        <>
       {renderTable ? (
         <div className="sm:w-[55vw] overflow-x-auto p-10">
           <table className="table">
@@ -186,13 +212,7 @@ const ItemList = () => {
                       </span>
                     </div>
                   </td>
-                  <td>
-                    {dropPoints
-                      .filter(
-                        (point) => point.id === item.dropoffPoint_id
-                      )
-                      .map((filteredPoint) => filteredPoint.name)}
-                  </td>
+                  <td>{getDropPointName(dropPoints, item)}</td>
                   <td className="flex justify-center items-center">
                     <button
                       className="btn btn-ghost border-primary-content"
@@ -228,9 +248,7 @@ const ItemList = () => {
                 </h2>
                 <p className="text-xs">
                   {dropPoints
-                    .filter(
-                      (point) => point.id === item.dropoffPoint_id
-                    )
+                    .filter((point) => point.id === item.dropoff_point_id)
                     .map((filteredPoint) => filteredPoint.name)}
                 </p>
                 <div className="card-actions">
@@ -284,7 +302,7 @@ const ItemList = () => {
           // chamar a api para obter a localização do ponto de recolha
           location={
             dropPoints.filter(
-              (point) => point.id === selectedItem?.dropoffPoint_id
+              (point) => point.id === selectedItem?.dropoff_point_id
             )[0]
           }
           userLocation={userLocation}
@@ -292,12 +310,11 @@ const ItemList = () => {
           calculateMidpoint={calculateMidpoint}
         />
       )}
-      </>
-      ) : (
-        <div className="flex justify-center items-center h-screen">
-          <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-64 w-64"></div>
-        </div>
-      )}
+      <Pagination
+        totalPages={totalPages}
+        currentPage={page}
+        onPageChange={(newPage) => setPage(newPage)}
+      />
     </div>
   );
 };

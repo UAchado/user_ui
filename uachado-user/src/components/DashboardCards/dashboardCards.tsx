@@ -4,23 +4,24 @@ import {ItemType} from "../../types/ItemType.ts";
 
 interface DashboardCardsProps {
     openItemDetails: (item: ItemType) => void;
-    handleSelect: (item: ItemType) => void;
+    archiveItem: (item: ItemType, email: string) => void;
     tags: string[];
     handleSelectTag: (tag: string) => void;
     toggleSelectedState: () => void;
     selectedState: string;
     filteredItems: ItemType[];
+    openArchiveModal: (item: ItemType) => void;
 }
 
 export const DashboardCards: React.FC<DashboardCardsProps> = (
     {
         openItemDetails,
-        handleSelect,
         tags,
         handleSelectTag,
         toggleSelectedState,
         selectedState,
-        filteredItems
+        filteredItems,
+        openArchiveModal,
     }
 ) => {
     const canArchive = () => {
@@ -50,9 +51,6 @@ export const DashboardCards: React.FC<DashboardCardsProps> = (
                         <h2 className="card-title text-3xl sm:text-2xl mx-auto">
                             {item.description}
                         </h2>
-                        <p className="text-sm">
-                            {new Date(item.admittedAt).toLocaleDateString()}
-                        </p>
                         <div className="card-actions">
                             <button className="btn btn-accent btn-block text-xs sm:text-md"
                                     onClick={() => openItemDetails(item)}
@@ -62,7 +60,7 @@ export const DashboardCards: React.FC<DashboardCardsProps> = (
                             {canArchive() &&
                                 <button
                                     className={`btn btn-neutral btn-block`}
-                                    onClick={() => handleSelect(item)}
+                                    onClick={() => openArchiveModal(item)}
                                 >
                                     Marcar como encontrado
                                 </button>

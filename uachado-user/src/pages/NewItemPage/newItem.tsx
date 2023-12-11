@@ -10,6 +10,8 @@ const NewItem = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [warning, setWarning] = useState<string | null>(null);
   const [sucess, setSucess] = useState<string | null>(null);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+
   const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
 
   useEffect(() => {
@@ -21,7 +23,6 @@ const NewItem = () => {
           .get(itemsBaseUrl + "items/tags/")
           .then(function (response) {
             setTags(response.data);
-            console.log("Data fetched successfully:", response.data);
           })
           .catch(function (error) {
             console.error("Error sending data:", error);
@@ -34,31 +35,40 @@ const NewItem = () => {
     fetchTags();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+    selectedImage: File | null
+  ) => {
     e.preventDefault();
-    const tag = e.currentTarget.tag.value;
-    // Access form fields directly from formData
 
-    if (tag != null) {
-      if (tags.includes(tag.toString())) {
-        // Send data to the API
-        const data = {"tag": tag, "description": e.currentTarget.description.value, "image": e.currentTarget.image.value, "dropoff_point_id": 1}
-        console.log(data)
-        axios
-          .post(itemsBaseUrl + "items/create", data) // change to post request to the server
-          .then(function (response) {
-            console.log("Data sent successfully:", response.data);
-            setSucess("Item adicionado com sucesso");
-          })
-          .catch(function (error) {
-            console.error("Error sending data:", error);
-          });
+    const tag = e.currentTarget.tag.value;
+    const description = e.currentTarget.description.value;
+    const dropoffPointId = 1; // Or however you get this value
+
+    if (tag && tags.includes(tag.toString())) {
+      const formData = new FormData();
+      formData.append("tag", tag);
+      formData.append("description", description);
+      if (selectedImage) {
+        formData.append("image", selectedImage);
       } else {
-        setWarning("A tag é inválida");
+        formData.append("image", new Blob(), '');
       }
+      formData.append("dropoff_point_id", dropoffPointId.toString());
+
+      try {
+        await axios.post(
+          itemsBaseUrl + "items/create",
+          formData
+        );
+        setSucess("Item adicionado com sucesso");
+      } catch (error) {
+        setWarning("Erro ao enviar dados");
+      }
+    } else {
+      setWarning("A tag é inválida");
     }
   };
-
   return (
     <div className="items-center toast toast-middle toast-center">
       {warning && (
@@ -77,9 +87,7 @@ const NewItem = () => {
               d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span style={{ fontSize: "11px" }}>
-            Selecione uma tag da lista.
-          </span>
+          <span style={{ fontSize: "11px" }}>Selecione uma tag da lista.</span>
         </div>
       )}
       {sucess && (
@@ -106,7 +114,7 @@ const NewItem = () => {
           <div className="card bg-primary">
             <div className="card-body">
               <h2 className="card-title">Formulário de Objeto Encontrado</h2>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={(e) => handleSubmit(e, selectedImageFile)}>
                 {/* Textarea for item description */}
                 <div className="w-full max-w-xs form-control">
                   <textarea
@@ -115,11 +123,9 @@ const NewItem = () => {
                     name="description"
                     required
                   ></textarea>
-
                   {/* Dropdown for item category */}
                   <Dropdown items={tags} />
-
-                  <Image />
+                  <Image onImageChange={setSelectedImageFile} />
                   {/* Submit button */}
                   <div className="justify-end card-actions">
                     <button
