@@ -31,8 +31,8 @@ jobs:
       id: terraform
       run: |
         INVENTORY_DNS=$(terraform output -raw inventory_lb_dns_name)
-        POINTS_DNS=$(terraform output -raw points_lb_dns_name)
         echo "INVENTORY_URL=http://${INVENTORY_DNS}/inventory/v1/" >> $INVENTORY_URL
+        POINTS_DNS=$(terraform output -raw points_lb_dns_name)
         echo "POINTS_URL=http://${POINTS_DNS}/points/v1/" >> $POINTS_URL
 
 
