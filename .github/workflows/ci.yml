@@ -19,23 +19,6 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-1
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
-
-    - name: Terraform Init
-      run: terraform init
-
-    - name: Get Terraform Output
-      id: terraform
-      run: |
-        INVENTORY_DNS=$(terraform output -raw inventory_lb_dns_name)
-        echo "INVENTORY_URL=http://${INVENTORY_DNS}/inventory/v1/" >> $INVENTORY_URL
-        POINTS_DNS=$(terraform output -raw points_lb_dns_name)
-        echo "POINTS_URL=http://${POINTS_DNS}/points/v1/" >> $POINTS_URL
-
-
     - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
 
