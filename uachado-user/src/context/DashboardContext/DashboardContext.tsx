@@ -47,7 +47,7 @@ export const DashboardContextProvider: React.FC<
   const [selectedState, setSelectedState] = useState<string>("stored"); // Initial state is set to 'stored'
 
   useEffect(() => {
-    console.log("selectedState", selectedState);
+    setFilteredData([]);
     fetchItems(page);
     fetchTags();
   }, [selectedState, page, selectedTag]);

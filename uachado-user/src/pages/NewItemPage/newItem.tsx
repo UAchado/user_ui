@@ -51,11 +51,13 @@ const NewItem = () => {
       formData.append("description", description);
       if (selectedImage) {
         formData.append("image", selectedImage);
+      } else {
+        formData.append("image", new Blob(), '');
       }
       formData.append("dropoff_point_id", dropoffPointId.toString());
 
       try {
-        const response = await axios.post(
+        await axios.post(
           itemsBaseUrl + "items/create",
           formData
         );

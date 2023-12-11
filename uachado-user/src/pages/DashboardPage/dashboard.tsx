@@ -11,6 +11,7 @@ const Dashboard = () => {
     selectedItem,
     setSelectedItem,
     tags,
+    selectedTag,
     setSelectedTag,
     filteredData,
     selectedState,
@@ -28,6 +29,15 @@ const Dashboard = () => {
     latitude: number;
     longitude: number;
   }
+
+  useEffect(() => {
+    // Call fetchItems with initial page number, e.g., 1
+    if (page !== 1 || selectedTag !== "Todos" || selectedItem !== null) {
+      setPage(1);
+      setSelectedTag("Todos")
+      setSelectedItem(null);
+    }
+  }, [setPage, setSelectedItem, setSelectedTag]);
 
   const pointsBaseUrl = import.meta.env.VITE_POINTS_URL;
   const [dropPoints, setDropoints] = useState<DropPoint[]>([]);

@@ -41,7 +41,7 @@ function Image({ onImageChange }: { onImageChange: (file: File | null) => void }
           <input
             name="image"
             type="file"
-            accept="image/png, image/jpeg, image/svg, image/jpg"
+            accept="image/png, image/jpeg, image/jpg"
             className="w-full max-w-xs file-input file-input-primary"
             onChange={handleImageChange}
           />

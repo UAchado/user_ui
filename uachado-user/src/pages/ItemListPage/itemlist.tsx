@@ -13,6 +13,7 @@ const ItemList = () => {
     selectedItem,
     setSelectedItem,
     tags,
+    selectedTag,
     setSelectedTag,
     filteredData,
     page,
@@ -35,6 +36,15 @@ const ItemList = () => {
     lat: number;
     lng: number;
   } | null>(null);
+
+  useEffect(() => {
+    // Call fetchItems with initial page number, e.g., 1
+    if (page !== 1 || selectedTag !== "Todos" || selectedItem !== null) {
+      setPage(1);
+      setSelectedTag("Todos")
+      setSelectedItem(null);
+    }
+  }, [setPage, setSelectedItem, setSelectedTag]);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   useEffect(() => {
