@@ -77,11 +77,11 @@ const ItemList = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log(
-            "User's location:",
-            position.coords.latitude,
-            position.coords.longitude
-          );
+          // console.log(
+          //   "User's location:",
+          //   position.coords.latitude,
+          //   position.coords.longitude
+          // );
           setUserLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude,

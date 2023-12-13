@@ -14,7 +14,7 @@ const DropPoints: React.FC = () => {
     lng: number;
   } | null>(null);
 
-  console.log("Points Base URL:", pointsBaseUrl);
+  // console.log("Points Base URL:", pointsBaseUrl);
   // Make a GET request to the points API
 
   const { isLoaded, loadError } = useJsApiLoader({
@@ -28,7 +28,7 @@ const DropPoints: React.FC = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log("User's location:", position.coords.latitude, position.coords.longitude);
+          // console.log("User's location:", position.coords.latitude, position.coords.longitude);
           setUserLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
