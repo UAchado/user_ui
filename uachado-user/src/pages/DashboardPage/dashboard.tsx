@@ -130,29 +130,13 @@ const Dashboard = () => {
 
   return (
     <div>
-      {progress < 100 && (
-        <div className="flex justify-center items-center  m-20">
-          <div
-            className="radial-progress text-black"
-            style={progressStyle}
-            role="progressbar"
-          >
-            {Math.round(progress)}%
-          </div>
-        </div>
-      )}
-
-      {progress === 100 && (
+      {progress === 100 ? (
         <>
           {selectedState === "stored" ? (
             <h2 className="text-2xl font-bold mt-10">Objetos Guardados</h2>
           ) : (
             <h2 className="text-2xl font-bold mt-10">Objetos Arquivados</h2>
           )}
-        </>
-      )}
-      {progress === 100 && (
-        <>
           {renderTable ? (
             <DashboardTable
               openItemDetails={openItemDetails}
@@ -176,73 +160,87 @@ const Dashboard = () => {
               openArchiveModal={openArchiveModal}
             />
           )}
-        </>
-      )}
 
-      {selectedItem && progress === 100 && (
-        <dialog id="my_modal_1" className="modal">
-          <div className="modal-box">
-            <img
-              src={selectedItem["image"]}
-              alt={selectedItem["description"]}
-            />
-            <h3 className="text-lg font-bold">{selectedItem["description"]}</h3>
-            <span className="badge badge-ghost badge-md">
-              {selectedItem["tag"]}
-            </span>
-            <h1 className="text-xl font-bold">
-              Guardado em: <b>{getDropPointName(dropPoints, selectedItem)}</b>
-            </h1>
-            <div className="modal-action">
-              <form method="dialog">
-                <button className="btn" onClick={() => setSelectedItem(null)}>
-                  Fechar
-                </button>
-              </form>
-            </div>
-          </div>
-        </dialog>
-      )}
-
-      {modalItem && progress === 100 && (
-        <dialog id="my_modal_2" className="modal">
-          <div className="modal-box">
-            <h3 className="text-lg font-bold">Confirmar Arquivamento</h3>
-            <p className="text-sm mb-4">
-              Insira o e-mail da pessoa que recolheu o item (preferencialmente
-              um e-mail @ua.pt).
-            </p>
-            <form method="dialog" onSubmit={handleArchiveSubmit}>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email @ua.pt"
-                className="input input-bordered w-full mb-4"
-                required
-              />
-              <div className="modal-action">
-                <button type="submit" className="btn btn-primary">
-                  Confirmar
-                </button>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => setModalItem(null)}
-                >
-                  Fechar
-                </button>
+          {selectedItem && (
+            <dialog id="my_modal_1" className="modal">
+              <div className="modal-box">
+                <img
+                  src={selectedItem["image"]}
+                  alt={selectedItem["description"]}
+                />
+                <h3 className="text-lg font-bold">
+                  {selectedItem["description"]}
+                </h3>
+                <span className="badge badge-ghost badge-md">
+                  {selectedItem["tag"]}
+                </span>
+                <h1 className="text-xl font-bold">
+                  Guardado em:{" "}
+                  <b>{getDropPointName(dropPoints, selectedItem)}</b>
+                </h1>
+                <div className="modal-action">
+                  <form method="dialog">
+                    <button
+                      className="btn"
+                      onClick={() => setSelectedItem(null)}
+                    >
+                      Fechar
+                    </button>
+                  </form>
+                </div>
               </div>
-            </form>
-          </div>
-        </dialog>
-      )}
+            </dialog>
+          )}
 
-      {progress === 100 && (
-        <Pagination
-          totalPages={totalPages}
-          currentPage={page}
-          onPageChange={(newPage) => setPage(newPage)}
-        />
+          {modalItem && (
+            <dialog id="my_modal_2" className="modal">
+              <div className="modal-box">
+                <h3 className="text-lg font-bold">Confirmar Arquivamento</h3>
+                <p className="text-sm mb-4">
+                  Insira o e-mail da pessoa que recolheu o item
+                  (preferencialmente um e-mail @ua.pt).
+                </p>
+                <form method="dialog" onSubmit={handleArchiveSubmit}>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Email @ua.pt"
+                    className="input input-bordered w-full mb-4"
+                    required
+                  />
+                  <div className="modal-action">
+                    <button type="submit" className="btn btn-primary">
+                      Confirmar
+                    </button>
+                    <button
+                      type="button"
+                      className="btn"
+                      onClick={() => setModalItem(null)}
+                    >
+                      Fechar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </dialog>
+          )}
+
+          <Pagination
+            totalPages={totalPages}
+            currentPage={page}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
+        </>
+      ) : (
+        <div className="flex justify-center items-center  m-20">
+          <div
+            className="radial-progress text-black"
+            style={progressStyle}
+            role="progressbar"
+          >
+            {Math.round(progress)}%
+          </div>
+        </div>
       )}
     </div>
   );

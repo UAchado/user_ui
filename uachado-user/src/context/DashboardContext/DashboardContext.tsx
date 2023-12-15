@@ -51,7 +51,6 @@ export const DashboardContextProvider: React.FC<
   const { token, id } = useContext(AuthContext);
 
   useEffect(() => {
-    setFilteredData([]);
     fetchItems(page);
     fetchTags();
   }, [selectedState, page, selectedTag, token]);
@@ -154,7 +153,7 @@ export const DashboardContextProvider: React.FC<
   }, [data, selectedTag]);
 
   const toggleSelectedState = () => {
-    setFilteredData([]);
+    setPage(1);
     setSelectedState((prevState) =>
       prevState === "stored" ? "retrieved" : "stored"
     );
