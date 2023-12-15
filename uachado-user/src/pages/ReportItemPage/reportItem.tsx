@@ -19,7 +19,7 @@ const ReportItem = () => {
       try {
         // Adjust the endpoint as needed
         axios
-          .get(itemsBaseUrl + "items/tags/")
+          .get(itemsBaseUrl + "items/tags")
           .then(function (response) {
             setTags(response.data);
           })
