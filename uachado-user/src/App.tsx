@@ -7,7 +7,6 @@ import DropPoints from "./pages/DropOffPointsPage/droppoints";
 import Navbar from "./components/Navbar/navbar";
 import ItemList from "./pages/ItemListPage/itemlist";
 import Dashboard from "./pages/DashboardPage/dashboard";
-import Login from "./pages/LoginPage/login";
 import LandingPage from "./pages/LandingPage/landing";
 import ReportItem from "./pages/ReportItemPage/reportItem";
 import { useContext } from "react";
@@ -19,9 +18,33 @@ import { ItemListContextProvider } from "./context/ItemListContext/ItemListConte
 function App() {
   const location = useLocation();
   const isnotLanding = location.pathname !== "/";
+  const { showToast, setShowToast} = useContext(AuthContext);
   return (
     <ItemListContextProvider>
       <DashboardContextProvider>
+        {showToast && (
+          <div className="toast toast-bot toast-end z-30">
+            <div className="alert alert-warning">
+              <span>
+                O seu token de autenticação acabou, volte a fazer login!
+              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4 stroke-current shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                onClick={() => setShowToast(false)}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+          </div>
+        )}
         <div>
           {isnotLanding && <Navbar />}
           <div className="flex items-center justify-center">
@@ -44,10 +67,9 @@ function App() {
 
 function Contents() {
   // Check if the user is logged in (you can use localStorage or another state management solution)
-  const { isLoggedIn } = useContext(AuthContext);
-  const { role } = useContext(AuthContext);
+  const { isLoggedIn, id } = useContext(AuthContext);
 
-  if (isLoggedIn && role === "admin") {
+  if (isLoggedIn && id !== null) {
     return (
       <Routes>
         <Route path="/home" element={<Home />} />
@@ -58,24 +80,13 @@ function Contents() {
         <Route path="*" element={<h1>Not Found!</h1>} />
       </Routes>
     );
-  } else if (isLoggedIn && role === "user") {
-    return (
-      <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/dropPoints" element={<DropPoints />} />
-        <Route path="/findItems" element={<ItemList />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/reportItem" element={<ReportItem />} />
-        <Route path="*" element={<h1>Not Found!</h1>} />
-      </Routes>
-    );
   } else {
     return (
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/dropPoints" element={<DropPoints />} />
         <Route path="/findItems" element={<ItemList />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/reportItem" element={<ReportItem />} />
         <Route path="*" element={<h1>Not Found!</h1>} />
       </Routes>
     );

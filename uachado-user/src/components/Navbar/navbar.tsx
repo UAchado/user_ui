@@ -5,9 +5,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/LoginContext/AuthContext";
 
 const Navbar = () => {
-  const { isLoggedIn, role, logout } = useContext(AuthContext);
-
-  const { username } = useContext(AuthContext);
+  const { name, isLoggedIn, id, logout } = useContext(AuthContext);
 
   const [showGreeting, setShowGreeting] = useState(false);
 
@@ -25,7 +23,7 @@ const Navbar = () => {
       style={{ position: "relative", zIndex: 20, width: "100%" }}
     >
       <div className="navbar-start">
-        {isLoggedIn && role === "admin" && (
+        {isLoggedIn && id !== null && (
           <div className="dropdown">
             <label tabIndex={20} className="btn btn-ghost btn-circle">
               <i className="fas fa-bars"></i>
@@ -54,7 +52,7 @@ const Navbar = () => {
             </ul>
           </div>
         )}
-        {isLoggedIn && role === "user" && (
+        {!isLoggedIn &&(
           <div className="dropdown">
             <label tabIndex={20} className="btn btn-ghost btn-circle">
               <i className="fas fa-bars"></i>
@@ -96,7 +94,7 @@ const Navbar = () => {
               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg">
                 <div className="p-2">
                   <p className="text-gray-800 text-sm">
-                    Hello, {username}
+                    Olá, {name}
                     {/* Replace with actual username */}
                   </p>
                   <hr className="my-2" />
@@ -113,7 +111,7 @@ const Navbar = () => {
         )}
         {!isLoggedIn && (
           <div className="relative">
-            <Link to="/login">
+            <Link to={import.meta.env.VITE_COGNITO_CODE_ENDPOINT}>
               <button onClick={() => {}} className="btn btn-ghost btn-circle">
                 <div className="indicator">
                   <i className="fas fa-user"></i> {/* User icon */}

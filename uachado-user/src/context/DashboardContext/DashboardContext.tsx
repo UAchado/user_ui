@@ -1,8 +1,9 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext, useEffect, useContext } from "react";
 
 import { ItemType } from "../../types/ItemType.ts";
 import { DashboardContextType } from "../../types/DashboardContextType.ts";
 import axios from "axios";
+import { AuthContext } from "../LoginContext/AuthContext.tsx";
 
 // Define a default context value with dummy functions for setting state
 const defaultContextValue: DashboardContextType = {
@@ -24,6 +25,7 @@ const defaultContextValue: DashboardContextType = {
   selectedState: "stored",
   setSelectedState: () => {}, // This should actually be a state updater function
   archiveItem: (_item: ItemType | null, _email: string) => {}, // This should actually be a state updater function
+  progress: 0,
 };
 
 // Create the context
@@ -45,18 +47,21 @@ export const DashboardContextProvider: React.FC<
   const [totalPages, setTotalPages] = useState(1);
   const [tags, setTags] = useState<string[]>([]);
   const [selectedState, setSelectedState] = useState<string>("stored"); // Initial state is set to 'stored'
+  const [progress, setProgress] = useState(0); // Progress is a number from 0 to 100
+  const { token, id } = useContext(AuthContext);
 
   useEffect(() => {
-    setFilteredData([]);
     fetchItems(page);
     fetchTags();
-  }, [selectedState, page, selectedTag]);
+  }, [selectedState, page, selectedTag, token]);
 
   const fetchTags = async () => {
     try {
       // Adjust the endpoint as needed
       axios
-        .get(itemsBaseUrl + "items/tags")
+        .get(itemsBaseUrl + "items/tags/", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then(function (response) {
           setTags(response.data);
         })
@@ -69,7 +74,8 @@ export const DashboardContextProvider: React.FC<
   };
 
   const fetchItems = async (page: number) => {
-    const drop_point_id = 1;
+    const drop_point_id: number | null = id;
+
     let my_filter = {};
 
     if (selectedTag !== "Todos") {
@@ -79,6 +85,7 @@ export const DashboardContextProvider: React.FC<
     }
     try {
       // Adjust the endpoint as needed
+      if (drop_point_id === null) return;
       axios
         .put(
           itemsBaseUrl +
@@ -87,8 +94,14 @@ export const DashboardContextProvider: React.FC<
             "?page=" +
             page +
             "&size=5",
-          { filter: my_filter }
+          {
+            filter: my_filter,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         )
+
         .then(function (response) {
           setData(response.data.items);
           setTotalPages(response.data.pages);
@@ -103,8 +116,10 @@ export const DashboardContextProvider: React.FC<
 
   const fetchItemImage = async (item: ItemType) => {
     const filePath = item.image;
+    if (!filePath) return undefined;
     try {
       const response = await axios.get(itemsBaseUrl + "image/" + filePath, {
+        headers: { Authorization: `Bearer ${token}` },
         responseType: "blob",
       });
       return URL.createObjectURL(response.data); // Create an Object URL from the Blob
@@ -117,22 +132,28 @@ export const DashboardContextProvider: React.FC<
   useEffect(() => {
     const updateDataWithImages = async () => {
       if (data.length === 0) return;
-
+  
+      let loadedImages = 0; // To track how many images have been loaded
+  
       const dataWithImages = await Promise.all(
         data.map(async (item) => {
           const imageData = await fetchItemImage(item);
+          loadedImages++; // Increment the counter for each loaded image
+          const progressValue = (loadedImages / data.length) * 100;
+          setProgress(progressValue); // Update progress
           return { ...item, image: imageData };
         })
       );
-
+  
       setFilteredData(dataWithImages);
+      setProgress(100); // When all images are loaded, set progress to 100%
     };
-
+  
     updateDataWithImages();
   }, [data, selectedTag]);
 
   const toggleSelectedState = () => {
-    setFilteredData([]);
+    setPage(1);
     setSelectedState((prevState) =>
       prevState === "stored" ? "retrieved" : "stored"
     );
@@ -142,8 +163,15 @@ export const DashboardContextProvider: React.FC<
     try {
       // Adjust the endpoint as needed
       axios
-        .put(itemsBaseUrl + "items/retrieve/" + item.id, { email: email })
+        .put(
+          itemsBaseUrl + "items/retrieve/" + item.id,
+          {
+            email: email,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
         .then(function (response) {
+          // meter modal a confirmar que o item foi arquivado
           console.log(response);
         })
         .catch(function (error) {
@@ -175,6 +203,7 @@ export const DashboardContextProvider: React.FC<
         selectedState,
         setSelectedState,
         archiveItem,
+        progress,
       }}
     >
       {children}

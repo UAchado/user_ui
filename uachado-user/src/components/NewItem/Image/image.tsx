@@ -1,8 +1,8 @@
-import { useState } from "react";
-
-function Image({ onImageChange }: { onImageChange: (file: File | null) => void }) {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
+function Image({
+  onImageChange,
+}: {
+  onImageChange: (file: File | null) => void;
+}) {
   /**
    * Handles the change event of the file input element.
    * Sets the selected image to the uploaded file.
@@ -12,23 +12,6 @@ function Image({ onImageChange }: { onImageChange: (file: File | null) => void }
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       onImageChange(file); // Pass the file object to the parent component
-
-      if (file) {
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-          if (event.target) {
-            setSelectedImage(event.target.result as string);
-          }
-        };
-
-        reader.readAsDataURL(file);
-      } else {
-        setSelectedImage(null);
-      }
-    } else {
-      setSelectedImage(null);
-      onImageChange(null); // Clear the file in the parent component
     }
   };
   return (
@@ -45,15 +28,13 @@ function Image({ onImageChange }: { onImageChange: (file: File | null) => void }
             className="w-full max-w-xs file-input file-input-primary"
             onChange={handleImageChange}
           />
-
-          {/* Preview of selected image */}
-          {selectedImage && (
-            <img src={selectedImage} alt="Selected Preview" width="50%" />
-          )}
         </div>
       </div>
       <label className="label">
-        <span className="label-text" style={{ fontSize: "9px" , overflowWrap: "break-word"}}>
+        <span
+          className="label-text"
+          style={{ fontSize: "9px", overflowWrap: "break-word" }}
+        >
           Não insira fotos com informações sensiveis.
         </span>
       </label>

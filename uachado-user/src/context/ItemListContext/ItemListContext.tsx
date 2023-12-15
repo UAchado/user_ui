@@ -20,6 +20,7 @@ const defaultContextValue: ItemListContextType = {
   setPage: () => {}, // This should actually be a state updater function
   totalPages: 1,
   setTotalPages: () => {}, // This should actually be a state updater function
+  progress: 0,
 };
 
 // Create the context
@@ -40,6 +41,8 @@ export const ItemListContextProvider: React.FC<
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [tags, setTags] = useState<string[]>([]);
+  const [progress, setProgress] = useState(0); // Progress is a number from 0 to 100
+
 
   useEffect(() => {
     setFilteredData([]);
@@ -67,7 +70,7 @@ export const ItemListContextProvider: React.FC<
     let my_filter = {};
 
     if (selectedTag !== "Todos") {
-      my_filter = {"tag": selectedTag};;
+      my_filter = { tag: selectedTag };
     }
 
     try {
@@ -90,8 +93,11 @@ export const ItemListContextProvider: React.FC<
 
   const fetchItemImage = async (item: ItemType) => {
     const filePath = item.image;
+    if (!filePath) return undefined;
     try {
-      const response = await axios.get(itemsBaseUrl + "image/" + filePath, { responseType: 'blob' });
+      const response = await axios.get(itemsBaseUrl + "image/" + filePath, {
+        responseType: "blob",
+      });
       return URL.createObjectURL(response.data); // Create an Object URL from the Blob
     } catch (error) {
       console.error("Error fetching image:", error);
@@ -103,16 +109,20 @@ export const ItemListContextProvider: React.FC<
     const updateDataWithImages = async () => {
       if (data.length === 0) return;
   
-      const dataWithImages = await Promise.all(data.map(async (item) => {
-        const imageData = await fetchItemImage(item);
-        return { ...item, image: imageData };
-      }));
-      
-      setFilteredData(
-        dataWithImages.filter((item) =>
-          selectedTag === "Todos" ? true : item.tag === selectedTag
-        )
+      let loadedImages = 0; // To track how many images have been loaded
+  
+      const dataWithImages = await Promise.all(
+        data.map(async (item) => {
+          const imageData = await fetchItemImage(item);
+          loadedImages++; // Increment the counter for each loaded image
+          const progressValue = (loadedImages / data.length) * 100;
+          setProgress(progressValue); // Update progress
+          return { ...item, image: imageData };
+        })
       );
+  
+      setFilteredData(dataWithImages);
+      setProgress(100); // When all images are loaded, set progress to 100%
     };
   
     updateDataWithImages();
@@ -135,6 +145,7 @@ export const ItemListContextProvider: React.FC<
         setPage,
         totalPages,
         setTotalPages,
+        progress
       }}
     >
       {children}

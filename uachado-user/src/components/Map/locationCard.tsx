@@ -4,7 +4,7 @@ interface LocationCardProps {
   location: {
     name: string;
     location: string;
-    photo: string;
+    image: string;
   };
   onOpenModal: () => void;
 }
@@ -24,7 +24,7 @@ const LocationCard: React.FC<LocationCardProps> = ({
     <div className="card bg-secondary-focus" id={`card-${cardId}`}>
       <figure className="h-40 overflow-hidden">
         <img
-          src={location.photo}
+          src={location.image}
           alt={location.name}
           className="object-cover w-full h-full"
         />

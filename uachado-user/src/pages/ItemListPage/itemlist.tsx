@@ -19,6 +19,7 @@ const ItemList = () => {
     page,
     setPage,
     totalPages,
+    progress,
   } = useContext(ItemListContext);
 
   interface DropPoint {
@@ -32,6 +33,7 @@ const ItemList = () => {
   const pointsBaseUrl = import.meta.env.VITE_POINTS_URL;
   const [dropPoints, setDropoints] = useState<DropPoint[]>([]);
   const [showMap, setShowMap] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
@@ -41,7 +43,7 @@ const ItemList = () => {
     // Call fetchItems with initial page number, e.g., 1
     if (page !== 1 || selectedTag !== "Todos" || selectedItem !== null) {
       setPage(1);
-      setSelectedTag("Todos")
+      setSelectedTag("Todos");
       setSelectedItem(null);
     }
   }, [setPage, setSelectedItem, setSelectedTag]);
@@ -77,11 +79,6 @@ const ItemList = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          // console.log(
-          //   "User's location:",
-          //   position.coords.latitude,
-          //   position.coords.longitude
-          // );
           setUserLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
@@ -113,9 +110,7 @@ const ItemList = () => {
         console.error("Error fetching dropPoints:", error);
       }
     };
-    fetchDropPoints().then(() =>
-      console.log("DropPoints fetched successfully")
-    );
+    fetchDropPoints();
   }, [pointsBaseUrl]);
 
   const calculateMidpoint = (
@@ -151,171 +146,178 @@ const ItemList = () => {
   };
 
   const openMapComponent = () => {
+    setShowModal(false);
     setShowMap(true);
+  };
+
+  const handleSelectedItem = (item: ItemType) => {
+    setShowModal(true);
+    setSelectedItem(item);
+  };
+
+  const onCloseModal = () => {
+    setSelectedItem(null);
+    setShowModal(false);
+    setShowMap(false); // Make sure to also set the showMap state to false if needed
+    // If you're directly manipulating the DOM (which is not recommended in React), you may need to manually close the dialog
+    const modal = document.getElementById("my_modal_1") as HTMLDialogElement;
+    modal.close();
   };
 
   const getDropPointName = (
     dropPoints: DropPoint[],
     item: ItemType
   ): string => {
-    console.log("Original dropPoints:", dropPoints);
-    console.log("Current item:", item);
-
     const filteredPoints = dropPoints.filter((point) => {
-      console.log("Checking point with id:", point.id);
-      console.log("Against item with id:", item.dropoff_point_id);
       return point.id === item.dropoff_point_id;
     });
-
-    console.log("Filtered Points:", filteredPoints);
 
     return filteredPoints.length > 0 ? filteredPoints[0].name : "Not Found";
   };
 
   const renderTable: boolean = windowWidth > 1250;
-  console.log("filteredData", filteredData);
+  // Style for the progress bar
+  const progressStyle: React.CSSProperties = {
+    "--value": progress.toString(),
+  } as React.CSSProperties;
+
+  // Conditional rendering based on progress
+  const renderContent = () => {
+    console.log("Progress:", progress);
+    if (progress < 100) {
+      return (
+        <div className="flex justify-center items-center m-20">
+          <div
+            className="radial-progress text-black"
+            style={progressStyle}
+            role="progressbar"
+          >
+            {Math.round(progress)}%
+          </div>
+        </div>
+      );
+    } else if (renderTable) {
+      return renderTableView();
+    } else {
+      return renderCardView();
+    }
+  };
+
+  const renderTableView = () => (
+    <div className="sm:w-[55vw] overflow-x-auto p-10">
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Imagem</th>
+            <th>Tag</th>
+            <th>Ponto de Recolha</th>
+            <th>Opções</th>
+          </tr>
+        </thead>
+        <tbody className="text-xl">
+          {filteredData.map((item, index) => (
+            <tr key={index}>
+              <td>
+                <div className="flex items-center space-x-3">
+                  <div className="avatar">
+                    <div className="w-12 h-12 mask mask-squircle">
+                      <img
+                        src={item.image}
+                        alt="Avatar Tailwind CSS Component"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div className="flex items-center space-x-2">
+                  <span className="badge badge-ghost badge-md">{item.tag}</span>
+                </div>
+              </td>
+              <td>{getDropPointName(dropPoints, item)}</td>
+              <td className="flex justify-center items-center">
+                <button
+                  className="btn btn-ghost border-primary-content"
+                  onClick={() => handleSelectedItem(item)}
+                >
+                  Detalhes
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const renderCardView = () => (
+    <div className="grid grid-cols-1 gap-4 m-10 md:grid-cols-2">
+      <Dropdown items={tags} onSelect={handleSelectTag} />
+      {filteredData.map((item, index) => (
+        <div
+          key={index}
+          className="card bg-secondary-focus"
+          onClick={() => handleSelectedItem(item)}
+        >
+          <figure className="h-40 overflow-hidden">
+            <img
+              src={item.image}
+              alt={item.description}
+              className="object-cover w-full h-full"
+            />
+          </figure>
+          <div className="card-body">
+            <h2 className="card-title text-3xl sm:text-2xl mx-auto">
+              {item.description}
+            </h2>
+            <div className="card-actions">
+              <button className="btn btn-accent btn-block text-xs sm:text-md">
+                Ver Detalhes
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div>
-      {renderTable ? (
-        <div className="sm:w-[55vw] overflow-x-auto p-10">
-          <table className="table">
-            {/* head */}
-            <thead>
-              <tr>
-                <th>Imagem</th>
-                <th>Tag</th>
-                <th>Ponto de Recolha</th>
-                <th>
-                  <Dropdown items={tags} onSelect={handleSelectTag} />
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-xl">
-              {filteredData.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <div className="flex items-center space-x-3">
-                      <div className="avatar">
-                        <div className="w-12 h-12 mask mask-squircle">
-                          <img
-                            src={item.image}
-                            alt="Avatar Tailwind CSS Component"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="flex items-center space-x-2">
-                      <span className="badge badge-ghost badge-md">
-                        {item.tag}
-                      </span>
-                    </div>
-                  </td>
-                  <td>{getDropPointName(dropPoints, item)}</td>
-                  <td className="flex justify-center items-center">
-                    <button
-                      className="btn btn-ghost border-primary-content"
-                      onClick={() => setSelectedItem(item)}
-                    >
-                      Detalhes
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 m-10 md:grid-cols-2">
-          <Dropdown items={tags} onSelect={handleSelectTag} />
-          {filteredData.map((item, index) => (
-            <div
-              key={index}
-              className="card bg-secondary-focus"
-              onClick={() => setSelectedItem(item)}
-            >
-              <figure className="h-40 overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.description}
-                  className="object-cover w-full h-full"
-                />
-              </figure>
-              <div className="card-body">
-                <h2 className="card-title text-3xl sm:text-2xl mx-auto">
-                  {item.description}
-                </h2>
-                <p className="text-xs">
-                  {dropPoints
-                    .filter((point) => point.id === item.dropoff_point_id)
-                    .map((filteredPoint) => filteredPoint.name)}
-                </p>
-                <div className="card-actions">
-                  <button className="btn btn-accent btn-block text-xs sm:text-md">
-                    Ver Detalhes
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-          <h2 className="cursor-pointer hover:underline">
-            <button
-              className="btn btn-ghost hover:underline hover:bg-transparent"
-              onClick={() =>
-                (
-                  document.getElementById("contacto") as HTMLDialogElement
-                )?.showModal()
-              }
-            >
-              Não encontraste o que perdeste?
-            </button>
-          </h2>
-          <dialog id="contacto" className="modal">
-            <div className="modal-box">
-              <h3 className="text-lg font-bold">Tu aí!</h3>
-              <p className="py-4">
-                Se não encontraste aqui o que perdeste, não desesperes! Manda um
-                e-mail para <b>uachadomachado@gmail.com</b> com uma bre§e
-                descrição do teu item e faremos o nosso melhor para fazê-lo
-                chegar até ti!
-              </p>
-              <div className="modal-action">
-                <form method="dialog">
-                  <button className="btn">Entendido!</button>
-                </form>
-              </div>
-            </div>
-          </dialog>
-        </div>
-      )}
-      {selectedItem && (
+      {renderContent()}
+      {showModal && selectedItem && (
         <Modal
           selectedItem={selectedItem}
           droppoints={dropPoints}
           onOpenOtherComponent={openMapComponent}
+          onCloseModal={onCloseModal}
         />
       )}
 
-      {showMap && isLoaded && !loadError && (
-        <LocationModal
-          // chamar a api para obter a localização do ponto de recolha
-          location={
-            dropPoints.filter(
-              (point) => point.id === selectedItem?.dropoff_point_id
-            )[0]
-          }
-          userLocation={userLocation}
-          onCloseModal={() => setShowMap(false)}
-          calculateMidpoint={calculateMidpoint}
+      {showMap &&
+        selectedItem &&
+        isLoaded &&
+        !loadError &&
+        progress === 100 && (
+          <LocationModal
+            location={
+              dropPoints.filter(
+                (point) => point.id === selectedItem?.dropoff_point_id
+              )[0]
+            }
+            userLocation={userLocation}
+            onCloseModal={() => setShowMap(false)}
+            calculateMidpoint={calculateMidpoint}
+          />
+        )}
+      {progress === 100 && (
+        <Pagination
+          totalPages={totalPages}
+          currentPage={page}
+          onPageChange={setPage}
         />
       )}
-      <Pagination
-        totalPages={totalPages}
-        currentPage={page}
-        onPageChange={(newPage) => setPage(newPage)}
-      />
     </div>
   );
 };
+
 export default ItemList;

@@ -19,4 +19,5 @@ export interface DashboardContextType {
   selectedState: string;
   setSelectedState: React.Dispatch<React.SetStateAction<string>>;
   archiveItem: (item: ItemType, email: string) => void;
+  progress: number;
 }
