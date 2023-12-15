@@ -60,6 +60,7 @@ const DropPoints: React.FC = () => {
   };
 
   const handleModalClose = () => {
+    setSelectedIndex(-1);
     setIsModalOpen(false);
   };
 

@@ -3,7 +3,6 @@ import React, { useState, createContext, useEffect } from "react";
 import { ItemType } from "../../types/ItemType.ts";
 import { ItemListContextType } from "../../types/ItemListContextType.ts";
 import axios from "axios";
-import { set } from "firebase/database";
 
 // Define a default context value with dummy functions for setting state
 const defaultContextValue: ItemListContextType = {
@@ -21,6 +20,7 @@ const defaultContextValue: ItemListContextType = {
   setPage: () => {}, // This should actually be a state updater function
   totalPages: 1,
   setTotalPages: () => {}, // This should actually be a state updater function
+  progress: 0,
 };
 
 // Create the context
@@ -41,6 +41,8 @@ export const ItemListContextProvider: React.FC<
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [tags, setTags] = useState<string[]>([]);
+  const [progress, setProgress] = useState(0); // Progress is a number from 0 to 100
+
 
   useEffect(() => {
     setFilteredData([]);
@@ -106,17 +108,23 @@ export const ItemListContextProvider: React.FC<
   useEffect(() => {
     const updateDataWithImages = async () => {
       if (data.length === 0) return;
-
+  
+      let loadedImages = 0; // To track how many images have been loaded
+  
       const dataWithImages = await Promise.all(
         data.map(async (item) => {
           const imageData = await fetchItemImage(item);
+          loadedImages++; // Increment the counter for each loaded image
+          const progressValue = (loadedImages / data.length) * 100;
+          setProgress(progressValue); // Update progress
           return { ...item, image: imageData };
         })
       );
-
+  
       setFilteredData(dataWithImages);
+      setProgress(100); // When all images are loaded, set progress to 100%
     };
-
+  
     updateDataWithImages();
   }, [data, selectedTag]);
 
@@ -137,6 +145,7 @@ export const ItemListContextProvider: React.FC<
         setPage,
         totalPages,
         setTotalPages,
+        progress
       }}
     >
       {children}

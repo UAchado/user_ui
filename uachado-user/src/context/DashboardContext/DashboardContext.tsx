@@ -25,6 +25,7 @@ const defaultContextValue: DashboardContextType = {
   selectedState: "stored",
   setSelectedState: () => {}, // This should actually be a state updater function
   archiveItem: (_item: ItemType | null, _email: string) => {}, // This should actually be a state updater function
+  progress: 0,
 };
 
 // Create the context
@@ -46,13 +47,14 @@ export const DashboardContextProvider: React.FC<
   const [totalPages, setTotalPages] = useState(1);
   const [tags, setTags] = useState<string[]>([]);
   const [selectedState, setSelectedState] = useState<string>("stored"); // Initial state is set to 'stored'
+  const [progress, setProgress] = useState(0); // Progress is a number from 0 to 100
   const { token, id } = useContext(AuthContext);
 
   useEffect(() => {
     setFilteredData([]);
     fetchItems(page);
     fetchTags();
-  }, [selectedState, page, selectedTag]);
+  }, [selectedState, page, selectedTag, token]);
 
   const fetchTags = async () => {
     try {
@@ -131,17 +133,23 @@ export const DashboardContextProvider: React.FC<
   useEffect(() => {
     const updateDataWithImages = async () => {
       if (data.length === 0) return;
-
+  
+      let loadedImages = 0; // To track how many images have been loaded
+  
       const dataWithImages = await Promise.all(
         data.map(async (item) => {
           const imageData = await fetchItemImage(item);
+          loadedImages++; // Increment the counter for each loaded image
+          const progressValue = (loadedImages / data.length) * 100;
+          setProgress(progressValue); // Update progress
           return { ...item, image: imageData };
         })
       );
-
+  
       setFilteredData(dataWithImages);
+      setProgress(100); // When all images are loaded, set progress to 100%
     };
-
+  
     updateDataWithImages();
   }, [data, selectedTag]);
 
@@ -196,6 +204,7 @@ export const DashboardContextProvider: React.FC<
         selectedState,
         setSelectedState,
         archiveItem,
+        progress,
       }}
     >
       {children}

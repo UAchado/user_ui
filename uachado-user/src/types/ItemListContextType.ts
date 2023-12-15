@@ -15,4 +15,5 @@ export interface ItemListContextType {
     setPage: React.Dispatch<React.SetStateAction<number>>,
     totalPages: number,
     setTotalPages: React.Dispatch<React.SetStateAction<number>>,
+    progress: number,
 }

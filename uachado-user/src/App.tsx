@@ -18,9 +18,33 @@ import { ItemListContextProvider } from "./context/ItemListContext/ItemListConte
 function App() {
   const location = useLocation();
   const isnotLanding = location.pathname !== "/";
+  const { showToast, setShowToast} = useContext(AuthContext);
   return (
     <ItemListContextProvider>
       <DashboardContextProvider>
+        {showToast && (
+          <div className="toast toast-bot toast-end z-30">
+            <div className="alert alert-warning">
+              <span>
+                O seu token de autenticação acabou, volte a fazer login!
+              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4 stroke-current shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                onClick={() => setShowToast(false)}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+          </div>
+        )}
         <div>
           {isnotLanding && <Navbar />}
           <div className="flex items-center justify-center">
@@ -43,8 +67,7 @@ function App() {
 
 function Contents() {
   // Check if the user is logged in (you can use localStorage or another state management solution)
-  const { isLoggedIn } = useContext(AuthContext);
-  const { id } = useContext(AuthContext);
+  const { isLoggedIn, id } = useContext(AuthContext);
 
   if (isLoggedIn && id !== null) {
     return (

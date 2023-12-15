@@ -20,8 +20,6 @@ export const DashboardTable: React.FC<DashboardTableProps> = ({
   filteredItems,
   openArchiveModal,
 }) => {
-
-
   const canArchive = () => {
     return selectedState !== "retrieved";
   };
@@ -39,60 +37,61 @@ export const DashboardTable: React.FC<DashboardTableProps> = ({
               <Dropdown items={tags} onSelect={handleSelectTag} />
             </th>
             <th>
-              <button
-                onClick={toggleSelectedState}
-                className="btn btn-accent btn-block mt-7"
-              >
-                Alternar Ativos/Arquivados
-              </button>
+              <div className="mt-7">
+                <span className="label-text align-middle">Recolhidos</span>
+                <input
+                  onClick={toggleSelectedState}
+                  type="checkbox"
+                  className="toggle toggle-accent mr-2 ml-2 align-middle"
+                />
+                <span className="label-text align-middle">Arquivados</span>
+              </div>
             </th>
           </tr>
         </thead>
-          <tbody className="text-xl">
-            {filteredItems.map((item, index) => (
-              <tr key={index}>
-                <td>
-                  <div className="flex items-center space-x-3">
-                    <div className="avatar">
-                      <div className="w-12 h-12 mask mask-squircle">
-                        <img
-                          src={item.image}
-                          alt="Avatar Tailwind CSS Component"
-                          loading="lazy"
-                        />
-                      </div>
+        <tbody className="text-xl">
+          {filteredItems.map((item, index) => (
+            <tr key={index}>
+              <td>
+                <div className="flex items-center space-x-3">
+                  <div className="avatar">
+                    <div className="w-12 h-12 mask mask-squircle">
+                      <img
+                        src={item.image}
+                        alt="Avatar Tailwind CSS Component"
+                        loading="lazy"
+                      />
                     </div>
                   </div>
-                </td>
-                <td>
-                  <div className="flex items-center space-x-2">
-                    <span className="badge badge-ghost badge-md">
-                      {item.tag}
-                    </span>
-                  </div>
-                </td>
-                <td></td>
-                <td>
+                </div>
+              </td>
+              <td>
+                <div className="flex items-center space-x-2">
+                  <span className="badge badge-ghost badge-md">{item.tag}</span>
+                </div>
+              </td>
+              <td></td>
+              <td>
+                <button
+                  className="btn btn-ghost border-primary-content"
+                  onClick={() => openItemDetails(item)}
+                >
+                  Detalhes
+                </button>
+              </td>
+              <td>
+                {canArchive() && (
                   <button
-                    className="btn btn-ghost border-primary-content"
-                    onClick={() => openItemDetails(item)}
+                    className="btn btn-neutral"
+                    onClick={() => openArchiveModal(item)}
                   >
-                    Detalhes
+                    Marcar como encontrado
                   </button>
-                </td>
-                <td>
-                  {canArchive() && (
-                    <button
-                      className="btn btn-neutral"
-                      onClick={() => openArchiveModal(item)}
-                    >
-                      Marcar como encontrado
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );

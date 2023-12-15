@@ -13,19 +13,21 @@ interface ModalProps {
   selectedItem: ItemType | null;
   droppoints: DropPointType[] | null;
   onOpenOtherComponent: () => void; // Define the type for this prop
+  onCloseModal: () => void;
 }
 
 const Modal: React.FC<ModalProps> = ({
   selectedItem,
   droppoints = null,
   onOpenOtherComponent,
+  onCloseModal,
 }) => {
   return (
     <dialog id="my_modal_1" className="modal">
       <div className="modal-box">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={onCloseModal}>
             ✕
           </button>
         </form>
@@ -58,7 +60,9 @@ const Modal: React.FC<ModalProps> = ({
           <form method="dialog">
             <button
               className="btn btn-accent"
-              onClick={() => {
+              onClick={(event) => {
+                event.preventDefault(); // Prevents the default action of the form submission
+                event.stopPropagation(); // Stops the click event from propagating to parent elements
                 onOpenOtherComponent();
               }}
             >

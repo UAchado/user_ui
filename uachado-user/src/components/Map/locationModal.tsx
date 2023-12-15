@@ -32,18 +32,24 @@ const LocationModal: React.FC<LocationModalProps> = ({
     height: "400px",
   };
   if (!location) return null;
-  
+
   const [latitudeStr, longitudeStr] = location.coordinates.split(", ");
 
   // Convert string values to numbers
   location.latitude = parseFloat(latitudeStr);
   location.longitude = parseFloat(longitudeStr);
 
-
   const goToDirections = () => {
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}&travelmode=walking`, '_blank');
-  }
+    window.open(
+      `https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}&travelmode=walking`,
+      "_blank"
+    );
+  };
 
+  const handleGoToDirections = () => {
+    goToDirections();
+    onCloseModal();
+  };
 
   return (
     <dialog open className="modal modal-bottom sm:modal-middle">
@@ -90,7 +96,12 @@ const LocationModal: React.FC<LocationModalProps> = ({
         </GoogleMap>
         <div className="modal-action">
           <form method="dialog">
-            <button className="btn bg-primary mx-2" onClick={goToDirections}>Direções</button>
+            <button
+              className="btn bg-primary mx-2"
+              onClick={handleGoToDirections}
+            >
+              Direções
+            </button>
             <button className="btn bg-warning mx-2" onClick={onCloseModal}>
               Fechar
             </button>

@@ -20,6 +20,7 @@ const Dashboard = () => {
     page,
     setPage,
     totalPages,
+    progress,
   } = useContext(DashboardContext);
 
   interface DropPoint {
@@ -34,7 +35,7 @@ const Dashboard = () => {
     // Call fetchItems with initial page number, e.g., 1
     if (page !== 1 || selectedTag !== "Todos" || selectedItem !== null) {
       setPage(1);
-      setSelectedTag("Todos")
+      setSelectedTag("Todos");
       setSelectedItem(null);
     }
   }, [setPage, setSelectedItem, setSelectedTag]);
@@ -122,37 +123,63 @@ const Dashboard = () => {
     }
   };
 
+  // Style for the progress bar
+  const progressStyle: React.CSSProperties = {
+    "--value": progress.toString(),
+  } as React.CSSProperties;
+
   return (
     <div>
-      {selectedState === "stored" ? (
-        <h2 className="text-2xl font-bold mt-10">Objetos Guardados</h2>
-      ) : (
-        <h2 className="text-2xl font-bold mt-10">Objetos Arquivados</h2>
+      {progress < 100 && (
+        <div className="flex justify-center items-center  m-20">
+          <div
+            className="radial-progress text-black"
+            style={progressStyle}
+            role="progressbar"
+          >
+            {Math.round(progress)}%
+          </div>
+        </div>
       )}
-      {renderTable ? (
-        <DashboardTable
-          openItemDetails={openItemDetails}
-          archiveItem={archiveItem}
-          tags={tags}
-          handleSelectTag={handleSelectTag}
-          toggleSelectedState={toggleSelectedState}
-          selectedState={selectedState}
-          filteredItems={filteredItems}
-          openArchiveModal={openArchiveModal}
-        />
-      ) : (
-        <DashboardCards
-          openItemDetails={openItemDetails}
-          archiveItem={archiveItem}
-          tags={tags}
-          handleSelectTag={handleSelectTag}
-          toggleSelectedState={toggleSelectedState}
-          selectedState={selectedState}
-          filteredItems={filteredItems}
-          openArchiveModal={openArchiveModal}
-        />
+
+      {progress === 100 && (
+        <>
+          {selectedState === "stored" ? (
+            <h2 className="text-2xl font-bold mt-10">Objetos Guardados</h2>
+          ) : (
+            <h2 className="text-2xl font-bold mt-10">Objetos Arquivados</h2>
+          )}
+        </>
       )}
-      {selectedItem && (
+      {progress === 100 && (
+        <>
+          {renderTable ? (
+            <DashboardTable
+              openItemDetails={openItemDetails}
+              archiveItem={archiveItem}
+              tags={tags}
+              handleSelectTag={handleSelectTag}
+              toggleSelectedState={toggleSelectedState}
+              selectedState={selectedState}
+              filteredItems={filteredItems}
+              openArchiveModal={openArchiveModal}
+            />
+          ) : (
+            <DashboardCards
+              openItemDetails={openItemDetails}
+              archiveItem={archiveItem}
+              tags={tags}
+              handleSelectTag={handleSelectTag}
+              toggleSelectedState={toggleSelectedState}
+              selectedState={selectedState}
+              filteredItems={filteredItems}
+              openArchiveModal={openArchiveModal}
+            />
+          )}
+        </>
+      )}
+
+      {selectedItem && progress === 100 && (
         <dialog id="my_modal_1" className="modal">
           <div className="modal-box">
             <img
@@ -177,7 +204,7 @@ const Dashboard = () => {
         </dialog>
       )}
 
-      {modalItem && (
+      {modalItem && progress === 100 && (
         <dialog id="my_modal_2" className="modal">
           <div className="modal-box">
             <h3 className="text-lg font-bold">Confirmar Arquivamento</h3>
@@ -209,7 +236,14 @@ const Dashboard = () => {
           </div>
         </dialog>
       )}
-      <Pagination totalPages={totalPages} currentPage={page} onPageChange={(newPage) => setPage(newPage)} />
+
+      {progress === 100 && (
+        <Pagination
+          totalPages={totalPages}
+          currentPage={page}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
+      )}
     </div>
   );
 };

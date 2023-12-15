@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { createContext, useState, ReactNode, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   token: string | null;
   isLoggedIn: boolean;
   name: string;
   id: number | null;
+  showToast: boolean;
+  setShowToast: (show: boolean) => void;
   login: (username: string, id: number, token: string) => void;
   logout: () => void;
 }
@@ -15,6 +18,8 @@ export const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   name: "",
   id: null,
+  showToast: false,
+  setShowToast: () => {},
   login: () => {},
   logout: () => {},
 });
@@ -30,6 +35,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const CLIENT_ID: string = import.meta.env.VITE_CLIENT_ID;
   const REDIRECT_URI: string = import.meta.env.VITE_REDIRECT_URI;
   const CLIENT_SECRET: string = import.meta.env.VITE_CLIENT_SECRET;
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
     localStorage.getItem("isLoggedIn") === "true"
@@ -65,6 +72,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const fetchTokens = async (code: string) => {
     let my_token = null;
+    if (
+      COGNITO_TOKEN_ENDPOINT === null ||
+      CLIENT_ID === null ||
+      REDIRECT_URI === null ||
+      CLIENT_SECRET === null ||
+      code === null
+    )
+      return;
+
     const params = new URLSearchParams();
     params.append("grant_type", "authorization_code");
     params.append("client_id", CLIENT_ID);
@@ -73,7 +89,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     params.append("client_secret", CLIENT_SECRET);
 
     try {
-      if (COGNITO_TOKEN_ENDPOINT === null && params.size !== 5) return;
+      if (COGNITO_TOKEN_ENDPOINT === null || params.size !== 5) return;
 
       const response = await axios.post(COGNITO_TOKEN_ENDPOINT, params, {
         headers: {
@@ -100,27 +116,42 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Asynchronous logic here
-      if (token) {
-        const response = checkToken(token);
-        if ((await response) === false) {
-          const urlParams = new URLSearchParams(window.location.search);
-          const code = urlParams.get("code");
-          if (code) {
-            fetchTokens(code);
-          }
-        }
-      } else {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
-        if (code) {
-          fetchTokens(code);
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+      // If there's a code in the URL, try fetching tokens
+      if (code) {
+        await fetchTokens(code);
+        navigate("/home");
+      } else if (token) {
+        // If there's no code but we have a token, check its validity
+        const isValid = await checkToken(token);
+        if (!isValid) {
+          setShowToast(true);
+          logout();
         }
       }
     };
 
     fetchData();
-  }, [10000]);
+
+    // If you want to check the token validity periodically, set up an interval
+    const interval = setInterval(() => {
+      console.log("Checking token validity...");
+      const token = localStorage.getItem("token");
+      if (token) {
+        checkToken(token).then((isValid) => {
+          console.log("Token is valid:", isValid);
+          if (!isValid) {
+            setShowToast(true);
+            logout();
+          }
+        });
+      }
+    }, 1000); // 1 second
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(interval);
+  }, [token]); // Dependencies should be the state variables the effect relies on
 
   const login = (name: string, id: number, token: string) => {
     localStorage.setItem("isLoggedIn", "true");
@@ -149,6 +180,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     name,
     id,
     isLoggedIn,
+    showToast,
+    setShowToast,
     login,
     logout,
   };
