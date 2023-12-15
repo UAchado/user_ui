@@ -3,6 +3,7 @@ import React, { useState, createContext, useEffect } from "react";
 import { ItemType } from "../../types/ItemType.ts";
 import { ItemListContextType } from "../../types/ItemListContextType.ts";
 import axios from "axios";
+import { set } from "firebase/database";
 
 // Define a default context value with dummy functions for setting state
 const defaultContextValue: ItemListContextType = {
@@ -67,7 +68,7 @@ export const ItemListContextProvider: React.FC<
     let my_filter = {};
 
     if (selectedTag !== "Todos") {
-      my_filter = {"tag": selectedTag};;
+      my_filter = { tag: selectedTag };
     }
 
     try {
@@ -90,8 +91,11 @@ export const ItemListContextProvider: React.FC<
 
   const fetchItemImage = async (item: ItemType) => {
     const filePath = item.image;
+    if (!filePath) return undefined;
     try {
-      const response = await axios.get(itemsBaseUrl + "image/" + filePath, { responseType: 'blob' });
+      const response = await axios.get(itemsBaseUrl + "image/" + filePath, {
+        responseType: "blob",
+      });
       return URL.createObjectURL(response.data); // Create an Object URL from the Blob
     } catch (error) {
       console.error("Error fetching image:", error);
@@ -102,19 +106,17 @@ export const ItemListContextProvider: React.FC<
   useEffect(() => {
     const updateDataWithImages = async () => {
       if (data.length === 0) return;
-  
-      const dataWithImages = await Promise.all(data.map(async (item) => {
-        const imageData = await fetchItemImage(item);
-        return { ...item, image: imageData };
-      }));
-      
-      setFilteredData(
-        dataWithImages.filter((item) =>
-          selectedTag === "Todos" ? true : item.tag === selectedTag
-        )
+
+      const dataWithImages = await Promise.all(
+        data.map(async (item) => {
+          const imageData = await fetchItemImage(item);
+          return { ...item, image: imageData };
+        })
       );
+
+      setFilteredData(dataWithImages);
     };
-  
+
     updateDataWithImages();
   }, [data, selectedTag]);
 

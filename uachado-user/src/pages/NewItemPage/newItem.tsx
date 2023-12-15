@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Dropdown from "../../components/NewItem/Dropdown/dropdown";
 import axios from "axios";
 import Image from "../../components/NewItem/Image/image";
+import { AuthContext } from "../../context/LoginContext/AuthContext";
 /**
  * Component for creating a new item.
  */
@@ -11,6 +12,7 @@ const NewItem = () => {
   const [warning, setWarning] = useState<string | null>(null);
   const [sucess, setSucess] = useState<string | null>(null);
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  const { token } = useContext(AuthContext);
 
   const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
 
@@ -52,15 +54,14 @@ const NewItem = () => {
       if (selectedImage) {
         formData.append("image", selectedImage);
       } else {
-        formData.append("image", new Blob(), '');
+        formData.append("image", new Blob(), "");
       }
       formData.append("dropoff_point_id", dropoffPointId.toString());
 
       try {
-        await axios.post(
-          itemsBaseUrl + "items/create",
-          formData
-        );
+        await axios.post(itemsBaseUrl + "items/create", formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setSucess("Item adicionado com sucesso");
       } catch (error) {
         setWarning("Erro ao enviar dados");
@@ -87,7 +88,7 @@ const NewItem = () => {
               d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span style={{ fontSize: "11px" }}>Selecione uma tag da lista.</span>
+          <span style={{ fontSize: "11px" }}>{warning}</span>
         </div>
       )}
       {sucess && (

@@ -7,7 +7,6 @@ import DropPoints from "./pages/DropOffPointsPage/droppoints";
 import Navbar from "./components/Navbar/navbar";
 import ItemList from "./pages/ItemListPage/itemlist";
 import Dashboard from "./pages/DashboardPage/dashboard";
-import Login from "./pages/LoginPage/login";
 import LandingPage from "./pages/LandingPage/landing";
 import ReportItem from "./pages/ReportItemPage/reportItem";
 import { useContext } from "react";
@@ -45,9 +44,9 @@ function App() {
 function Contents() {
   // Check if the user is logged in (you can use localStorage or another state management solution)
   const { isLoggedIn } = useContext(AuthContext);
-  const { role } = useContext(AuthContext);
+  const { id } = useContext(AuthContext);
 
-  if (isLoggedIn && role === "admin") {
+  if (isLoggedIn && id !== null) {
     return (
       <Routes>
         <Route path="/home" element={<Home />} />
@@ -58,24 +57,13 @@ function Contents() {
         <Route path="*" element={<h1>Not Found!</h1>} />
       </Routes>
     );
-  } else if (isLoggedIn && role === "user") {
-    return (
-      <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/dropPoints" element={<DropPoints />} />
-        <Route path="/findItems" element={<ItemList />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/reportItem" element={<ReportItem />} />
-        <Route path="*" element={<h1>Not Found!</h1>} />
-      </Routes>
-    );
   } else {
     return (
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/dropPoints" element={<DropPoints />} />
         <Route path="/findItems" element={<ItemList />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/reportItem" element={<ReportItem />} />
         <Route path="*" element={<h1>Not Found!</h1>} />
       </Routes>
     );

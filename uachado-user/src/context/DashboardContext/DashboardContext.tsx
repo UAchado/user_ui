@@ -1,8 +1,9 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext, useEffect, useContext } from "react";
 
 import { ItemType } from "../../types/ItemType.ts";
 import { DashboardContextType } from "../../types/DashboardContextType.ts";
 import axios from "axios";
+import { AuthContext } from "../LoginContext/AuthContext.tsx";
 
 // Define a default context value with dummy functions for setting state
 const defaultContextValue: DashboardContextType = {
@@ -45,6 +46,7 @@ export const DashboardContextProvider: React.FC<
   const [totalPages, setTotalPages] = useState(1);
   const [tags, setTags] = useState<string[]>([]);
   const [selectedState, setSelectedState] = useState<string>("stored"); // Initial state is set to 'stored'
+  const { token, id } = useContext(AuthContext);
 
   useEffect(() => {
     setFilteredData([]);
@@ -56,7 +58,9 @@ export const DashboardContextProvider: React.FC<
     try {
       // Adjust the endpoint as needed
       axios
-        .get(itemsBaseUrl + "items/tags/")
+        .get(itemsBaseUrl + "items/tags/", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then(function (response) {
           setTags(response.data);
         })
@@ -69,7 +73,8 @@ export const DashboardContextProvider: React.FC<
   };
 
   const fetchItems = async (page: number) => {
-    const drop_point_id = 1;
+    const drop_point_id: number | null = id;
+
     let my_filter = {};
 
     if (selectedTag !== "Todos") {
@@ -79,6 +84,7 @@ export const DashboardContextProvider: React.FC<
     }
     try {
       // Adjust the endpoint as needed
+      if (drop_point_id === null) return;
       axios
         .put(
           itemsBaseUrl +
@@ -87,8 +93,14 @@ export const DashboardContextProvider: React.FC<
             "?page=" +
             page +
             "&size=5",
-          { filter: my_filter }
+          {
+            filter: my_filter,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         )
+
         .then(function (response) {
           setData(response.data.items);
           setTotalPages(response.data.pages);
@@ -103,8 +115,10 @@ export const DashboardContextProvider: React.FC<
 
   const fetchItemImage = async (item: ItemType) => {
     const filePath = item.image;
+    if (!filePath) return undefined;
     try {
       const response = await axios.get(itemsBaseUrl + "image/" + filePath, {
+        headers: { Authorization: `Bearer ${token}` },
         responseType: "blob",
       });
       return URL.createObjectURL(response.data); // Create an Object URL from the Blob
@@ -142,8 +156,15 @@ export const DashboardContextProvider: React.FC<
     try {
       // Adjust the endpoint as needed
       axios
-        .put(itemsBaseUrl + "items/retrieve/" + item.id, { email: email })
+        .put(
+          itemsBaseUrl + "items/retrieve/" + item.id,
+          {
+            email: email,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
         .then(function (response) {
+          // meter modal a confirmar que o item foi arquivado
           console.log(response);
         })
         .catch(function (error) {

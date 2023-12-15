@@ -41,7 +41,7 @@ const ItemList = () => {
     // Call fetchItems with initial page number, e.g., 1
     if (page !== 1 || selectedTag !== "Todos" || selectedItem !== null) {
       setPage(1);
-      setSelectedTag("Todos")
+      setSelectedTag("Todos");
       setSelectedItem(null);
     }
   }, [setPage, setSelectedItem, setSelectedTag]);
@@ -77,11 +77,6 @@ const ItemList = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          // console.log(
-          //   "User's location:",
-          //   position.coords.latitude,
-          //   position.coords.longitude
-          // );
           setUserLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
@@ -113,9 +108,7 @@ const ItemList = () => {
         console.error("Error fetching dropPoints:", error);
       }
     };
-    fetchDropPoints().then(() =>
-      console.log("DropPoints fetched successfully")
-    );
+    fetchDropPoints();
   }, [pointsBaseUrl]);
 
   const calculateMidpoint = (
@@ -158,22 +151,14 @@ const ItemList = () => {
     dropPoints: DropPoint[],
     item: ItemType
   ): string => {
-    console.log("Original dropPoints:", dropPoints);
-    console.log("Current item:", item);
-
     const filteredPoints = dropPoints.filter((point) => {
-      console.log("Checking point with id:", point.id);
-      console.log("Against item with id:", item.dropoff_point_id);
       return point.id === item.dropoff_point_id;
     });
-
-    console.log("Filtered Points:", filteredPoints);
 
     return filteredPoints.length > 0 ? filteredPoints[0].name : "Not Found";
   };
 
   const renderTable: boolean = windowWidth > 1250;
-  console.log("filteredData", filteredData);
   return (
     <div>
       {renderTable ? (

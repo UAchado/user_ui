@@ -22,7 +22,6 @@ const ReportItem = () => {
           .get(itemsBaseUrl + "items/tags/")
           .then(function (response) {
             setTags(response.data);
-            console.log("Data fetched successfully:", response.data);
           })
           .catch(function (error) {
             console.error("Error sending data:", error);
