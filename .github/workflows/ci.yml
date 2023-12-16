@@ -12,6 +12,17 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: |
+        cd uachado-user
+        npm install
+        npm run build
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:

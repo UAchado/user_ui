@@ -1,0 +1,4 @@
+FROM nginx
+
+# Rest of your build process...
+COPY uachado-user/dist /usr/share/nginx/html
