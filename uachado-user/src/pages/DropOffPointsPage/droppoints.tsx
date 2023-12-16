@@ -41,7 +41,7 @@ const DropPoints: React.FC = () => {
     }
 
     axios
-    .get(pointsBaseUrl + "points/")
+    .get(pointsBaseUrl + "points")
     .then((response) => {
       // Handle the successful response here
       setLocations(response.data);
