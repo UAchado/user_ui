@@ -147,7 +147,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         });
       }
-    }, 1000); // 1 second
+    }, 10000); // 10 seconds
 
     // Clean up the interval on component unmount
     return () => clearInterval(interval);
