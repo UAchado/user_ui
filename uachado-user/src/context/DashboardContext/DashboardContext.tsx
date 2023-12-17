@@ -172,6 +172,7 @@ export const DashboardContextProvider: React.FC<
         )
         .then(function (response) {
           // meter modal a confirmar que o item foi arquivado
+          fetchItems(page);
           console.log(response);
         })
         .catch(function (error) {

@@ -15,4 +15,12 @@ Feature: User navigation
     And I navigate to the item list page
     And I select a specific item
     Then I should be able to view details about the item
+
+  Scenario: Unauthenticated User navigates to the item list page and selects an itema nd sees where it is available
+    Given I am on the landing page
+    When I click on the button to go to the home page
+    And I navigate to the item list page
+    And I select a specific item
+    Then I should be able to see where the item is located
+  
   

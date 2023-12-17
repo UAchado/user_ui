@@ -139,35 +139,6 @@ When("I click on the logout button", async function () {
   await driver.findElement(By.css(".button")).click();
 });
 
-/*Then("I should be an unauthenticated user", async function () {
-  let button = await driver.wait(
-    until.elementLocated(By.css("label.btn.btn-ghost.btn-circle")),
-    10000
-  );
-
-  await driver.wait(until.elementIsVisible(button), 10000);
-
-  await button.click();
-
-  let text = await driver.wait(
-    until.elementLocated(
-      By.className(
-        "text-xl normal-case btn btn-ghost rounded-box w-full justify-start items-center"
-      )
-    ),
-    10000
-  );
-
-  let newText = await text.getText();
-
-  if (await !newText.includes("Reportar Item")) {
-    throw new Error(
-      "Login is not correct, should be Logged in, not a " +
-        (await newText) +
-        " a"
-    );
-  }
-});*/
 
 When("I go to the dashboard page", async function () {
   let button = await driver.wait(
@@ -196,7 +167,7 @@ Then(
   { timeout: 20 * 1000 },
   async function () {
     let itemClaim = await driver.wait(
-      until.elementLocated(By.css("tr:nth-child(1).btn-neutral")),
+      until.elementLocated(By.css("tr:nth-child(1) .btn-neutral")),
       15000
     );
 
@@ -219,3 +190,83 @@ Then(
     closeButton.click();
   }
 );
+
+When("I go to the add item page", async function () {
+  let button = await driver.wait(
+    until.elementLocated(By.css("label.btn.btn-ghost.btn-circle")),
+    10000
+  );
+
+  await driver.wait(until.elementIsVisible(button), 10000);
+
+  await button.click();
+
+  let addItem = await driver.wait(
+    until.elementLocated(
+      By.className(
+        "text-xl normal-case btn btn-ghost rounded-box w-full justify-start items-center"
+      )
+    ),
+    10000
+  );
+
+  addItem.click();
+});
+
+Then(
+  "I should be able to add an item to my DropOffPoint",
+  { timeout: 20 * 1000 },
+  async function () {
+    let description = await driver.wait(
+      until.elementLocated(By.name("description")),
+      10000
+    );
+
+    description.sendKeys("dummyemail.com");
+
+    let tag = await driver.wait(until.elementLocated(By.name("tag")), 10000);
+
+    await tag.click();
+
+    let tagOption = await driver.wait(
+      until.elementLocated(By.css("li:nth-child(2) > button")),
+      10000
+    );
+
+    await tagOption.click();
+
+    let button = await driver.wait(
+      until.elementLocated(By.css(".btn-secondary")),
+      10000
+    );
+
+    await button.click();
+  }
+);
+
+Then(
+  "I click on the toggle to see the archived items",
+  { timeout: 20 * 1000 },
+  async function () {
+
+    let toggle = await driver.wait(
+      until.elementLocated(By.css(".toggle")),
+      10000
+    );
+
+    await toggle.click();
+
+    let itemDetails = await driver.wait(
+      until.elementLocated(By.css("tr:nth-child(1) .btn-ghost")),
+      15000
+    );
+
+    await driver.wait(until.elementIsVisible(itemDetails), 10000);
+
+    await itemDetails.click();
+
+    
+
+  }
+);
+
