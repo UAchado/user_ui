@@ -23,7 +23,7 @@ export const DashboardCards: React.FC<DashboardCardsProps> = ({
   openArchiveModal,
 }) => {
   const canArchive = () => {
-    return selectedState === "archived";
+    return selectedState !== "retrieved";
   };
 
   return (
