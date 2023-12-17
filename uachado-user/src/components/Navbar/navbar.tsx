@@ -75,7 +75,7 @@ const Navbar = () => {
         )}
       </div>
       <div className="navbar-center">
-        <Link to="/">
+        <Link to="/home">
           <img className="w-32 -mr-8" src={generalLogo}></img>
         </Link>
       </div>
