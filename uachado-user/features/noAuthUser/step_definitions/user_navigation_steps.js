@@ -46,10 +46,18 @@ When(
 Then(
   "I should be able to view details about the dropoff point",
   async function () {
-    let modal = await driver.wait(until.elementLocated(By.className("modal-box bg-secondary-focus")), 10000); // Replace with your modal's identifier
+    let modal = await driver.wait(
+      until.elementLocated(By.className("modal-box bg-secondary-focus")),
+      10000
+    ); // Replace with your modal's identifier
     await driver.wait(until.elementIsVisible(modal), 10000);
-    let details = await driver.wait(until.elementLocated(By.className("text-lg font-bold")), 10000);
-    let detailText = await driver.wait(until.elementIsVisible(details)).getText();
+    let details = await driver.wait(
+      until.elementLocated(By.className("text-lg font-bold")),
+      10000
+    );
+    let detailText = await driver
+      .wait(until.elementIsVisible(details))
+      .getText();
     if (!detailText.includes("Reitoria")) {
       throw new Error(
         "Detail is not correct, should be Reitoria, not a " + detailText + " a"
@@ -99,3 +107,13 @@ Then("I should be able to view details about the item", async function () {
   }
 });
 
+Then("I should be able to see where the item is located", async function () {
+  let button = await driver.wait(
+    until.elementLocated(By.className("btn btn-accent")),
+    10000
+  );
+
+  await driver.wait(until.elementIsVisible(button), 10000);
+
+  await button.click();
+});
