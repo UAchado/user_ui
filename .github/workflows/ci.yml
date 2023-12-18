@@ -30,6 +30,7 @@ jobs:
         echo "VITE_REDIRECT_URI=${{ secrets.VITE_REDIRECT_URL }}" >> .env.local
         echo "VITE_COGNITO_CODE_ENDPOINT=${{ secrets.VITE_COGNITO_CODE_ENDPOINT }}" >> .env.local
         echo "VITE_COGNITO_CODE_TOKEN=${{ secrets.VITE_COGNITO_CODE_TOKEN }}" >> .env.local
+        cat .env.local
         npm run build
       
 
