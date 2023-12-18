@@ -15,7 +15,10 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16'
+        node-version: '21'
+
+    - name: Run Cucumber tests
+      run: npm run test:cucumber
 
     - name: Install dependencies
       run: |
