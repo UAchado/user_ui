@@ -18,6 +18,8 @@ import { ItemListContextProvider } from "./context/ItemListContext/ItemListConte
 function App() {
   const location = useLocation();
   const isnotLanding = location.pathname !== "/";
+  const isNotForms = location.pathname !== "/newItem" && location.pathname !== "/reportItem";
+  const showFeedback = isnotLanding && isNotForms;
   const { showToast, setShowToast} = useContext(AuthContext);
   return (
     <ItemListContextProvider>
@@ -58,7 +60,7 @@ function App() {
             )}
             {!isnotLanding && <LandingPage />}
           </div>
-          {isnotLanding && <Feedback />}
+          {showFeedback && <Feedback />}
         </div>
       </DashboardContextProvider>
     </ItemListContextProvider>
