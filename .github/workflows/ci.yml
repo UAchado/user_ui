@@ -18,12 +18,12 @@ jobs:
         node-version: '21'
 
     - name: Run Cucumber tests
-      run: npm run test:cucumber
+      run: |
+        cd uachado-user
+        npm run test:cucumber
 
     - name: Install dependencies
       run: |
-        npm install
-        cd uachado-user
         npm install
         npm run build
 
