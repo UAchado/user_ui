@@ -1,6 +1,8 @@
 import React from "react";
 import Dropdown from "../NewItem/Dropdown/dropdown.tsx";
 import { ItemType } from "../../types/ItemType.ts";
+import "@fortawesome/fontawesome-free/css/all.css";
+
 
 interface DashboardCardsProps {
   openItemDetails: (item: ItemType) => void;
@@ -45,12 +47,17 @@ export const DashboardCards: React.FC<DashboardCardsProps> = ({
       {filteredItems.map((item: ItemType, index: number) => (
         <div key={index} className="card bg-secondary-focus">
           <figure className="h-40 overflow-hidden">
-            <img
-              src={item.image}
-              alt={item.description}
-              className="object-cover w-full h-full"
-            />
+            {item.image ? (
+              <img
+                src={item.image}
+                alt={item.description}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <i className="fas fa-image"></i>
+              )}
           </figure>
+
           <div className="card-body">
             <h2 className="card-title text-3xl sm:text-2xl mx-auto">
               {item.description}

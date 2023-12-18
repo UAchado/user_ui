@@ -117,3 +117,58 @@ Then("I should be able to see where the item is located", async function () {
 
   await button.click();
 });
+
+
+
+When("I go to the report item page", async function () {
+  let button = await driver.wait(
+    until.elementLocated(By.css("label.btn.btn-ghost.btn-circle")),
+    10000
+  );
+
+  await driver.wait(until.elementIsVisible(button), 10000);
+
+  await button.click();
+
+  let addItem = await driver.wait(
+    until.elementLocated(
+      By.className(
+        "text-xl normal-case btn btn-ghost rounded-box w-full justify-start items-center"
+      )
+    ),
+    10000
+  );
+
+  addItem.click();
+});
+
+Then(
+  "I should be able to report the item that I lost",
+  { timeout: 20 * 1000 },
+  async function () {
+    let description = await driver.wait(
+      until.elementLocated(By.name("description")),
+      10000
+    );
+
+    description.sendKeys("description");
+
+    let tag = await driver.wait(until.elementLocated(By.name("tag")), 10000);
+
+    await tag.click();
+
+    let tagOption = await driver.wait(
+      until.elementLocated(By.css("li:nth-child(2) > button")),
+      10000
+    );
+
+    await tagOption.click();
+
+    let button = await driver.wait(
+      until.elementLocated(By.css(".btn-secondary")),
+      10000
+    );
+
+    await button.click();
+  }
+);

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Dropdown from "../../components/NewItem/Dropdown/dropdown";
 import axios from "axios";
 import Image from "../../components/NewItem/Image/image";
+import { set } from "firebase/database";
 /**
  * Component for creating a new item.
  */
@@ -12,6 +13,7 @@ const ReportItem = () => {
   const [sucess, setSucess] = useState<string | null>(null);
   const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
     // Fetch tags from the API
@@ -40,6 +42,7 @@ const ReportItem = () => {
   ) => {
     e.preventDefault();
 
+    setShowLoading(true);
     const tag = e.currentTarget.tag.value;
     const description = e.currentTarget.description.value;
     const report_email = e.currentTarget.email.value; // Or however you get this value
@@ -51,18 +54,21 @@ const ReportItem = () => {
       if (selectedImage) {
         formData.append("image", selectedImage);
       } else {
-        formData.append("image", new Blob(), '');
+        formData.append("image", new Blob(), "");
       }
       formData.append("report_email", report_email);
 
       try {
         await axios.post(itemsBaseUrl + "items/report", formData);
         setSucess("Item adicionado com sucesso");
+        setShowLoading(false);
       } catch (error) {
         setWarning("Erro ao enviar dados");
+        setShowLoading(false);
       }
     } else {
       setWarning("A tag é inválida");
+      setShowLoading(false);
     }
   };
 
@@ -106,7 +112,7 @@ const ReportItem = () => {
           <span style={{ fontSize: "11px" }}>Item adicionado com sucesso</span>
         </div>
       )}
-      {tags.length !== 0 && (
+      {tags.length !== 0 && !showLoading && (
         <div className="flex justify-center">
           <div className="card bg-primary">
             <div className="card-body">
@@ -145,6 +151,9 @@ const ReportItem = () => {
           </div>
         </div>
       )}
+
+      {showLoading && <div className="flex justify-center"></div>
+      }
     </div>
   );
 };

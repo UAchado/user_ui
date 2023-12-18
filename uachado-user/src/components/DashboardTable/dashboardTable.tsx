@@ -1,5 +1,7 @@
 import Dropdown from "../NewItem/Dropdown/dropdown.tsx";
 import { ItemType } from "../../types/ItemType.ts";
+import "@fortawesome/fontawesome-free/css/all.css";
+
 
 interface DashboardTableProps {
   openItemDetails: (item: ItemType) => void;
@@ -56,11 +58,15 @@ export const DashboardTable: React.FC<DashboardTableProps> = ({
                 <div className="flex items-center space-x-3">
                   <div className="avatar">
                     <div className="w-12 h-12 mask mask-squircle">
-                      <img
-                        src={item.image}
-                        alt="Avatar Tailwind CSS Component"
-                        loading="lazy"
-                      />
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt={item.description}
+                          className="object-cover w-full h-full"
+                        />
+                      ) : (
+                        <i className="fas fa-image"></i>
+                        )}
                     </div>
                   </div>
                 </div>

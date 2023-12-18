@@ -37,7 +37,7 @@ Feature: Authenticated User Navigation
     And I go to the dashboard page
     Then I click on the toggle to see the archived items
 
-  Scenario: Authenticated User I to add a new item to my DropOffPoint
+  Scenario: Authenticated User I want to add a new item to my DropOffPoint
     Given I am on the landing page as a not authenticated user
     When I click on the button to go to the home page to login
     And I navigate to the login page

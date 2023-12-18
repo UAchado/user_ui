@@ -222,7 +222,7 @@ Then(
       10000
     );
 
-    description.sendKeys("dummyemail.com");
+    description.sendKeys("description");
 
     let tag = await driver.wait(until.elementLocated(By.name("tag")), 10000);
 
