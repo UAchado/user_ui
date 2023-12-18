@@ -6,8 +6,15 @@ let driver;
 let vars;
 dotenv.config({ path: ".env" });
 
+let options = new chrome.Options();
+options.addArguments('--headless'); // Enables headless mode
+options.addArguments('--disable-gpu'); // Recommended for headless mode
+options.addArguments('--no-sandbox'); // Necessary for CI environments
+options.addArguments('--disable-dev-shm-usage'); // Overcome limited resource problems
+
 Before(async function () {
-  driver = await new Builder().forBrowser("chrome").build();
+  driver = await new Builder().forBrowser("chrome").setChromeOptions(options)
+  .build();
   await driver.manage().window().setRect({ width: 1280, height: 720 });
   const username = process.env.VITE_USERNAME;
   const password = process.env.VITE_PASSWORD;
