@@ -136,11 +136,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // If you want to check the token validity periodically, set up an interval
     const interval = setInterval(() => {
-      console.log("Checking token validity...");
       const token = localStorage.getItem("token");
       if (token) {
         checkToken(token).then((isValid) => {
-          console.log("Token is valid:", isValid);
           if (!isValid) {
             setShowToast(true);
             logout();

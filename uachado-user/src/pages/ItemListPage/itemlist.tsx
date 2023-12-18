@@ -184,7 +184,6 @@ const ItemList = () => {
 
   // Conditional rendering based on progress
   const renderContent = () => {
-    console.log("Progress:", progress);
     if (progress < 100) {
       return (
         <div className="flex justify-center items-center m-20">
