@@ -23,6 +23,12 @@ jobs:
         npm install
 
     - name: Build artifact
+      env:
+        VITE_CLIENT_ID: ${{ secrets.VITE_CLIENT_ID }}
+        VITE_CLIENT_SECRET: ${{ secrets.VITE_CLIENT_SECRET }}
+        VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URI }}
+        VITE_COGNITO_CODE_ENDPOINT: ${{ secrets.VITE_COGNITO_CODE_ENDPOINT }}
+        VITE_COGNITO_CODE_TOKEN: ${{ secrets.VITE_COGNITO_CODE_TOKEN }}
       run: |
         cd uachado-user
         npm run build
