@@ -12,7 +12,9 @@ const NewItem = () => {
   const [warning, setWarning] = useState<string | null>(null);
   const [sucess, setSucess] = useState<string | null>(null);
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
-  const { token } = useContext(AuthContext);
+  const { id, token } = useContext(AuthContext);
+  const [showLoading, setShowLoading] = useState<boolean>(false);
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false); // New state variable
 
   const itemsBaseUrl = import.meta.env.VITE_INVENTORY_URL;
 
@@ -43,9 +45,15 @@ const NewItem = () => {
   ) => {
     e.preventDefault();
 
+    setShowLoading(true);
+
+
     const tag = e.currentTarget.tag.value;
     const description = e.currentTarget.description.value;
-    const dropoffPointId = 1; // Or however you get this value
+    const dropoffPointId = id; // Or however you get this value
+
+    e.currentTarget.tag.value = "";
+    e.currentTarget.description.value = "";
 
     if (tag && tags.includes(tag.toString())) {
       const formData = new FormData();
@@ -56,18 +64,26 @@ const NewItem = () => {
       } else {
         formData.append("image", new Blob(), "");
       }
-      formData.append("dropoff_point_id", dropoffPointId.toString());
+      formData.append("dropoff_point_id", dropoffPointId!.toString());
 
       try {
         await axios.post(itemsBaseUrl + "items/create", formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        setSelectedImageFile(null);
         setSucess("Item adicionado com sucesso");
+        setShowLoading(false);
+        setFormSubmitted(true); // Mark the form as submitted      } catch (error) {
       } catch (error) {
+        console.error("Error sending data:", error);
         setWarning("Erro ao enviar dados");
+        setShowLoading(false);
+        setFormSubmitted(false); // Mark the form as not submitted
       }
     } else {
       setWarning("A tag é inválida");
+      setShowLoading(false);
+      setFormSubmitted(false); // Mark the form as not submitted
     }
   };
   return (
@@ -92,7 +108,7 @@ const NewItem = () => {
         </div>
       )}
       {sucess && (
-        <div className="w-1/2 alert alert-success">
+        <div className=" alert alert-success">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-4 h-4 stroke-current shrink-0"
@@ -110,7 +126,7 @@ const NewItem = () => {
           <span style={{ fontSize: "11px" }}>Item adicionado com sucesso.</span>
         </div>
       )}
-      {tags.length !== 0 && (
+      {tags.length !== 0 && !showLoading && (
         <div className="flex justify-center">
           <div className="card bg-primary">
             <div className="card-body">
@@ -141,6 +157,14 @@ const NewItem = () => {
             </div>
           </div>
         </div>
+      )}
+      {showLoading && !formSubmitted && (
+        <div className="flex justify-center">
+        {/* Show a spinner while loading */}
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
       )}
     </div>
   );

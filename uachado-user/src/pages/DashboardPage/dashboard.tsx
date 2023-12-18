@@ -97,7 +97,7 @@ const Dashboard = () => {
       try {
         // Adjust the endpoint as needed
         axios
-          .get(pointsBaseUrl + "points/")
+          .get(pointsBaseUrl + "points")
           .then(function (response) {
             setDropoints(response.data);
           })
