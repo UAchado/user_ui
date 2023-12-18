@@ -23,4 +23,8 @@ Feature: User navigation
     And I select a specific item
     Then I should be able to see where the item is located
   
-  
+  Scenario: Unauthenticated User wants to report an item as lost
+    Given I am on the landing page
+    When I click on the button to go to the home page
+    And I go to the report item page
+    Then I should be able to report the item that I lost

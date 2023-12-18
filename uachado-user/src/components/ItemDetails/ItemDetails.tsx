@@ -1,5 +1,7 @@
 import React from "react";
 import { ItemType } from "../../types/ItemType.ts";
+import "@fortawesome/fontawesome-free/css/all.css";
+
 
 // Define a type for the item
 
@@ -34,11 +36,15 @@ const Modal: React.FC<ModalProps> = ({
         <div className="flex-col items-center text-center gap-3">
           <div className="avatar">
             <figure className="h-40 overflow-hidden">
+            {selectedItem?.image ? (
               <img
-                src={selectedItem?.image}
-                alt={"Image of " + selectedItem?.tag}
+                src={selectedItem.image}
+                alt={selectedItem.description}
                 className="object-cover w-full h-full"
               />
+            ) : (
+              <i className="fas fa-image"></i>
+              )}
             </figure>
           </div>
           <div>

@@ -7,6 +7,7 @@ import { useJsApiLoader } from "@react-google-maps/api";
 import { ItemListContext } from "../../context/ItemListContext/ItemListContext";
 import { ItemType } from "../../types/ItemType";
 import Pagination from "../../components/Pagination/pagination";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const ItemList = () => {
   const {
@@ -211,7 +212,9 @@ const ItemList = () => {
             <th>Imagem</th>
             <th>Tag</th>
             <th>Ponto de Recolha</th>
-            <th>Opções</th>
+            <th>
+              <Dropdown items={tags} onSelect={handleSelectTag} />
+            </th>
           </tr>
         </thead>
         <tbody className="text-xl">
@@ -221,10 +224,15 @@ const ItemList = () => {
                 <div className="flex items-center space-x-3">
                   <div className="avatar">
                     <div className="w-12 h-12 mask mask-squircle">
-                      <img
-                        src={item.image}
-                        alt="Avatar Tailwind CSS Component"
-                      />
+                      {item.image ? (
+                        <img
+                          src={item.image}
+                          alt={item.description}
+                          className="object-cover w-full h-full"
+                        />
+                      ) : (
+                        <i className="fas fa-image"></i>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -260,11 +268,15 @@ const ItemList = () => {
           onClick={() => handleSelectedItem(item)}
         >
           <figure className="h-40 overflow-hidden">
-            <img
-              src={item.image}
-              alt={item.description}
-              className="object-cover w-full h-full"
-            />
+            {item.image ? (
+              <img
+                src={item.image}
+                alt={item.description}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <i className="fas fa-image"></i>
+            )}
           </figure>
           <div className="card-body">
             <h2 className="card-title text-3xl sm:text-2xl mx-auto">

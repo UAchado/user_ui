@@ -5,6 +5,8 @@ import { ItemType } from "../../types/ItemType.ts";
 import { DashboardCards } from "../../components/DashboardCards/dashboardCards.tsx";
 import axios from "axios";
 import Pagination from "../../components/Pagination/pagination.tsx";
+import "@fortawesome/fontawesome-free/css/all.css";
+
 
 const Dashboard = () => {
   const {
@@ -95,7 +97,7 @@ const Dashboard = () => {
       try {
         // Adjust the endpoint as needed
         axios
-          .get(pointsBaseUrl + "points/")
+          .get(pointsBaseUrl + "points")
           .then(function (response) {
             setDropoints(response.data);
           })
@@ -164,10 +166,15 @@ const Dashboard = () => {
           {selectedItem && (
             <dialog id="my_modal_1" className="modal">
               <div className="modal-box">
-                <img
-                  src={selectedItem["image"]}
-                  alt={selectedItem["description"]}
-                />
+            {selectedItem.image ? (
+              <img
+                src={selectedItem.image}
+                alt={selectedItem.description}
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <i className="fas fa-image"></i>
+              )}
                 <h3 className="text-lg font-bold">
                   {selectedItem["description"]}
                 </h3>

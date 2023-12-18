@@ -1,6 +1,6 @@
 const Feedback = () => {
   return (
-    <>
+    <div>
       <h2>
         <button
           className="btn btn-ghost hover:underline hover:bg-transparent"
@@ -29,7 +29,7 @@ const Feedback = () => {
           </div>
         </div>
       </dialog>
-    </>
+    </div>
   );
 };
 

@@ -49,11 +49,12 @@ export const DashboardContextProvider: React.FC<
   const [selectedState, setSelectedState] = useState<string>("stored"); // Initial state is set to 'stored'
   const [progress, setProgress] = useState(0); // Progress is a number from 0 to 100
   const { token, id } = useContext(AuthContext);
+  const [actualize, setActualize] = useState(false);
 
   useEffect(() => {
     fetchItems(page);
     fetchTags();
-  }, [selectedState, page, selectedTag, token]);
+  }, [selectedState, page, selectedTag, token, actualize]);
 
   const fetchTags = async () => {
     try {
@@ -150,7 +151,7 @@ export const DashboardContextProvider: React.FC<
     };
   
     updateDataWithImages();
-  }, [data, selectedTag]);
+  }, [data, selectedTag, actualize]);
 
   const toggleSelectedState = () => {
     setPage(1);
@@ -170,10 +171,9 @@ export const DashboardContextProvider: React.FC<
           },
           { headers: { Authorization: `Bearer ${token}` } }
         )
-        .then(function (response) {
+        .then(function () {
           // meter modal a confirmar que o item foi arquivado
-          fetchItems(page);
-          console.log(response);
+          setActualize(!actualize);
         })
         .catch(function (error) {
           console.error("Error sending data:", error);

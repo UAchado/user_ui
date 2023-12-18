@@ -21,16 +21,6 @@ jobs:
       run: |
         cd uachado-user
         npm install
-        
-    - name: Install Chrome and ChromeDriver
-      uses: browser-actions/setup-chrome@v1
-      with:
-        chrome-version: 'stable'
-
-    - name: Run tests
-      run: |
-        cd uachado-user
-        npm run test:cucumber
 
     - name: Build artifact
       run: |

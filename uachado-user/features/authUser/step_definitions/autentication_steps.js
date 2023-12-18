@@ -2,6 +2,7 @@ import { Before, After, Given, When, Then } from "@cucumber/cucumber";
 import { Builder, By, until } from "selenium-webdriver";
 import dotenv from "dotenv";
 
+
 let driver;
 let vars;
 dotenv.config({ path: ".env" });
@@ -222,7 +223,7 @@ Then(
       10000
     );
 
-    description.sendKeys("dummyemail.com");
+    description.sendKeys("description");
 
     let tag = await driver.wait(until.elementLocated(By.name("tag")), 10000);
 
