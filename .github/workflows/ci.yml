@@ -4,6 +4,13 @@ on:
   push:
     branches: [ main ]
 
+env:
+  VITE_CLIENT_ID: ${{ secrets.VITE_CLIENT_ID }}
+  VITE_CLIENT_SECRET: ${{ secrets.VITE_CLIENT_SECRET }}
+  VITE_REDIRECT_URI: ${{ secrets.VITE_REDIRECT_URL }}
+  VITE_COGNITO_CODE_ENDPOINT: ${{ secrets.VITE_COGNITO_CODE_ENDPOINT }}
+  VITE_COGNITO_CODE_TOKEN: ${{ secrets.VITE_COGNITO_CODE_TOKEN }}
+
 jobs:
 
   build:
@@ -25,12 +32,6 @@ jobs:
     - name: Build artifact
       run: |
         cd uachado-user
-        echo "VITE_CLIENT_ID=${{ secrets.VITE_CLIENT_ID }}" >> .env.local
-        echo "VITE_CLIENT_SECRET=${{ secrets.VITE_CLIENT_SECRET }}" >> .env.local
-        echo "VITE_REDIRECT_URI=${{ secrets.VITE_REDIRECT_URL }}" >> .env.local
-        echo "VITE_COGNITO_CODE_ENDPOINT=${{ secrets.VITE_COGNITO_CODE_ENDPOINT }}" >> .env.local
-        echo "VITE_COGNITO_CODE_TOKEN=${{ secrets.VITE_COGNITO_CODE_TOKEN }}" >> .env.local
-        cat .env.local
         npm run build
       
 
