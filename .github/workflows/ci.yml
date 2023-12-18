@@ -17,14 +17,17 @@ jobs:
       with:
         node-version: '21'
 
-    - name: Run Cucumber tests
-      run: |
-        cd uachado-user
-        npm run test:cucumber
-
     - name: Install dependencies
       run: |
+        cd uachado-user
         npm install
+
+    - name: Run tests
+      run: |
+        npm run test:cucumber
+
+    - name: Build artifact
+      run: |
         npm run build
 
     - name: Configure AWS credentials
