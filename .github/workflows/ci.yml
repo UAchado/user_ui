@@ -24,10 +24,12 @@ jobs:
 
     - name: Run tests
       run: |
+        cd uachado-user
         npm run test:cucumber
 
     - name: Build artifact
       run: |
+        cd uachado-user
         npm run build
 
     - name: Configure AWS credentials
